@@ -93,6 +93,7 @@ public class MainActivity extends ActionBarActivity {
                     for (int i = 3; i < rows.size(); i++) {
                         Element row = rows.get(i);
                         Elements cols = row.select("td");
+                        //TODO: Proberen cols.get(1) etc, kijken of 1e klas werkt
 
                         if (cols.get(0).text().contains("1Hb")) {
                             String wijzigingen = " De wijziging is " + cols.get(1).toString();
