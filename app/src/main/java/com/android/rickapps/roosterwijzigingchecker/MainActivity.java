@@ -88,6 +88,7 @@ public class MainActivity extends ActionBarActivity {
                     Document doc = Jsoup.connect(url).get();
                     Element table = doc.select("table").get(1);
                     Elements rows = table.select("tr");
+
                     //Loop genereren, voor elke row kijken of het de goede tekst bevat
                     //Beginnen bij 4e, bovenstaande is niet belangrijk
                     for (int i = 3; i < rows.size(); i++) {
@@ -95,28 +96,28 @@ public class MainActivity extends ActionBarActivity {
                         Elements cols = row.select("td");
                         //TODO: Proberen cols.get(1) etc, kijken of 1e klas werkt
 
-                        if (cols.get(0).text().contains("1Hb")) {
+                        if (cols.get(0).text().contains("1Va")) {
                             String wijzigingen = " De wijziging is " + cols.get(1).toString();
                             return wijzigingen;
 
                         }
                         else{
-                              String wijzigingen = "Er zijn geen wijzigingen.";
-                              return wijzigingen;
+                              if (i == rows.size() - 1){
+                                  return "Er zijn geen wijzigingen.";
+                            }
 
                         }
                    }
                 }
                 catch(java.io.IOException e) {
-                    String wijzigingen = "Er was een verbindingsfout";
-                    return wijzigingen;
+                    return "Er was een verbindingsfout";
                 }
                 return null;
             }
             public void onPostExecute(String wijzigingen){
                 //Messagebox met wijzigingen laten zien
                 AlertDialog.Builder messageBox = new AlertDialog.Builder(MainActivity.this);
-                messageBox.setTitle("Resultaat!");
+                messageBox.setTitle("Resultaat");
                 messageBox.setMessage(wijzigingen);
                 messageBox.setCancelable(false);
                 messageBox.setNeutralButton("Oké!", null);
