@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -83,6 +84,8 @@ public class MainActivity extends ActionBarActivity {
 
             @Override
             public String doInBackground(Void... params) {
+                EditText klasText = (EditText) findViewById(R.id.klasText);
+                String klasTextS = klasText.getText().toString();
                 String url = "http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm";
                 try {
                     Document doc = Jsoup.connect(url).get();
@@ -96,7 +99,7 @@ public class MainActivity extends ActionBarActivity {
                         Elements cols = row.select("td");
                         //TODO: Proberen cols.get(1) etc, kijken of 1e klas werkt
 
-                        if (cols.get(0).text().contains("1Va")) {
+                        if (cols.get(0).text().contains(klasTextS)) {
                             String wijzigingen = " De wijziging is " + cols.get(1).toString();
                             return wijzigingen;
 
