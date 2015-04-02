@@ -54,32 +54,10 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-//Onderstaand was een experiment, is niet gebruikt, gewoon negeren dus
-    public void checker(View view) throws IOException {
-        //ArrayList<String> wijzigingen = new ArrayList<>();
-        String url = "http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm";
-        Document doc = Jsoup.connect(url).get();
-        Element table = doc.select("table").get(0);
-        Elements rows = table.select("tr");
-        //Loop genereren, voor elke row kijken of het de goede tekst bevat
-        for (int i = 1; i < rows.size(); i++) {
-            Element row = rows.get(i);
-            Elements cols = row.select("td");
 
-            if (cols.get(1).text().equals("5Va")) {
-                String wijzigingen = cols.get(1).toString();
-                TextView text = (TextView) findViewById(R.id.textView);
-                text.setText(wijzigingen);
-
-            }//text.setText(Arrays.toString(wijzigingen));
-            // ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, wijzigingen);
-            //ListView listView = (ListView) findViewById(R.id.listView);
-            //listView.setAdapter(adapter);
-        }
-    }
         public void checker2(View view){
         new CheckerClass().execute();
-    }
+        }
         class CheckerClass extends AsyncTask<Void, Void, String> {
 
             @Override
@@ -99,7 +77,18 @@ public class MainActivity extends ActionBarActivity {
                         Elements cols = row.select("td");
 
                         if (cols.get(0).text().contains(klasTextS)) {
-                            String wijzigingen = " De wijziging is " + cols.get(1).toString();
+                            String wijzigingen = " De wijziging is: " +
+                                    // Voegt alle kolommen samen tot 1 string
+                                    // .text() zorgt voor leesbare text
+                                    // Spaties voor leesbaarheid
+                                    Jsoup.parse(cols.get(1).toString()).text() + "e uur " +
+                                    Jsoup.parse(cols.get(2).toString()).text() + " " +
+                                    Jsoup.parse(cols.get(3).toString()).text() + " wordt " +
+                                    Jsoup.parse(cols.get(4).toString()).text() + " " +
+                                    Jsoup.parse(cols.get(5).toString()).text() + " in " +
+                                    Jsoup.parse(cols.get(6).toString()).text() + " " +
+                                    Jsoup.parse(cols.get(7).toString()).text() + " " +
+                                    Jsoup.parse(cols.get(8).toString()).text();
                             return wijzigingen;
 
                         }
