@@ -79,7 +79,7 @@ public class MainActivity extends ActionBarActivity {
 
                     //Loop genereren, voor elke row kijken of het de goede tekst bevat
                     //Beginnen bij 4e, bovenstaande is niet belangrijk
-                    for (int i = 3; i < rows.size(); i++) {
+                    for (int i = 2; i < rows.size(); i++) {
                         Element row = rows.get(i);
                         Elements cols = row.select("td");
 
