@@ -10,26 +10,30 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.jsoup.Connection;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
+
 
 
 public class MainActivity extends ActionBarActivity {
+    ArrayList<String> wijzigingenList = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Listview beheren waarop wijzigingen komen te staan
+        ListView listView = (ListView) findViewById(R.id.wijzigingenList);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                MainActivity.this,
+                android.R.layout.simple_list_item_1,
+                wijzigingenList);
+        listView.setAdapter(arrayAdapter);
     }
 
 
@@ -65,11 +69,13 @@ public class MainActivity extends ActionBarActivity {
                 EditText klasText = (EditText) findViewById(R.id.klasText);
                 String klasTextS = klasText.getText().toString();
                 String url = "http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm";
-                ArrayList<String> wijzigingenList = new ArrayList<String>();
+
+
                 try {
                     Document doc = Jsoup.connect(url).get();
                     Element table = doc.select("table").get(1);
                     Elements rows = table.select("tr");
+                    wijzigingenList.clear();
 
                     //Loop genereren, voor elke row kijken of het de goede tekst bevat
                     //Beginnen bij 4e, bovenstaande is niet belangrijk
@@ -79,7 +85,7 @@ public class MainActivity extends ActionBarActivity {
 
 
                         if (cols.get(0).text().contains(klasTextS)) {
-                            String wijziging = " De wijziging is: " +
+                            String wijziging =
                                     // Voegt alle kolommen samen tot 1 string
                                     // .text() zorgt voor leesbare text
                                     // Spaties voor leesbaarheid
@@ -115,16 +121,26 @@ public class MainActivity extends ActionBarActivity {
                 return null;
             }
             public void onPostExecute(ArrayList wijzigingenList){
+                //ONDERSTAANDE COMMENT KAN WORDEN VERWIJDERD
                 //Messageboxen met wijzigingen laten zien: Net zolang doorgaan totdat alle
                 //wijzigingen zijn weergegeven
-                for (int i = 0; i< wijzigingenList.size(); i++){
-                AlertDialog.Builder messageBox = new AlertDialog.Builder(MainActivity.this);
-                messageBox.setTitle("Resultaat");
-                messageBox.setMessage(wijzigingenList.get(i).toString());
-                messageBox.setCancelable(false);
-                messageBox.setNeutralButton("Oké!", null);
-                messageBox.show();
-            }}
+                //for (int i = 0; i< wijzigingenList.size(); i++){
+                //AlertDialog.Builder messageBox = new AlertDialog.Builder(MainActivity.this);
+                //messageBox.setTitle("Resultaat");
+                //messageBox.setMessage(wijzigingenList.get(i).toString());
+                //messageBox.setCancelable(false);
+                //messageBox.setNeutralButton("Oké!", null);
+                //messageBox.show();
+            //}
+                //Onderstaand If om bug tegen te gaan waar er altijd staat "Er zijn geen wijzigingen"
+                if (wijzigingenList.indexOf("Er zijn geen wijzigingen.") > 0){
+                    int index = wijzigingenList.indexOf("Er zijn geen wijzigingen");
+                    wijzigingenList.remove(index);
+                }
+
+                ListView listView = (ListView) findViewById(R.id.wijzigingenList);
+                listView.invalidateViews();
+            }
 
     }
 

@@ -37,4 +37,22 @@
         android:layout_alignBottom="@+id/klasText"
         android:textSize="30sp" />
 
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/wijzigingenList"
+        android:layout_below="@+id/wijzigingenBanner"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="De wijzigingen zijn:"
+        android:textSize="25sp"
+        android:id="@+id/wijzigingenBanner"
+        android:layout_below="@+id/klasText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>
