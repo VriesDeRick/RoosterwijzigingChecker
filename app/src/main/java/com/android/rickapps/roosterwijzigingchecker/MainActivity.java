@@ -58,13 +58,14 @@ public class MainActivity extends ActionBarActivity {
         public void checker2(View view){
         new CheckerClass().execute();
         }
-        class CheckerClass extends AsyncTask<Void, Void, String> {
+        class CheckerClass extends AsyncTask<Void, Void, ArrayList> {
 
             @Override
-            public String doInBackground(Void... params) {
+            public ArrayList doInBackground(Void... params) {
                 EditText klasText = (EditText) findViewById(R.id.klasText);
                 String klasTextS = klasText.getText().toString();
                 String url = "http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm";
+                ArrayList<String> wijzigingenList = new ArrayList<String>();
                 try {
                     Document doc = Jsoup.connect(url).get();
                     Element table = doc.select("table").get(1);
@@ -76,8 +77,9 @@ public class MainActivity extends ActionBarActivity {
                         Element row = rows.get(i);
                         Elements cols = row.select("td");
 
+
                         if (cols.get(0).text().contains(klasTextS)) {
-                            String wijzigingen = " De wijziging is: " +
+                            String wijziging = " De wijziging is: " +
                                     // Voegt alle kolommen samen tot 1 string
                                     // .text() zorgt voor leesbare text
                                     // Spaties voor leesbaarheid
@@ -87,34 +89,42 @@ public class MainActivity extends ActionBarActivity {
                                     Jsoup.parse(cols.get(4).toString()).text() + " " +
                                     Jsoup.parse(cols.get(5).toString()).text() + " in " +
                                     Jsoup.parse(cols.get(6).toString()).text() + " " +
-                                    Jsoup.parse(cols.get(7).toString()).text() + " " +
-                                    Jsoup.parse(cols.get(8).toString()).text();
-                            return wijzigingen;
+                                    Jsoup.parse(cols.get(7).toString()).text() + " (" +
+                                    Jsoup.parse(cols.get(8).toString()).text() + ")";
+                            wijzigingenList.add(wijziging);
 
                         }
                         //Geen wijzigingen pas bij laatste rij
                         else{
                               if (i == rows.size() - 1){
-                                  return "Er zijn geen wijzigingen.";
+                                  //Checken of wijzigingenList leeg is, zo ja 1 ding toevoegen
+                                  if (wijzigingenList.size() == 0){
+                                      wijzigingenList.add("Er zijn geen wijzigingen.");
+                                  }
+                                  return wijzigingenList;
                             }
 
                         }
                    }
                 }
                 catch(java.io.IOException e) {
-                    return "Er was een verbindingsfout";
+                    //Error toevoegen aan wijzigingenList, dat wordt weergegeven in messagebox
+                    wijzigingenList.add("Er was een verbindingsfout");
+                    return wijzigingenList;
                 }
                 return null;
             }
-            public void onPostExecute(String wijzigingen){
-                //Messagebox met wijzigingen laten zien
+            public void onPostExecute(ArrayList wijzigingenList){
+                //Messageboxen met wijzigingen laten zien: Net zolang doorgaan totdat alle
+                //wijzigingen zijn weergegeven
+                for (int i = 0; i< wijzigingenList.size(); i++){
                 AlertDialog.Builder messageBox = new AlertDialog.Builder(MainActivity.this);
                 messageBox.setTitle("Resultaat");
-                messageBox.setMessage(wijzigingen);
+                messageBox.setMessage(wijzigingenList.get(i).toString());
                 messageBox.setCancelable(false);
                 messageBox.setNeutralButton("Oké!", null);
                 messageBox.show();
-            }
+            }}
 
     }
 
