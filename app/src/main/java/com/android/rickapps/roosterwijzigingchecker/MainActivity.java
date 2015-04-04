@@ -1,6 +1,6 @@
 package com.android.rickapps.roosterwijzigingchecker;
 
-import android.app.AlertDialog;
+
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 
 public class MainActivity extends ActionBarActivity {
-    ArrayList<String> wijzigingenList = new ArrayList<String>();
+    ArrayList<String> wijzigingenList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         //Listview beheren waarop wijzigingen komen te staan
         ListView listView = (ListView) findViewById(R.id.wijzigingenList);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
                 MainActivity.this,
                 android.R.layout.simple_list_item_1,
                 wijzigingenList);
