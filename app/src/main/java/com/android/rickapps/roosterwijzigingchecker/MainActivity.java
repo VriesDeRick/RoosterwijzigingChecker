@@ -59,19 +59,19 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-        public void checker2(View view){
+    public void checker2(View view){
         new CheckerClass().execute();
         }
-        class CheckerClass extends AsyncTask<Void, Void, ArrayList> {
+    class CheckerClass extends AsyncTask<Void, Void, ArrayList> {
 
-            @Override
-            public ArrayList doInBackground(Void... params) {
+        @Override
+        public ArrayList doInBackground(Void... params) {
                 EditText klasText = (EditText) findViewById(R.id.klasText);
                 String klasTextS = klasText.getText().toString();
                 String url = "http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm";
 
-
-                try {
+            //Try en catch in het geval dat de internetverbinding mist
+            try {
                     Document doc = Jsoup.connect(url).get();
                     Element table = doc.select("table").get(1);
                     Elements rows = table.select("tr");
@@ -101,65 +101,30 @@ public class MainActivity extends ActionBarActivity {
 
                         }
                         //Geen wijzigingen pas bij laatste rij
-                        else{
-                              if (i == rows.size() - 1){
+                        if (i == rows.size() - 1){
                                   //Checken of wijzigingenList leeg is, zo ja 1 ding toevoegen
-                                  if (wijzigingenList.size() == 0){
+                                  if (wijzigingenList.isEmpty()){
                                       wijzigingenList.add("Er zijn geen wijzigingen.");
                                   }
                                   return wijzigingenList;
-                            }
-
                         }
+
+
                    }
-                }
-                catch(java.io.IOException e) {
+            }
+            catch(java.io.IOException e) {
                     //Error toevoegen aan wijzigingenList, dat wordt weergegeven in messagebox
+                    wijzigingenList.clear();
                     wijzigingenList.add("Er was een verbindingsfout");
                     return wijzigingenList;
-                }
-                return null;
             }
-            public void onPostExecute(ArrayList wijzigingenList){
-                //ONDERSTAANDE COMMENT KAN WORDEN VERWIJDERD
-                //Messageboxen met wijzigingen laten zien: Net zolang doorgaan totdat alle
-                //wijzigingen zijn weergegeven
-                //for (int i = 0; i< wijzigingenList.size(); i++){
-                //AlertDialog.Builder messageBox = new AlertDialog.Builder(MainActivity.this);
-                //messageBox.setTitle("Resultaat");
-                //messageBox.setMessage(wijzigingenList.get(i).toString());
-                //messageBox.setCancelable(false);
-                //messageBox.setNeutralButton("Oké!", null);
-                //messageBox.show();
-            //}
-                //Onderstaand If om bug tegen te gaan waar er altijd staat "Er zijn geen wijzigingen"
-                if (wijzigingenList.indexOf("Er zijn geen wijzigingen.") > 0){
-                    int index = wijzigingenList.indexOf("Er zijn geen wijzigingen");
-                    wijzigingenList.remove(index);
-                }
-
+            //AS wilt graag een return statment: here you go
+            return null;
+        }
+        public void onPostExecute(ArrayList wijzigingenList){
                 ListView listView = (ListView) findViewById(R.id.wijzigingenList);
                 listView.invalidateViews();
-            }
+        }
 
-    }
-
-
-    private void messageBoxGeenWijziging() {
-            AlertDialog.Builder messageBox = new AlertDialog.Builder(this);
-            messageBox.setTitle("Er zijn geen wijzigingen!");
-            messageBox.setMessage("Er zijn geen wijzigingen, volgende keer beter!");
-            messageBox.setCancelable(false);
-            messageBox.setNeutralButton("Oké!", null);
-            messageBox.show();
-    }
-
-    private void messageBoxWijziging(String wijzigingen) {
-        AlertDialog.Builder messageBox = new AlertDialog.Builder(this);
-        messageBox.setTitle("Er zijn wijzigingen!");
-        messageBox.setMessage(wijzigingen);
-        messageBox.setCancelable(false);
-        messageBox.setNeutralButton("Dankje!", null);
-        messageBox.show();
     }
 }
