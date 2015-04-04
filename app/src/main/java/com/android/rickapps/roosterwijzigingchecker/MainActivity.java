@@ -66,10 +66,30 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         public ArrayList doInBackground(Void... params) {
-                EditText klasText = (EditText) findViewById(R.id.klasText);
-                String klasTextS = klasText.getText().toString();
-                String url = "http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm";
-
+            EditText klasText = (EditText) findViewById(R.id.klasText);
+            String klasTextS = klasText.getText().toString();
+            String url = "http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm";
+            //String opsplitsen in 2 delen, om naar hoofdletters te converteren
+            char charcijfer = klasTextS.charAt(0);
+            String klascijfer = String.valueOf(charcijfer);
+            char charafdeling = klasTextS.charAt(1);
+            String klasafdelingBig = String.valueOf(charafdeling).toUpperCase();
+            boolean langeklas = false;
+            //Sommige klassen hebben 2 delen, andere 3
+            if (klasTextS.length() == 3){
+                 langeklas = true;
+            }
+            String klasCorrect;
+            //Onderstaand bij 3-delige klas, laatste deel moet kleine letter zijn.
+            if(langeklas){
+                char klasabc = klasTextS.charAt(2);
+                String klasabcSmall = String.valueOf(klasabc).toLowerCase();
+                klasCorrect = klascijfer + klasafdelingBig + klasabcSmall;
+            }
+            //Onderstaand bij 2-delige klas
+            else {
+                klasCorrect = klascijfer + klasafdelingBig;
+            }
             //Try en catch in het geval dat de internetverbinding mist
             try {
                     Document doc = Jsoup.connect(url).get();
@@ -84,7 +104,7 @@ public class MainActivity extends ActionBarActivity {
                         Elements cols = row.select("td");
 
 
-                        if (cols.get(0).text().contains(klasTextS)) {
+                        if (cols.get(0).text().contains(klasCorrect)) {
                             String wijziging =
                                     // Voegt alle kolommen samen tot 1 string
                                     // .text() zorgt voor leesbare text
