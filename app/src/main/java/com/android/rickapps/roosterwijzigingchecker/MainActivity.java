@@ -1,6 +1,8 @@
 package com.android.rickapps.roosterwijzigingchecker;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -34,6 +36,16 @@ public class MainActivity extends ActionBarActivity {
                 android.R.layout.simple_list_item_1,
                 wijzigingenList);
         listView.setAdapter(arrayAdapter);
+        //Klas ophalen van SP
+        EditText klasText = (EditText) findViewById(R.id.klasText);
+        //EMPTY is als er geen value is opgehaald, maw bij de 1e keer gebruik
+        String SPKlas = getPreferences(Context.MODE_PRIVATE).getString("KLAS", "EMPTY");
+        //In geval van 1e keer is SP leeg: in dat geval textView aanpassen
+        if (!SPKlas.equals("EMPTY")){
+            klasText.setText(SPKlas);
+        }
+
+
     }
 
 
@@ -131,7 +143,8 @@ public class MainActivity extends ActionBarActivity {
                                   if (wijzigingenList.isEmpty()){
                                       wijzigingenList.add("Er zijn geen wijzigingen.");
                                   }
-                                  return wijzigingenList;
+                            wijzigingenList.add(klasCorrect);
+                            return wijzigingenList;
                         }
 
 
@@ -147,7 +160,17 @@ public class MainActivity extends ActionBarActivity {
             return null;
         }
         public void onPostExecute(ArrayList wijzigingenList){
-                ListView listView = (ListView) findViewById(R.id.wijzigingenList);
+            //int voor klasindex opvragen, index is 1 lager dan size, want hij is
+            //als laatste toegevoegd
+            int klasIndex = wijzigingenList.size() -1;
+            //Klas opslaan voor later gebruik
+            String klas = wijzigingenList.get(klasIndex).toString();
+            SharedPreferences.Editor SPEditor = getPreferences(Context.MODE_PRIVATE).edit();
+            SPEditor.putString("KLAS", klas);
+            SPEditor.commit();
+            //Listview updaten, wel eerst klas eruit weghalen
+            wijzigingenList.remove(klasIndex);
+            ListView listView = (ListView) findViewById(R.id.wijzigingenList);
                 listView.invalidateViews();
         }
 
