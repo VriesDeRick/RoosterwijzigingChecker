@@ -107,6 +107,11 @@ public class MainActivity extends ActionBarActivity {
             else {
                 klasCorrect = klascijfer + klasafdelingBig;
             }
+            //Klas opslaan in SP
+            SharedPreferences.Editor SPEditor = getPreferences(Context.MODE_PRIVATE).edit();
+            SPEditor.putString("KLAS", klasCorrect);
+            SPEditor.commit();
+
             //Try en catch in het geval dat de internetverbinding mist
             try {
                     Document doc = Jsoup.connect(url).get();
@@ -143,7 +148,6 @@ public class MainActivity extends ActionBarActivity {
                                   if (wijzigingenList.isEmpty()){
                                       wijzigingenList.add("Er zijn geen wijzigingen.");
                                   }
-                            wijzigingenList.add(klasCorrect);
                             return wijzigingenList;
                         }
 
@@ -160,16 +164,7 @@ public class MainActivity extends ActionBarActivity {
             return null;
         }
         public void onPostExecute(ArrayList wijzigingenList){
-            //int voor klasindex opvragen, index is 1 lager dan size, want hij is
-            //als laatste toegevoegd
-            int klasIndex = wijzigingenList.size() -1;
-            //Klas opslaan voor later gebruik
-            String klas = wijzigingenList.get(klasIndex).toString();
-            SharedPreferences.Editor SPEditor = getPreferences(Context.MODE_PRIVATE).edit();
-            SPEditor.putString("KLAS", klas);
-            SPEditor.commit();
-            //Listview updaten, wel eerst klas eruit weghalen
-            wijzigingenList.remove(klasIndex);
+            //ListView updaten om roosterwijzigingen te laten zien
             ListView listView = (ListView) findViewById(R.id.wijzigingenList);
                 listView.invalidateViews();
         }
