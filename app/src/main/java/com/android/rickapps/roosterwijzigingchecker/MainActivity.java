@@ -91,20 +91,24 @@ public class MainActivity extends ActionBarActivity {
             String klascijfer = String.valueOf(charcijfer);
             char charafdeling = klasTextS.charAt(1);
             String klasafdelingBig = String.valueOf(charafdeling).toUpperCase();
-            boolean langeklas = false;
-            //Sommige klassen hebben 2 delen, andere 3
-            if (klasTextS.length() == 3){
-                 langeklas = true;
-            }
-            String klasCorrect;
+            //Sommige klassen hebben 2 delen, andere 3, andere 4
+            String klasCorrect= "5Va";
             //Onderstaand bij 3-delige klas, laatste deel moet kleine letter zijn.
-            if(langeklas){
+            if(klasTextS.length() == 3){
                 char klasabc = klasTextS.charAt(2);
                 String klasabcSmall = String.valueOf(klasabc).toLowerCase();
                 klasCorrect = klascijfer + klasafdelingBig + klasabcSmall;
             }
+            if (klasTextS.length() == 4){
+                char klasafdeling2 = klasTextS.charAt(2);
+                String klasafdeling2Big = String.valueOf(klasafdeling2).toUpperCase();
+                char klasabc = klasTextS.charAt(3);
+                String klasabcSmall = String.valueOf(klasabc).toLowerCase();
+
+                klasCorrect = klascijfer + klasafdelingBig + klasafdeling2Big + klasabcSmall;
+            }
             //Onderstaand bij 2-delige klas
-            else {
+            if (klasTextS.length() == 2){
                 klasCorrect = klascijfer + klasafdelingBig;
             }
             //Klas opslaan in SP
@@ -127,6 +131,15 @@ public class MainActivity extends ActionBarActivity {
 
 
                         if (cols.get(0).text().contains(klasCorrect)) {
+                            //If in geval van uitval, else ingeval van wijziging
+                            if (Jsoup.parse(cols.get(6).toString()).text().contains("--")){
+                                String wijziging =
+                                        Jsoup.parse(cols.get(1).toString()).text() + "e uur " +
+                                        Jsoup.parse(cols.get(2).toString()).text() + " valt uit.";
+                                wijzigingenList.add(wijziging);
+                            }
+                            else {
+
                             String wijziging =
                                     // Voegt alle kolommen samen tot 1 string
                                     // .text() zorgt voor leesbare text
@@ -137,9 +150,9 @@ public class MainActivity extends ActionBarActivity {
                                     Jsoup.parse(cols.get(4).toString()).text() + " " +
                                     Jsoup.parse(cols.get(5).toString()).text() + " in " +
                                     Jsoup.parse(cols.get(6).toString()).text() + " " +
-                                    Jsoup.parse(cols.get(7).toString()).text() + " (" +
-                                    Jsoup.parse(cols.get(8).toString()).text() + ")";
-                            wijzigingenList.add(wijziging);
+                                    Jsoup.parse(cols.get(7).toString()).text() + " " +
+                                    Jsoup.parse(cols.get(8).toString()).text() + " ";
+                            wijzigingenList.add(wijziging);}
 
                         }
                         //Geen wijzigingen pas bij laatste rij
