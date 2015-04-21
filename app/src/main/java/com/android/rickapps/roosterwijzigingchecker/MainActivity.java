@@ -2,14 +2,18 @@ package com.android.rickapps.roosterwijzigingchecker;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -24,6 +28,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity {
     ArrayList<String> wijzigingenList = new ArrayList<>();
+    int SETTINGS_INFO = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,15 +70,39 @@ public class MainActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            openSettings();
         }
-        switch (item.getItemId()) {
-            case R.id.action_refresh:
-                checker2(findViewById(R.id.button));
+        if (id == R.id.action_refresh) {
+            checker2(findViewById(R.id.button));
         }
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    //Onderstaand puur tijdelijk voor testdoeleinden
+    private void openSettings() {
+        Intent settingsIntent = new Intent(getApplicationContext(),
+                SettingsActivity.class);
+        startActivityForResult(settingsIntent, SETTINGS_INFO);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == SETTINGS_INFO){
+            button_bold();
+
+        }
+    }
+
+    private void button_bold() {
+        Button button = (Button) findViewById(R.id.button);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (sharedPreferences.getBoolean("pref_but_bold", false)){
+            button.setTypeface(null, Typeface.BOLD);
+        } else button.setTypeface(null, Typeface.NORMAL);
+
     }
 
     public void checker2(View view){
