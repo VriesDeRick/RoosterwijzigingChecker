@@ -28,7 +28,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity {
     ArrayList<String> wijzigingenList = new ArrayList<>();
-    int SETTINGS_INFO = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,15 +83,14 @@ public class MainActivity extends ActionBarActivity {
     private void openSettings() {
         Intent settingsIntent = new Intent(getApplicationContext(),
                 SettingsActivity.class);
-        startActivityForResult(settingsIntent, SETTINGS_INFO);
+        startActivityForResult(settingsIntent, 1874);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == SETTINGS_INFO){
+        if(requestCode == 1874){
             button_bold();
-
         }
     }
 
@@ -102,6 +100,7 @@ public class MainActivity extends ActionBarActivity {
         if (sharedPreferences.getBoolean("pref_but_bold", false)){
             button.setTypeface(null, Typeface.BOLD);
         } else button.setTypeface(null, Typeface.NORMAL);
+
 
     }
 

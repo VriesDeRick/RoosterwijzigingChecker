@@ -4,4 +4,8 @@
         android:title="Make text bold"
         android:summary="Makes the button bold"
         android:defaultValue="false"/>
+    <EditTextPreference android:key="pref_klas"
+        android:title="Klas"
+        android:summary="Voer hier je klas in"
+        android:defaultValue="5Va" />
 </PreferenceScreen>
