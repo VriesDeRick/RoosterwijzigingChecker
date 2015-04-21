@@ -23,7 +23,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-
+import java.util.Objects;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -40,14 +40,6 @@ public class MainActivity extends ActionBarActivity {
                 android.R.layout.simple_list_item_1,
                 wijzigingenList);
         listView.setAdapter(arrayAdapter);
-        //Klas ophalen van SP
-        EditText klasText = (EditText) findViewById(R.id.klasText);
-        //EMPTY is als er geen value is opgehaald, maw bij de 1e keer gebruik
-        String SPKlas = getPreferences(Context.MODE_PRIVATE).getString("KLAS", "EMPTY");
-        //In geval van 1e keer is SP leeg: in dat geval textView aanpassen
-        if (!SPKlas.equals("EMPTY")){
-            klasText.setText(SPKlas);
-        }
 
 
     }
@@ -111,9 +103,15 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         public ArrayList doInBackground(Void... params) {
-            EditText klasText = (EditText) findViewById(R.id.klasText);
-            String klasTextS = klasText.getText().toString();
+            //String halen uit SP
+            String klasTextS = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("pref_klas", "");
             String url = "http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm";
+            wijzigingenList.clear();
+            //Checken of klas niet leeg is
+            if (klasTextS.equals("")){
+                wijzigingenList.add("Voer een klas in in het instellingenscherm.");
+                return wijzigingenList;
+            }
             //String opsplitsen in 2 delen, om naar hoofdletters te converteren
             char charcijfer = klasTextS.charAt(0);
             String klascijfer = String.valueOf(charcijfer);
@@ -142,15 +140,13 @@ public class MainActivity extends ActionBarActivity {
             //Klas opslaan in SP
             SharedPreferences.Editor SPEditor = getPreferences(Context.MODE_PRIVATE).edit();
             SPEditor.putString("KLAS", klasCorrect);
-            SPEditor.commit();
+            SPEditor.apply();
 
             //Try en catch in het geval dat de internetverbinding mist
             try {
                     Document doc = Jsoup.connect(url).get();
                     Element table = doc.select("table").get(1);
                     Elements rows = table.select("tr");
-                    wijzigingenList.clear();
-
                     //Loop genereren, voor elke row kijken of het de goede tekst bevat
                     //Beginnen bij 4e, bovenstaande is niet belangrijk
                     for (int i = 2; i < rows.size(); i++) {

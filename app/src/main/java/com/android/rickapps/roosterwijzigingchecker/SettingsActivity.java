@@ -22,9 +22,8 @@ public class SettingsActivity extends ActionBarActivity{
     }
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        //Up-button (R.id.home) sluit activity af
         if (id == android.R.id.home){
-            Intent resultIntent = new Intent();
-            setResult(Activity.RESULT_OK, resultIntent);
             finish();
             return true;
         }
