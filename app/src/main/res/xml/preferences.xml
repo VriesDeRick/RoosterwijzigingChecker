@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <CheckBoxPreference android:key="pref_but_bold"
-        android:title="Make text bold"
-        android:summary="Makes the button bold"
+        android:title="Maak zoekknop dikgedrukt"
+        android:summary="Let op: dit is puur voor debugging-doeleinden"
         android:defaultValue="false"/>
     <EditTextPreference android:key="pref_klas"
         android:title="Klas"
