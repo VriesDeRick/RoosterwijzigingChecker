@@ -1,23 +1,19 @@
 package com.android.rickapps.roosterwijzigingchecker;
 
-import android.app.ActionBar;
-import android.os.Bundle;
-import android.preference.PreferenceActivity;
 
-public class SettingsActivity extends PreferenceActivity {
-    //TODO: Text in Actionbar uitvogelen
+import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+
+public class SettingsActivity extends ActionBarActivity{
     @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //ActionBar actionBar = getActionBar();
-        //actionBar.setDisplayHomeAsUpEnabled(true);
-
         setContentView(R.layout.activity_settings);
-
-        // Define the xml file used for preferences
-        addPreferencesFromResource(R.xml.preferences);
+        //Fragment als content zetten op activity
+        getFragmentManager().beginTransaction()
+                .replace(android.R.id.content, new SettingsFragment())
+                .commit();
     }
 
 }
