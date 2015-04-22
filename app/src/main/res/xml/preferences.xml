@@ -4,8 +4,80 @@
         android:title="Maak zoekknop dikgedrukt"
         android:summary="Let op: dit is puur voor debugging-doeleinden"
         android:defaultValue="false"/>
-    <EditTextPreference android:key="pref_klas"
+    <EditTextPreference
+        android:key="pref_klas"
         android:title="Klas"
         android:summary="Voer hier je klas in"
         android:defaultValue="5Va" />
+    <PreferenceCategory
+        android:title="Clusterinstellingen"
+        android:key="pref_cluster_settings">
+        <CheckBoxPreference
+            android:title="Clusters inschakelen"
+            android:summary="Schakel clusterfiltering in (aangeraden voor bovenbouw)"
+            android:key="pref_cluster_enabled"
+            android:defaultValue="false" />
+        <EditTextPreference
+            android:key="pref_cluster1"
+            android:title="Clusters"
+            android:summary="Voer hier een cluster in"
+            android:defaultValue=""
+            android:dependency="pref_cluster_enabled" />
+        <EditTextPreference
+            android:key="pref_cluster3"
+            android:title="Clusters"
+            android:summary="Voer hier een andere cluster in"
+            android:defaultValue=""
+            android:dependency="pref_cluster_enabled" />
+        <EditTextPreference
+            android:key="pref_cluster3"
+            android:title="Clusters"
+            android:summary="Voer hier een andere cluster in"
+            android:defaultValue=""
+            android:dependency="pref_cluster_enabled" />
+        <EditTextPreference
+            android:key="pref_cluster4"
+            android:title="Clusters"
+            android:summary="Voer hier een andere cluster in"
+            android:defaultValue=""
+            android:dependency="pref_cluster_enabled" />
+        <EditTextPreference
+            android:key="pref_cluster5"
+            android:title="Clusters"
+            android:summary="Voer hier een andere cluster in"
+            android:defaultValue=""
+            android:dependency="pref_cluster_enabled" />
+        <EditTextPreference
+            android:key="pref_cluster6"
+            android:title="Clusters"
+            android:summary="Voer hier een andere cluster in"
+            android:defaultValue=""
+            android:dependency="pref_cluster_enabled" />
+        <EditTextPreference
+            android:key="pref_cluster7"
+            android:title="Clusters"
+            android:summary="Voer hier een andere cluster in"
+            android:defaultValue=""
+            android:dependency="pref_cluster_enabled" />
+        <EditTextPreference
+            android:key="pref_cluster8"
+            android:title="Clusters"
+            android:summary="Voer hier een andere cluster in"
+            android:defaultValue=""
+            android:dependency="pref_cluster_enabled" />
+        <EditTextPreference
+            android:key="pref_cluster9"
+            android:title="Clusters"
+            android:summary="Voer hier een andere cluster in"
+            android:defaultValue=""
+            android:dependency="pref_cluster_enabled" />
+        <EditTextPreference
+            android:key="pref_cluster10"
+            android:title="Clusters"
+            android:summary="Voer hier een andere cluster in"
+            android:defaultValue=""
+            android:dependency="pref_cluster_enabled" />
+
+
+    </PreferenceCategory>
 </PreferenceScreen>

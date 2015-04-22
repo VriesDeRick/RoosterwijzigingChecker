@@ -12,7 +12,7 @@
         android:text="Check voor roosterwijzigingen"
         android:id="@+id/button"
         android:layout_centerHorizontal="true"
-        android:onClick="checker2"
+        android:onClick="checker"
         />
 
 
