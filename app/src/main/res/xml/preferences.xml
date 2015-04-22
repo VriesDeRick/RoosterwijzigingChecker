@@ -20,61 +20,61 @@
         <EditTextPreference
             android:key="pref_cluster1"
             android:title="Cluster 1"
-            android:summary="%s"
+            android:summary=""
             android:defaultValue=""
             android:dependency="pref_cluster_enabled" />
         <EditTextPreference
             android:key="pref_cluster3"
             android:title="Cluster 2"
-            android:summary="%s"
+            android:summary=""
             android:defaultValue=""
             android:dependency="pref_cluster_enabled" />
         <EditTextPreference
             android:key="pref_cluster3"
             android:title="Cluster 3"
-            android:summary="%s"
+            android:summary=""
             android:defaultValue=""
             android:dependency="pref_cluster_enabled" />
         <EditTextPreference
             android:key="pref_cluster4"
             android:title="Cluster 4"
-            android:summary="%s"
+            android:summary=""
             android:defaultValue=""
             android:dependency="pref_cluster_enabled" />
         <EditTextPreference
             android:key="pref_cluster5"
             android:title="Cluster 5"
-            android:summary="%s"
+            android:summary=""
             android:defaultValue=""
             android:dependency="pref_cluster_enabled" />
         <EditTextPreference
             android:key="pref_cluster6"
             android:title="Cluster 6"
-            android:summary="%s"
+            android:summary=""
             android:defaultValue=""
             android:dependency="pref_cluster_enabled" />
         <EditTextPreference
             android:key="pref_cluster7"
             android:title="Cluster 7"
-            android:summary="%s"
+            android:summary=""
             android:defaultValue=""
             android:dependency="pref_cluster_enabled" />
         <EditTextPreference
             android:key="pref_cluster8"
             android:title="Cluster 8"
-            android:summary="%s"
+            android:summary=""
             android:defaultValue=""
             android:dependency="pref_cluster_enabled" />
         <EditTextPreference
             android:key="pref_cluster9"
             android:title="Cluster 9"
-            android:summary="%s"
+            android:summary=""
             android:defaultValue=""
             android:dependency="pref_cluster_enabled" />
         <EditTextPreference
             android:key="pref_cluster10"
             android:title="Cluster 10"
-            android:summary="%s"
+            android:summary=""
             android:defaultValue=""
             android:dependency="pref_cluster_enabled" />
 
