@@ -143,10 +143,6 @@ public class MainActivity extends ActionBarActivity {
             if (klasTextS.length() == 2){
                 klasCorrect = klascijfer + klasafdelingBig;
             }
-            //Klas opslaan in SP
-            SharedPreferences.Editor SPEditor = getPreferences(Context.MODE_PRIVATE).edit();
-            SPEditor.putString("KLAS", klasCorrect);
-            SPEditor.apply();
 
             //Try en catch in het geval dat de internetverbinding mist
             try {
@@ -231,7 +227,7 @@ public class MainActivity extends ActionBarActivity {
                 clusters.add(cluster);
             }
             //Lege clusters weghalen uit arraylist TODO: Kijken of singleton werkt/wat het is
-            clusters.removeAll(Collections.singleton(null));
+            clusters.removeAll(Collections.singleton(""));
 
 
             //Checken of klas niet leeg is
@@ -264,24 +260,21 @@ public class MainActivity extends ActionBarActivity {
             if (klasTextS.length() == 2){
                 klasCorrect = klascijfer + klasafdelingBig;
             }
-            //Klas opslaan in SP
-            SharedPreferences.Editor SPEditor = getPreferences(Context.MODE_PRIVATE).edit();
-            SPEditor.putString("KLAS", klasCorrect);
-            SPEditor.apply();
-
             //Try en catch in het geval dat de internetverbinding mist
             try {
                 Document doc = Jsoup.connect(url).get();
                 Element table = doc.select("table").get(1);
                 Elements rows = table.select("tr");
-                //Loop genereren, voor elke row kijken of het de goede tekst bevat
-                //Beginnen bij 4e, bovenstaande is niet belangrijk
+                //Eerste loop is om 2e loop te herhalen voor iedere cluster, tweede loop
+                //doorzoekt dan op zowel klas als cluster
+                for (int b = 0; b <= clusters.size(); b++){
                 for (int i = 2; i < rows.size(); i++) {
                     Element row = rows.get(i);
                     Elements cols = row.select("td");
 
 
-                    if (cols.get(0).text().contains(klasCorrect)) {
+                    if (cols.get(0).text().contains(klasCorrect)
+                            && cols.get(2).text().contains(clusters.get(b))) {
                         //If in geval van uitval, else ingeval van wijziging
                         if (Jsoup.parse(cols.get(6).toString()).text().contains("--")){
                             String wijziging =
@@ -306,8 +299,8 @@ public class MainActivity extends ActionBarActivity {
                             wijzigingenList.add(wijziging);}
 
                     }
-                    //Geen wijzigingen pas bij laatste rij
-                    if (i == rows.size() - 1){
+                    //Geen wijzigingen pas bij laatste rij en de laatste cluster
+                    if (i == rows.size() - 1 && b == clusters.size() - 1){
                         //Checken of wijzigingenList leeg is, zo ja 1 ding toevoegen
                         if (wijzigingenList.isEmpty()){
                             wijzigingenList.add("Er zijn geen wijzigingen.");
@@ -316,7 +309,7 @@ public class MainActivity extends ActionBarActivity {
                     }
 
 
-                }
+                } }
             }
             catch(java.io.IOException e) {
                 //Error toevoegen aan wijzigingenList, dat wordt weergegeven in messagebox
