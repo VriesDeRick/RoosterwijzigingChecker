@@ -222,7 +222,7 @@ public class MainActivity extends ActionBarActivity {
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             //Clusters ophalen uit SP
             ArrayList<String> clusters = new ArrayList<>();
-            for (int a = 1; a < 11; a++){
+            for (int a = 1; a < 15; a++){
                 String cluster = sp.getString("pref_cluster" + a, "");
                 clusters.add(cluster);
             }
@@ -267,7 +267,7 @@ public class MainActivity extends ActionBarActivity {
                 Elements rows = table.select("tr");
                 //Eerste loop is om 2e loop te herhalen voor iedere cluster, tweede loop
                 //doorzoekt dan op zowel klas als cluster
-                for (int b = 0; b <= clusters.size(); b++){
+                for (int b = 0; b < clusters.size(); b++){
                 for (int i = 2; i < rows.size(); i++) {
                     Element row = rows.get(i);
                     Elements cols = row.select("td");
