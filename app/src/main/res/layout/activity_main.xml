@@ -12,30 +12,9 @@
         android:text="Check voor roosterwijzigingen"
         android:id="@+id/button"
         android:layout_centerHorizontal="true"
-        android:onClick="checker2"
+        android:onClick="checker"
         />
 
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/klasText"
-        android:hint="Voer hier je klas in"
-        android:layout_below="@+id/button"
-        android:layout_toRightOf="@+id/textView"
-        android:layout_toEndOf="@+id/textView" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Klas:"
-        android:id="@+id/textView"
-        android:layout_below="@+id/button"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignBottom="@+id/klasText"
-        android:textSize="30sp" />
 
     <ListView
         android:layout_width="wrap_content"
@@ -51,8 +30,8 @@
         android:text="De wijzigingen zijn:"
         android:textSize="25sp"
         android:id="@+id/wijzigingenBanner"
-        android:layout_below="@+id/klasText"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/button" />
 
 </RelativeLayout>
