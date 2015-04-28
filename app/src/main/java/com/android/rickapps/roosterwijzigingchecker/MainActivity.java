@@ -228,6 +228,7 @@ public class MainActivity extends ActionBarActivity {
             //Clusters ophalen uit SP
             ArrayList<String> clusters = new ArrayList<>();
             for (int a = 1; a < 15; a++){
+                //TODO: Eerste letter kleine letter maken
                 String cluster = sp.getString("pref_cluster" + a, "");
                 clusters.add(cluster);
             }
