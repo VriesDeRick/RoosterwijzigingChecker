@@ -1,7 +1,6 @@
 package com.android.rickapps.roosterwijzigingchecker;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -15,6 +14,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -22,7 +22,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 
@@ -99,12 +98,14 @@ public class MainActivity extends ActionBarActivity {
     public void checker(View view){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Boolean clusters_enabled = sp.getBoolean("pref_cluster_enabled", false);
+        //Toast om gebruiker gerust te stellen
+        Toast.makeText(getApplicationContext(), "Zoeken is gestart", Toast.LENGTH_SHORT).show();
         if (clusters_enabled){
         new CheckerClusters().execute();}
-        else new CheckerClass().execute();
+        else new CheckerKlas().execute();
         }
     //Zoekalgoritme voor klassen
-    class CheckerClass extends AsyncTask<Void, Void, ArrayList> {
+    class CheckerKlas extends AsyncTask<Void, Void, ArrayList> {
 
         @Override
         public ArrayList doInBackground(Void... params) {
@@ -124,7 +125,7 @@ public class MainActivity extends ActionBarActivity {
             char charafdeling = klasTextS.charAt(1);
             String klasafdelingBig = String.valueOf(charafdeling).toUpperCase();
             //Sommige klassen hebben 2 delen, andere 3, andere 4
-            String klasCorrect= "5Va"; //TODO: check of deze line weg kan
+            String klasCorrect = null;
             //Onderstaand bij 3-delige klas, laatste deel moet kleine letter zijn.
             if(klasTextS.length() == 3){
                 char klasabc = klasTextS.charAt(2);
@@ -206,6 +207,10 @@ public class MainActivity extends ActionBarActivity {
             //ListView updaten om roosterwijzigingen te laten zien
             ListView listView = (ListView) findViewById(R.id.wijzigingenList);
                 listView.invalidateViews();
+            //Toast om te laten weten dat er is geupdatet, mag niet als er een verbindingsfout was
+            if (!wijzigingenList.get(0).equals("Er was een verbindingsfout")) {
+                Toast.makeText(getApplicationContext(), "Vernieuwd", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
@@ -241,7 +246,7 @@ public class MainActivity extends ActionBarActivity {
             char charafdeling = klasTextS.charAt(1);
             String klasafdelingBig = String.valueOf(charafdeling).toUpperCase();
             //Sommige klassen hebben 2 delen, andere 3, andere 4
-            String klasCorrect= "5Va"; //TODO: Check of deze line weg kan
+            String klasCorrect = null;
             //Onderstaand bij 3-delige klas, laatste deel moet kleine letter zijn.
             if(klasTextS.length() == 3){
                 char klasabc = klasTextS.charAt(2);
@@ -324,6 +329,10 @@ public class MainActivity extends ActionBarActivity {
             //ListView updaten om roosterwijzigingen te laten zien
             ListView listView = (ListView) findViewById(R.id.wijzigingenList);
             listView.invalidateViews();
+            //Toast om te laten weten dat er is geupdatet, mag niet als er verbindingsfout was
+            if (!wijzigingenList.get(0).equals("Er was een verbindingsfout")) {
+                Toast.makeText(getApplicationContext(), "Vernieuwd", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }

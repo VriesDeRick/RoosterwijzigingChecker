@@ -8,7 +8,7 @@
         android:key="pref_klas"
         android:title="Klas"
         android:summary="Voer hier je klas in"
-        android:defaultValue="5Va" />
+        android:defaultValue="" />
     <PreferenceCategory
         android:title="Clusterinstellingen"
         android:key="pref_cluster_settings">
@@ -24,7 +24,7 @@
             android:defaultValue=""
             android:dependency="pref_cluster_enabled" />
         <EditTextPreference
-            android:key="pref_cluster3"
+            android:key="pref_cluster2"
             android:title="Cluster 2"
             android:summary=""
             android:defaultValue=""
@@ -90,7 +90,7 @@
             android:defaultValue=""
             android:dependency="pref_cluster_enabled" />
         <EditTextPreference
-            android:key="pref_cluster10"
+            android:key="pref_cluster13"
             android:title="Cluster 13"
             android:summary=""
             android:defaultValue=""
