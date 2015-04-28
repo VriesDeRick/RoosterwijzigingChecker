@@ -124,7 +124,7 @@ public class MainActivity extends ActionBarActivity {
             char charafdeling = klasTextS.charAt(1);
             String klasafdelingBig = String.valueOf(charafdeling).toUpperCase();
             //Sommige klassen hebben 2 delen, andere 3, andere 4
-            String klasCorrect= "5Va";
+            String klasCorrect= "5Va"; //TODO: check of deze line weg kan
             //Onderstaand bij 3-delige klas, laatste deel moet kleine letter zijn.
             if(klasTextS.length() == 3){
                 char klasabc = klasTextS.charAt(2);
@@ -241,7 +241,7 @@ public class MainActivity extends ActionBarActivity {
             char charafdeling = klasTextS.charAt(1);
             String klasafdelingBig = String.valueOf(charafdeling).toUpperCase();
             //Sommige klassen hebben 2 delen, andere 3, andere 4
-            String klasCorrect= "5Va";
+            String klasCorrect= "5Va"; //TODO: Check of deze line weg kan
             //Onderstaand bij 3-delige klas, laatste deel moet kleine letter zijn.
             if(klasTextS.length() == 3){
                 char klasabc = klasTextS.charAt(2);
