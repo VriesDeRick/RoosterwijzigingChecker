@@ -27,6 +27,7 @@ import java.util.Collections;
 
 public class MainActivity extends ActionBarActivity {
     ArrayList<String> wijzigingenList = new ArrayList<>();
+    public Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,8 +99,6 @@ public class MainActivity extends ActionBarActivity {
     public void checker(View view){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Boolean clusters_enabled = sp.getBoolean("pref_cluster_enabled", false);
-        //Toast om gebruiker gerust te stellen
-        Toast.makeText(getApplicationContext(), "Zoeken is gestart", Toast.LENGTH_SHORT).show();
         if (clusters_enabled){
         new CheckerClusters().execute();}
         else new CheckerKlas().execute();
@@ -108,11 +107,17 @@ public class MainActivity extends ActionBarActivity {
     class CheckerKlas extends AsyncTask<Void, Void, ArrayList> {
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //Toast om gebruiker gerust te stellen
+            toast = Toast.makeText(getApplicationContext(), "Zoeken is gestart", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+        @Override
         public ArrayList doInBackground(Void... params) {
             //String halen uit SP
             String klasTextS = PreferenceManager.getDefaultSharedPreferences
                     (getApplicationContext()).getString("pref_klas", "");
-            String url = "http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm";
             wijzigingenList.clear();
             //Checken of klas niet leeg is
             if (klasTextS.equals("")){
@@ -125,7 +130,7 @@ public class MainActivity extends ActionBarActivity {
             char charafdeling = klasTextS.charAt(1);
             String klasafdelingBig = String.valueOf(charafdeling).toUpperCase();
             //Sommige klassen hebben 2 delen, andere 3, andere 4
-            String klasCorrect = null;
+            String klasCorrect = "";
             //Onderstaand bij 3-delige klas, laatste deel moet kleine letter zijn.
             if(klasTextS.length() == 3){
                 char klasabc = klasTextS.charAt(2);
@@ -147,7 +152,10 @@ public class MainActivity extends ActionBarActivity {
 
             //Try en catch in het geval dat de internetverbinding mist
             try {
-                    Document doc = Jsoup.connect(url).get();
+                String url = "http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm";
+                Document doc = Jsoup.connect(url).get();
+                //publishProgress maakt Toast om gebruiker op hoogte te houden
+                publishProgress();
                     Element table = doc.select("table").get(1);
                     Elements rows = table.select("tr");
                     //Loop genereren, voor elke row kijken of het de goede tekst bevat
@@ -201,7 +209,7 @@ public class MainActivity extends ActionBarActivity {
                     return wijzigingenList;
             }
             //AS wilt graag een return statment: here you go
-            return null;
+            return wijzigingenList;
         }
         public void onPostExecute(ArrayList wijzigingenList){
             //ListView updaten om roosterwijzigingen te laten zien
@@ -213,9 +221,28 @@ public class MainActivity extends ActionBarActivity {
             }
         }
 
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+            //Als het snel gaat wordt toast al weergegeven
+            if (toast.getView().getWindowVisibility() == View.VISIBLE){
+                toast.setText("Tabel wordt doorzocht");
+            } else{
+            Toast.makeText(getApplicationContext(), "Tabel wordt doorzocht"
+                    , Toast.LENGTH_SHORT).show();}
+        }
+
     }
     //Zoekalgoritme voor clusters
     class CheckerClusters extends AsyncTask<Void, Void, ArrayList> {
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //Toast om gebruiker gerust te stellen
+             toast = Toast.makeText(getApplicationContext(), "Zoeken met clusterfiltering is gestart"
+                    , Toast.LENGTH_SHORT);
+             toast.show();
+        }
 
         @Override
         public ArrayList doInBackground(Void... params) {
@@ -269,6 +296,8 @@ public class MainActivity extends ActionBarActivity {
             //Try en catch in het geval dat de internetverbinding mist
             try {
                 Document doc = Jsoup.connect(url).get();
+                //publishProgress maakt Toast om gebruiker op hoogte te houden
+                publishProgress();
                 Element table = doc.select("table").get(1);
                 Elements rows = table.select("tr");
                 //Eerste loop is om 2e loop te herhalen voor iedere cluster, tweede loop
@@ -326,6 +355,9 @@ public class MainActivity extends ActionBarActivity {
             //AS wilt graag een return statment: here you go
             return null;
         }
+
+
+
         public void onPostExecute(ArrayList wijzigingenList){
             //ListView updaten om roosterwijzigingen te laten zien
             ListView listView = (ListView) findViewById(R.id.wijzigingenList);
@@ -335,6 +367,15 @@ public class MainActivity extends ActionBarActivity {
                 Toast.makeText(getApplicationContext(), "Vernieuwd", Toast.LENGTH_SHORT).show();
             }
         }
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+            if (toast.getView().getWindowVisibility() == View.VISIBLE){
+                toast.setText("Tabel wordt doorzocht");
+            } else{
+                Toast.makeText(getApplicationContext(), "Tabel wordt doorzocht"
+                        , Toast.LENGTH_SHORT).show();}
+        }
 
     }
+
 }
