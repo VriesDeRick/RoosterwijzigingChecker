@@ -23,10 +23,14 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 public class MainActivity extends ActionBarActivity {
-    ArrayList<String> wijzigingenList = new ArrayList<>();
+    @SuppressWarnings("unchecked")
+    public ArrayList<String> wijzigingenList = new ArrayList<>();
     public Toast toast;
 
     @Override
@@ -40,6 +44,20 @@ public class MainActivity extends ActionBarActivity {
                 android.R.layout.simple_list_item_1,
                 wijzigingenList);
         listView.setAdapter(arrayAdapter);
+        //listView updaten met oude wijzigingen: eerst Set ophalen van SP
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Set<String> wijzigingenSet = new HashSet<>();
+        wijzigingenSet = sp.getStringSet("last_wijzigingenList", null);
+        //nullpointer voorkomen
+        if (wijzigingenSet != null){
+            List<String> wijzigingenList_old = new ArrayList<>(wijzigingenSet);
+            //Loop om wijzigingen van ene arrayList naar andere over te zetten
+            for (int i = 0; i < wijzigingenList_old.size(); i++){
+                wijzigingenList.add(wijzigingenList_old.get(i));
+            }
+        }
+        //listView updaten om eventuele wijzigingen te laten zien
+        listView.invalidateViews();
 
 
     }
@@ -219,6 +237,13 @@ public class MainActivity extends ActionBarActivity {
             if (!wijzigingenList.get(0).equals("Er was een verbindingsfout")) {
                 Toast.makeText(getApplicationContext(), "Vernieuwd", Toast.LENGTH_SHORT).show();
             }
+            //List opslaan in SP
+            Set<String> wijzigingenSet = new HashSet<>();
+            wijzigingenSet.addAll(wijzigingenList);
+            SharedPreferences.Editor spEditor = PreferenceManager
+                    .getDefaultSharedPreferences(getApplicationContext()).edit();
+            spEditor.putStringSet("last_wijzigingenList", wijzigingenSet);
+            spEditor.commit();
         }
 
         @Override
@@ -229,7 +254,8 @@ public class MainActivity extends ActionBarActivity {
                 toast.setText("Tabel wordt doorzocht");
             } else{
             Toast.makeText(getApplicationContext(), "Tabel wordt doorzocht"
-                    , Toast.LENGTH_SHORT).show();}
+                    , Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
@@ -366,6 +392,16 @@ public class MainActivity extends ActionBarActivity {
             if (!wijzigingenList.get(0).equals("Er was een verbindingsfout")) {
                 Toast.makeText(getApplicationContext(), "Vernieuwd", Toast.LENGTH_SHORT).show();
             }
+            //List opslaan in SP
+            Set<String> wijzigingenSet = new HashSet<>();
+            wijzigingenSet.addAll(wijzigingenList);
+            SharedPreferences.Editor spEditor = PreferenceManager
+                    .getDefaultSharedPreferences(getApplicationContext()).edit();
+            spEditor.putStringSet("last_wijzigingenList", wijzigingenSet);
+            spEditor.commit();
+
+
+
         }
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
