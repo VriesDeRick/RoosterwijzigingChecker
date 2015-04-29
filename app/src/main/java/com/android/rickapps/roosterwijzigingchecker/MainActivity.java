@@ -46,8 +46,7 @@ public class MainActivity extends ActionBarActivity {
         listView.setAdapter(arrayAdapter);
         //listView updaten met oude wijzigingen: eerst Set ophalen van SP
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        Set<String> wijzigingenSet = new HashSet<>();
-        wijzigingenSet = sp.getStringSet("last_wijzigingenList", null);
+        Set<String> wijzigingenSet = sp.getStringSet("last_wijzigingenList", null);
         //nullpointer voorkomen
         if (wijzigingenSet != null){
             List<String> wijzigingenList_old = new ArrayList<>(wijzigingenSet);
