@@ -58,6 +58,9 @@ public class MainActivity extends ActionBarActivity {
         //listView updaten om eventuele wijzigingen te laten zien
         listView.invalidateViews();
 
+        //Titel actionBar aanpassen
+        setTitle("Roosterwijzigingen");
+
 
     }
 
