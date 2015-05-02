@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.jsoup.Jsoup;
@@ -57,6 +58,14 @@ public class MainActivity extends ActionBarActivity {
         }
         //listView updaten om eventuele wijzigingen te laten zien
         listView.invalidateViews();
+
+        //Stand updaten naar laatste stand
+        TextView standView = (TextView) findViewById(R.id.textStand);
+        String stand = sp.getString("stand", null);
+        if (stand != null){
+            standView.setText("Stand van" + stand);
+        }
+
 
         //Titel actionBar aanpassen
         setTitle("Roosterwijzigingen");
@@ -216,7 +225,14 @@ public class MainActivity extends ActionBarActivity {
                                   if (wijzigingenList.isEmpty()){
                                       wijzigingenList.add("Er zijn geen wijzigingen.");
                                   }
+                            //Stand ophalen: staat in 1e tabel van HTML
+                            Element tableDate = doc.select("table").get(0);
+                            String dateFullText = tableDate.getElementsContainingOwnText("Stand:").text();
+                            //Deel achter "Stand:" pakken
+                            String FullTextSplit[] = dateFullText.split("Stand:");
+                            wijzigingenList.add(FullTextSplit[1]);
                             return wijzigingenList;
+
                         }
 
 
@@ -232,6 +248,18 @@ public class MainActivity extends ActionBarActivity {
             return wijzigingenList;
         }
         public void onPostExecute(ArrayList wijzigingenList){
+            //Standdatum eruit halen en weghalen uit list, mag niet als er een verbindingsfout was
+            String stand = "Stand";
+            Boolean isVerbindingsfout = false;
+            if(wijzigingenList.get(0) != "Er was een verbindingsfout"){
+                int datumIndex = wijzigingenList.size() - 1;
+                stand = wijzigingenList.get(datumIndex).toString();
+                wijzigingenList.remove(datumIndex);
+
+            } else {
+                //Er was dus wel een verbindingsfout
+                isVerbindingsfout = true;
+            }
             //ListView updaten om roosterwijzigingen te laten zien
             ListView listView = (ListView) findViewById(R.id.wijzigingenList);
                 listView.invalidateViews();
@@ -239,13 +267,19 @@ public class MainActivity extends ActionBarActivity {
             if (!wijzigingenList.get(0).equals("Er was een verbindingsfout")) {
                 Toast.makeText(getApplicationContext(), "Vernieuwd", Toast.LENGTH_SHORT).show();
             }
-            //List opslaan in SP
+            //List en stand opslaan in SP
             Set<String> wijzigingenSet = new HashSet<>();
             wijzigingenSet.addAll(wijzigingenList);
             SharedPreferences.Editor spEditor = PreferenceManager
                     .getDefaultSharedPreferences(getApplicationContext()).edit();
             spEditor.putStringSet("last_wijzigingenList", wijzigingenSet);
+            spEditor.putString("stand", stand);
             spEditor.commit();
+            //TextView met stand updaten
+            if (!isVerbindingsfout) {
+                TextView standView = (TextView) findViewById(R.id.textStand);
+                standView.setText("Stand van" + stand);
+            }
         }
 
         @Override
@@ -368,7 +402,14 @@ public class MainActivity extends ActionBarActivity {
                         if (wijzigingenList.isEmpty()){
                             wijzigingenList.add("Er zijn geen wijzigingen.");
                         }
+                        //Stand ophalen: staat in 1e tabel van HTML
+                        Element tableDate = doc.select("table").get(0);
+                        String dateFullText = tableDate.getElementsContainingOwnText("Stand:").text();
+                        //Deel achter "Stand:" pakken
+                        String FullTextSplit[] = dateFullText.split("Stand:");
+                        wijzigingenList.add(FullTextSplit[1]);
                         return wijzigingenList;
+
                     }
 
 
@@ -387,6 +428,18 @@ public class MainActivity extends ActionBarActivity {
 
 
         public void onPostExecute(ArrayList wijzigingenList){
+            //Standdatum eruit halen en weghalen uit list, mag niet als er een verbindingsfout was
+            String stand = "Stand";
+            Boolean isVerbindingsfout = false;
+            if(wijzigingenList.get(0) != "Er was een verbindingsfout"){
+            int datumIndex = wijzigingenList.size() - 1;
+                stand = wijzigingenList.get(datumIndex).toString();
+            wijzigingenList.remove(datumIndex);
+            } else {
+                //Er was dus wel een verbindingsfout
+                isVerbindingsfout = true;
+            }
+
             //ListView updaten om roosterwijzigingen te laten zien
             ListView listView = (ListView) findViewById(R.id.wijzigingenList);
             listView.invalidateViews();
@@ -400,9 +453,13 @@ public class MainActivity extends ActionBarActivity {
             SharedPreferences.Editor spEditor = PreferenceManager
                     .getDefaultSharedPreferences(getApplicationContext()).edit();
             spEditor.putStringSet("last_wijzigingenList", wijzigingenSet);
+            spEditor.putString("stand", stand);
             spEditor.commit();
-
-
+            //TextView met stand updaten
+            if (!isVerbindingsfout) {
+                TextView standView = (TextView) findViewById(R.id.textStand);
+                standView.setText("Stand van" + stand);
+            }
 
         }
         protected void onProgressUpdate(Void... values) {
