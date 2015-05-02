@@ -33,6 +33,9 @@ public class MainActivity extends ActionBarActivity {
     @SuppressWarnings("unchecked")
     public ArrayList<String> wijzigingenList = new ArrayList<>();
     public Toast toast;
+    String geenKlas = null;
+    String verbindfoutStr = null;
+    String geenWijziging = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,11 @@ public class MainActivity extends ActionBarActivity {
 
         //Titel actionBar aanpassen
         setTitle("Roosterwijzigingen");
+
+        //Strings aanpassen uit strings.xml
+        geenKlas = getString(R.string.geenKlas);
+        verbindfoutStr = getString(R.string.internet_error);
+        geenWijziging = getString(R.string.geenWijzigingen);
 
 
     }
@@ -223,7 +231,7 @@ public class MainActivity extends ActionBarActivity {
                         if (i == rows.size() - 1){
                                   //Checken of wijzigingenList leeg is, zo ja 1 ding toevoegen
                                   if (wijzigingenList.isEmpty()){
-                                      wijzigingenList.add("Er zijn geen wijzigingen.");
+                                      wijzigingenList.add(geenWijziging);
                                   }
                             //Stand ophalen: staat in 1e tabel van HTML
                             Element tableDate = doc.select("table").get(0);
@@ -241,7 +249,7 @@ public class MainActivity extends ActionBarActivity {
             catch(java.io.IOException e) {
                     //Error toevoegen aan wijzigingenList, dat wordt weergegeven in messagebox
                     wijzigingenList.clear();
-                    wijzigingenList.add("Er was een verbindingsfout");
+                    wijzigingenList.add(verbindfoutStr);
                     return wijzigingenList;
             }
             //AS wilt graag een return statment: here you go
@@ -251,7 +259,7 @@ public class MainActivity extends ActionBarActivity {
             //Standdatum eruit halen en weghalen uit list, mag niet als er een verbindingsfout was
             String stand = "Stand";
             Boolean isVerbindingsfout = false;
-            if(wijzigingenList.get(0) != "Er was een verbindingsfout"){
+            if(wijzigingenList.get(0) != verbindfoutStr){
                 int datumIndex = wijzigingenList.size() - 1;
                 stand = wijzigingenList.get(datumIndex).toString();
                 wijzigingenList.remove(datumIndex);
@@ -264,7 +272,7 @@ public class MainActivity extends ActionBarActivity {
             ListView listView = (ListView) findViewById(R.id.wijzigingenList);
                 listView.invalidateViews();
             //Toast om te laten weten dat er is geupdatet, mag niet als er een verbindingsfout was
-            if (!wijzigingenList.get(0).equals("Er was een verbindingsfout")) {
+            if (!wijzigingenList.get(0).equals(verbindfoutStr)) {
                 Toast.makeText(getApplicationContext(), "Vernieuwd", Toast.LENGTH_SHORT).show();
             }
             //List en stand opslaan in SP
@@ -400,7 +408,7 @@ public class MainActivity extends ActionBarActivity {
                     if (i == rows.size() - 1 && b == clusters.size() - 1){
                         //Checken of wijzigingenList leeg is, zo ja 1 ding toevoegen
                         if (wijzigingenList.isEmpty()){
-                            wijzigingenList.add("Er zijn geen wijzigingen.");
+                            wijzigingenList.add(geenWijziging);
                         }
                         //Stand ophalen: staat in 1e tabel van HTML
                         Element tableDate = doc.select("table").get(0);
@@ -418,7 +426,7 @@ public class MainActivity extends ActionBarActivity {
             catch(java.io.IOException e) {
                 //Error toevoegen aan wijzigingenList, dat wordt weergegeven in messagebox
                 wijzigingenList.clear();
-                wijzigingenList.add("Er was een verbindingsfout");
+                wijzigingenList.add(verbindfoutStr);
                 return wijzigingenList;
             }
             //AS wilt graag een return statment: here you go
@@ -431,7 +439,7 @@ public class MainActivity extends ActionBarActivity {
             //Standdatum eruit halen en weghalen uit list, mag niet als er een verbindingsfout was
             String stand = "Stand";
             Boolean isVerbindingsfout = false;
-            if(wijzigingenList.get(0) != "Er was een verbindingsfout"){
+            if(wijzigingenList.get(0) != verbindfoutStr){
             int datumIndex = wijzigingenList.size() - 1;
                 stand = wijzigingenList.get(datumIndex).toString();
             wijzigingenList.remove(datumIndex);
@@ -444,7 +452,7 @@ public class MainActivity extends ActionBarActivity {
             ListView listView = (ListView) findViewById(R.id.wijzigingenList);
             listView.invalidateViews();
             //Toast om te laten weten dat er is geupdatet, mag niet als er verbindingsfout was
-            if (!wijzigingenList.get(0).equals("Er was een verbindingsfout")) {
+            if (!wijzigingenList.get(0).equals(verbindfoutStr)) {
                 Toast.makeText(getApplicationContext(), "Vernieuwd", Toast.LENGTH_SHORT).show();
             }
             //List opslaan in SP

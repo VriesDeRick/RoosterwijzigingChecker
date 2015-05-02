@@ -3,5 +3,8 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Instellingen</string>
-    <string name="action_check">Check!</string>
+    <string name="action_check">Vernieuw</string>
+    <string name="internet_error">Er was een verbindingsfout</string>
+    <string name="geenWijzigingen">Er zijn geen wijzigingen.</string>
+    <string name="geenKlas">Voer een klas in in het instellingenscherm.</string>
 </resources>
