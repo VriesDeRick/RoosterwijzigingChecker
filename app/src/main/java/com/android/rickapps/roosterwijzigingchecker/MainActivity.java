@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -29,7 +32,7 @@ import java.util.List;
 import java.util.Set;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
     @SuppressWarnings("unchecked")
     public ArrayList<String> wijzigingenList = new ArrayList<>();
     public Toast toast;
@@ -64,9 +67,9 @@ public class MainActivity extends ActionBarActivity {
 
         //Stand updaten naar laatste stand
         TextView standView = (TextView) findViewById(R.id.textStand);
-        String stand = sp.getString("stand", null);
-        if (stand != null){
-            standView.setText("Stand van" + stand);
+        String standZin = sp.getString("stand", null);
+        if (standZin != null){
+            standView.setText(standZin);
         }
 
 
@@ -140,6 +143,56 @@ public class MainActivity extends ActionBarActivity {
         new CheckerClusters().execute();}
         else new CheckerKlas().execute();
         }
+
+
+    public void geenKlasAlert(){
+        new MaterialDialog.Builder(this)
+                .title("Geen klas ingevoerd")
+                .content("Er is geen klas ingevoerd in het instellingenscherm")
+                .positiveText("Stel een klas in")
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                        openSettings();
+                    }
+                })
+                .show();
+    }
+
+    public void verbindfoutAlert(){
+        new MaterialDialog.Builder(this)
+                .title("Verbindingsfout")
+                .content("Er was een verbindingsfout. Controleer je internetverbinding of probeer het later opnieuw.")
+                .positiveText("OK")
+                .show();
+    }
+    public void geenClusterAlert(){
+        new MaterialDialog.Builder(this)
+                .title("Geen clusters")
+                .content("Clusterfiltering is ingeschakeld, maar er zijn geen clusters ingevuld. " +
+                         "Vul clusters in of schakel clusterfiltering uit.")
+                .positiveText("Ga naar het instellingenscherm")
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                        openSettings();
+                    }
+                })
+                .show();
+    }
+    public void sPsaver(ArrayList wijzigingenList, String standZin){
+        SharedPreferences.Editor spEditor = PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext()).edit();
+        Set<String> wijzigingenSet = new HashSet<>();
+            wijzigingenSet.addAll(wijzigingenList);
+        spEditor.putStringSet("last_wijzigingenList", wijzigingenSet);
+        spEditor.putString("stand", standZin);
+        spEditor.commit();
+    }
+
+
     //Zoekalgoritme voor klassen
     class CheckerKlas extends AsyncTask<Void, Void, ArrayList> {
 
@@ -158,7 +211,7 @@ public class MainActivity extends ActionBarActivity {
             wijzigingenList.clear();
             //Checken of klas niet leeg is
             if (klasTextS.equals("")){
-                wijzigingenList.add("Voer een klas in in het instellingenscherm.");
+                wijzigingenList.add(geenKlas);
                 return wijzigingenList;
             }
             //String opsplitsen in 2 delen, om naar hoofdletters te converteren
@@ -256,38 +309,65 @@ public class MainActivity extends ActionBarActivity {
             return wijzigingenList;
         }
         public void onPostExecute(ArrayList wijzigingenList){
-            //Standdatum eruit halen en weghalen uit list, mag niet als er een verbindingsfout was
-            String stand = "Stand";
-            Boolean isVerbindingsfout = false;
-            if(wijzigingenList.get(0) != verbindfoutStr){
-                int datumIndex = wijzigingenList.size() - 1;
-                stand = wijzigingenList.get(datumIndex).toString();
-                wijzigingenList.remove(datumIndex);
+/*
+//Standdatum eruit halen en weghalen uit list, mag niet als er een verbindingsfout was
+String stand = "";
+Boolean isVerbindingsfout = false;
+if(wijzigingenList.get(0) != verbindfoutStr){
+int datumIndex = wijzigingenList.size() - 1;
+stand = wijzigingenList.get(datumIndex).toString();
+wijzigingenList.remove(datumIndex);
 
-            } else {
-                //Er was dus wel een verbindingsfout
+} else {
+//Er was dus wel een verbindingsfout
+isVerbindingsfout = true;
+}
+//ListView updaten om roosterwijzigingen te laten zien
+ListView listView = (ListView) findViewById(R.id.wijzigingenList);
+listView.invalidateViews();
+//Toast om te laten weten dat er is geupdatet, mag niet als er een verbindingsfout was
+if (!wijzigingenList.get(0).equals(verbindfoutStr)) {
+Toast.makeText(getApplicationContext(), "Vernieuwd", Toast.LENGTH_SHORT).show();
+}
+//List en stand opslaan in SP
+Set<String> wijzigingenSet = new HashSet<>();
+wijzigingenSet.addAll(wijzigingenList);
+SharedPreferences.Editor spEditor = PreferenceManager
+.getDefaultSharedPreferences(getApplicationContext()).edit();
+spEditor.putStringSet("last_wijzigingenList", wijzigingenSet);
+spEditor.putString("stand", stand);
+spEditor.commit();
+//TextView met stand updaten
+if (!isVerbindingsfout) {
+TextView standView = (TextView) findViewById(R.id.textStand);
+standView.setText("Stand van" + stand);
+}
+*/
+            boolean isVerbindingsfout = false;
+            boolean geenKlasBool = false;
+            int listLaatste = wijzigingenList.size() - 1;
+            String list0 = wijzigingenList.get(listLaatste).toString();
+            if (list0.equals(geenKlas)){
+                geenKlasAlert();
+                geenKlasBool = true;
+            }
+            if (list0.equals(verbindfoutStr)){
+                verbindfoutAlert();
                 isVerbindingsfout = true;
             }
-            //ListView updaten om roosterwijzigingen te laten zien
-            ListView listView = (ListView) findViewById(R.id.wijzigingenList);
+            if (!geenKlasBool && !isVerbindingsfout){
+                //Er is dus geen verbindfout en klasfout, list0 bevat stand
+                String standZin = "Stand van" + list0;
+                wijzigingenList.remove(listLaatste);
+                sPsaver(wijzigingenList, standZin);
+
+                ListView listView = (ListView) findViewById(R.id.wijzigingenList);
                 listView.invalidateViews();
-            //Toast om te laten weten dat er is geupdatet, mag niet als er een verbindingsfout was
-            if (!wijzigingenList.get(0).equals(verbindfoutStr)) {
-                Toast.makeText(getApplicationContext(), "Vernieuwd", Toast.LENGTH_SHORT).show();
+
+                TextView textStandView = (TextView) findViewById(R.id.textStand);
+                textStandView.setText(standZin);
             }
-            //List en stand opslaan in SP
-            Set<String> wijzigingenSet = new HashSet<>();
-            wijzigingenSet.addAll(wijzigingenList);
-            SharedPreferences.Editor spEditor = PreferenceManager
-                    .getDefaultSharedPreferences(getApplicationContext()).edit();
-            spEditor.putStringSet("last_wijzigingenList", wijzigingenSet);
-            spEditor.putString("stand", stand);
-            spEditor.commit();
-            //TextView met stand updaten
-            if (!isVerbindingsfout) {
-                TextView standView = (TextView) findViewById(R.id.textStand);
-                standView.setText("Stand van" + stand);
-            }
+
         }
 
         @Override
@@ -329,10 +409,14 @@ public class MainActivity extends ActionBarActivity {
                 String cluster = sp.getString("pref_cluster" + a, "");
                 clusters.add(cluster);
             }
+
             //Lege clusters weghalen uit arraylist TODO: Kijken of singleton werkt/wat het is
             clusters.removeAll(Collections.singleton(""));
-
-
+            //Er moeten wel clusters zijn ingevoerd: Zo nee, komt AlertDialog via onPostExecute
+            if (clusters.isEmpty()){
+                wijzigingenList.add(getString(R.string.geenClusters));
+                return wijzigingenList;
+            }
             //Checken of klas niet leeg is
             if (klasTextS.equals("")){
                 wijzigingenList.add("Voer een klas in in het instellingenscherm.");
@@ -436,37 +520,34 @@ public class MainActivity extends ActionBarActivity {
 
 
         public void onPostExecute(ArrayList wijzigingenList){
-            //Standdatum eruit halen en weghalen uit list, mag niet als er een verbindingsfout was
-            String stand = "Stand";
-            Boolean isVerbindingsfout = false;
-            if(wijzigingenList.get(0) != verbindfoutStr){
-            int datumIndex = wijzigingenList.size() - 1;
-                stand = wijzigingenList.get(datumIndex).toString();
-            wijzigingenList.remove(datumIndex);
-            } else {
-                //Er was dus wel een verbindingsfout
+            boolean isVerbindingsfout = false;
+            boolean geenKlasBool = false;
+            boolean geenClusters = false;
+            int listLaatste = wijzigingenList.size() - 1;
+            String list0 = wijzigingenList.get(listLaatste).toString();
+            if (list0.equals(geenKlas)){
+                geenKlasAlert();
+                geenKlasBool = true;
+            }
+            if (list0.equals(getString(R.string.geenClusters))){
+                geenClusters = true;
+                geenClusterAlert();
+            }
+            if (list0.equals(verbindfoutStr)){
+                verbindfoutAlert();
                 isVerbindingsfout = true;
             }
+            if (!geenKlasBool && !isVerbindingsfout && !geenClusters){
+                //Er is dus geen verbindfout en klasfout/clusterfout, list0 bevat dus stand
+                String standZin = "Stand van" + list0;
+                wijzigingenList.remove(listLaatste);
+                sPsaver(wijzigingenList, standZin);
 
-            //ListView updaten om roosterwijzigingen te laten zien
-            ListView listView = (ListView) findViewById(R.id.wijzigingenList);
-            listView.invalidateViews();
-            //Toast om te laten weten dat er is geupdatet, mag niet als er verbindingsfout was
-            if (!wijzigingenList.get(0).equals(verbindfoutStr)) {
-                Toast.makeText(getApplicationContext(), "Vernieuwd", Toast.LENGTH_SHORT).show();
-            }
-            //List opslaan in SP
-            Set<String> wijzigingenSet = new HashSet<>();
-            wijzigingenSet.addAll(wijzigingenList);
-            SharedPreferences.Editor spEditor = PreferenceManager
-                    .getDefaultSharedPreferences(getApplicationContext()).edit();
-            spEditor.putStringSet("last_wijzigingenList", wijzigingenSet);
-            spEditor.putString("stand", stand);
-            spEditor.commit();
-            //TextView met stand updaten
-            if (!isVerbindingsfout) {
-                TextView standView = (TextView) findViewById(R.id.textStand);
-                standView.setText("Stand van" + stand);
+                ListView listView = (ListView) findViewById(R.id.wijzigingenList);
+                listView.invalidateViews();
+
+                TextView textStandView = (TextView) findViewById(R.id.textStand);
+                textStandView.setText(standZin);
             }
 
         }

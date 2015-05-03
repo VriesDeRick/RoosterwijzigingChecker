@@ -7,4 +7,5 @@
     <string name="internet_error">Er was een verbindingsfout</string>
     <string name="geenWijzigingen">Er zijn geen wijzigingen.</string>
     <string name="geenKlas">Voer een klas in in het instellingenscherm.</string>
+    <string name="geenClusters">Er zijn geen clusters ingevoerd.</string>
 </resources>
