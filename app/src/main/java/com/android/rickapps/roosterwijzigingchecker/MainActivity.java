@@ -308,40 +308,6 @@ public class MainActivity extends AppCompatActivity {
             return wijzigingenList;
         }
         public void onPostExecute(ArrayList wijzigingenList){
-/*
-//Standdatum eruit halen en weghalen uit list, mag niet als er een verbindingsfout was
-String stand = "";
-Boolean isVerbindingsfout = false;
-if(wijzigingenList.get(0) != verbindfoutStr){
-int datumIndex = wijzigingenList.size() - 1;
-stand = wijzigingenList.get(datumIndex).toString();
-wijzigingenList.remove(datumIndex);
-
-} else {
-//Er was dus wel een verbindingsfout
-isVerbindingsfout = true;
-}
-//ListView updaten om roosterwijzigingen te laten zien
-ListView listView = (ListView) findViewById(R.id.wijzigingenList);
-listView.invalidateViews();
-//Toast om te laten weten dat er is geupdatet, mag niet als er een verbindingsfout was
-if (!wijzigingenList.get(0).equals(verbindfoutStr)) {
-Toast.makeText(getApplicationContext(), "Vernieuwd", Toast.LENGTH_SHORT).show();
-}
-//List en stand opslaan in SP
-Set<String> wijzigingenSet = new HashSet<>();
-wijzigingenSet.addAll(wijzigingenList);
-SharedPreferences.Editor spEditor = PreferenceManager
-.getDefaultSharedPreferences(getApplicationContext()).edit();
-spEditor.putStringSet("last_wijzigingenList", wijzigingenSet);
-spEditor.putString("stand", stand);
-spEditor.commit();
-//TextView met stand updaten
-if (!isVerbindingsfout) {
-TextView standView = (TextView) findViewById(R.id.textStand);
-standView.setText("Stand van" + stand);
-}
-*/
             boolean isVerbindingsfout = false;
             boolean geenKlasBool = false;
             int listLaatste = wijzigingenList.size() - 1;
@@ -376,7 +342,7 @@ standView.setText("Stand van" + stand);
             if (toast.getView().getWindowVisibility() == View.VISIBLE){
                 toast.setText("Tabel wordt doorzocht");
             } else{
-            Toast.makeText(getApplicationContext(), "Tabel wordt doorzocht"
+            Toast.makeText(getApplicationContext(), "Vernieuwd"
                     , Toast.LENGTH_SHORT).show();
             }
         }
@@ -553,7 +519,7 @@ standView.setText("Stand van" + stand);
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
             if (toast.getView().getWindowVisibility() == View.VISIBLE){
-                toast.setText("Tabel wordt doorzocht");
+                toast.setText("Vernieuwd");
             } else{
                 Toast.makeText(getApplicationContext(), "Tabel wordt doorzocht"
                         , Toast.LENGTH_SHORT).show();}

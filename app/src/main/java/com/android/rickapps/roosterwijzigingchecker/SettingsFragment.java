@@ -61,9 +61,14 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             listPref.setSummary(listPref.getEntry());
 
         } else if (pref instanceof EditTextPreference) {
+            //Mag niet updaten bij tijdprefs
+            Preference tijd1 = findPreference("pref_auto_tijd1");
+            Preference tijd2 = findPreference("pref_auto_tijd2");
             // EditPreference
+            if (!pref.equals(tijd1) && !pref.equals(tijd2)){
             EditTextPreference editTextPref = (EditTextPreference) pref;
             editTextPref.setSummary(editTextPref.getText());
+            }
 
         } else if (pref instanceof MultiSelectListPreference) {
             // MultiSelectList Preference

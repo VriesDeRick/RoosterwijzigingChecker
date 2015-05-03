@@ -10,6 +10,27 @@
         android:summary="Voer hier je klas in"
         android:defaultValue="" />
     <PreferenceCategory
+        android:title="Automatisch zoeken"
+        android:key="prefCat_zoek_auto" />
+
+        <CheckBoxPreference
+            android:title="Zoek automatisch"
+            android:summary="Schakel automatisch zoeken in"
+            android:key="pref_auto_zoek"
+            android:defaultValue="false" />
+        <EditTextPreference
+            android:title="Zoektijd 1"
+            android:summary="Zoek tijd 1. Wijze van invullen is hh:mm (zoals 13:55)"
+            android:key="pref_auto_tijd1"
+            android:defaultValue=""
+            android:dependency="pref_auto_zoek"/>
+        <EditTextPreference
+            android:title="Zoektijd 2"
+            android:summary="Zoek tijd 1. Wijze van invullen is hh:mm (zoals 07:55)"
+            android:key="pref_auto_tijd2"
+            android:defaultValue=""
+            android:dependency="pref_auto_zoek"/>
+    <PreferenceCategory
         android:title="Clusterinstellingen"
         android:key="pref_cluster_settings">
         <CheckBoxPreference
