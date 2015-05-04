@@ -334,8 +334,10 @@ public class MainActivity extends AppCompatActivity {
 
                 TextView textStandView = (TextView) findViewById(R.id.textStand);
                 textStandView.setText(standZin);
+                //Mag toast met vernieuwd niet bij verbindingsfout etc
+                vernieuwdToast();
             }
-            vernieuwdToast();
+
 
         }
 
@@ -497,8 +499,10 @@ public class MainActivity extends AppCompatActivity {
 
                 TextView textStandView = (TextView) findViewById(R.id.textStand);
                 textStandView.setText(standZin);
+                //Mag toast met vernieuwd niet bij verbindingsfout etc
+                vernieuwdToast();
             }
-            vernieuwdToast();
+
 
         }
 
