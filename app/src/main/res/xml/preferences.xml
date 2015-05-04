@@ -12,7 +12,6 @@
     <PreferenceCategory
         android:title="Automatisch zoeken"
         android:key="prefCat_zoek_auto" />
-
         <CheckBoxPreference
             android:title="Zoek automatisch"
             android:summary="Schakel automatisch zoeken in"
@@ -122,7 +121,12 @@
             android:summary=""
             android:defaultValue=""
             android:dependency="pref_cluster_enabled" />
-
-
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Over deze app"
+        android:key="pref_aboutCat" />
+        <Preference
+            android:title="Over Roosterwijzigingchecker"
+            android:key="pref_about"
+            android:enabled="true"/>
 </PreferenceScreen>

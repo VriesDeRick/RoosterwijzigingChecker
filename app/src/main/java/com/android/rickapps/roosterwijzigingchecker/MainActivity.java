@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.app.ProgressDialog;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -34,10 +35,10 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity {
     @SuppressWarnings("unchecked")
     public ArrayList<String> wijzigingenList = new ArrayList<>();
-    public Toast toast;
     String geenKlas = null;
     String verbindfoutStr = null;
     String geenWijziging = null;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
         geenKlas = getString(R.string.geenKlas);
         verbindfoutStr = getString(R.string.internet_error);
         geenWijziging = getString(R.string.geenWijzigingen);
+
+        progressDialog = new ProgressDialog(MainActivity.this);
 
 
     }
@@ -138,6 +141,11 @@ public class MainActivity extends AppCompatActivity {
     public void checker(View view){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Boolean clusters_enabled = sp.getBoolean("pref_cluster_enabled", false);
+        //Alvast progressDialog starten: hoeft het niet dubbel
+        progressDialog.setTitle("Aan het laden");
+        progressDialog.setMessage("De roosterwijzigingentabel wordt geladen en doorzocht");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
         if (clusters_enabled){
         new CheckerClusters().execute();}
         else new CheckerKlas().execute();
@@ -170,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
         new MaterialDialog.Builder(this)
                 .title("Geen clusters")
                 .content("Clusterfiltering is ingeschakeld, maar er zijn geen clusters ingevuld. " +
-                         "Vul clusters in of schakel clusterfiltering uit.")
+                        "Vul clusters in of schakel clusterfiltering uit.")
                 .positiveText("Ga naar het instellingenscherm")
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
@@ -190,18 +198,14 @@ public class MainActivity extends AppCompatActivity {
         spEditor.putString("stand", standZin);
         spEditor.commit();
     }
+    public void vernieuwdToast(){
+        Toast.makeText(getApplicationContext(), "Vernieuwd", Toast.LENGTH_LONG).show();
+    }
 
 
     //Zoekalgoritme voor klassen
     class CheckerKlas extends AsyncTask<Void, Void, ArrayList> {
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            //Toast om gebruiker gerust te stellen
-            toast = Toast.makeText(getApplicationContext(), "Zoeken is gestart", Toast.LENGTH_SHORT);
-            toast.show();
-        }
         @Override
         public ArrayList doInBackground(Void... params) {
             //String halen uit SP
@@ -243,8 +247,6 @@ public class MainActivity extends AppCompatActivity {
             try {
                 String url = "http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm";
                 Document doc = Jsoup.connect(url).get();
-                //publishProgress maakt Toast om gebruiker op hoogte te houden
-                publishProgress();
                     Element table = doc.select("table").get(1);
                     Elements rows = table.select("tr");
                     //Loop genereren, voor elke row kijken of het de goede tekst bevat
@@ -308,6 +310,7 @@ public class MainActivity extends AppCompatActivity {
             return wijzigingenList;
         }
         public void onPostExecute(ArrayList wijzigingenList){
+            progressDialog.dismiss();
             boolean isVerbindingsfout = false;
             boolean geenKlasBool = false;
             int listLaatste = wijzigingenList.size() - 1;
@@ -332,32 +335,14 @@ public class MainActivity extends AppCompatActivity {
                 TextView textStandView = (TextView) findViewById(R.id.textStand);
                 textStandView.setText(standZin);
             }
+            vernieuwdToast();
 
         }
 
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-            //Als het snel gaat wordt toast al weergegeven
-            if (toast.getView().getWindowVisibility() == View.VISIBLE){
-                toast.setText("Tabel wordt doorzocht");
-            } else{
-            Toast.makeText(getApplicationContext(), "Vernieuwd"
-                    , Toast.LENGTH_SHORT).show();
-            }
-        }
 
     }
     //Zoekalgoritme voor clusters
     class CheckerClusters extends AsyncTask<Void, Void, ArrayList> {
-
-        protected void onPreExecute() {
-            super.onPreExecute();
-            //Toast om gebruiker gerust te stellen
-             toast = Toast.makeText(getApplicationContext(), "Zoeken met clusterfiltering is gestart"
-                    , Toast.LENGTH_SHORT);
-             toast.show();
-        }
 
         @Override
         public ArrayList doInBackground(Void... params) {
@@ -415,8 +400,6 @@ public class MainActivity extends AppCompatActivity {
             //Try en catch in het geval dat de internetverbinding mist
             try {
                 Document doc = Jsoup.connect(url).get();
-                //publishProgress maakt Toast om gebruiker op hoogte te houden
-                publishProgress();
                 Element table = doc.select("table").get(1);
                 Elements rows = table.select("tr");
                 //Eerste loop is om 2e loop te herhalen voor iedere cluster, tweede loop
@@ -485,6 +468,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         public void onPostExecute(ArrayList wijzigingenList){
+            progressDialog.dismiss();
             boolean isVerbindingsfout = false;
             boolean geenKlasBool = false;
             boolean geenClusters = false;
@@ -514,15 +498,8 @@ public class MainActivity extends AppCompatActivity {
                 TextView textStandView = (TextView) findViewById(R.id.textStand);
                 textStandView.setText(standZin);
             }
+            vernieuwdToast();
 
-        }
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-            if (toast.getView().getWindowVisibility() == View.VISIBLE){
-                toast.setText("Vernieuwd");
-            } else{
-                Toast.makeText(getApplicationContext(), "Tabel wordt doorzocht"
-                        , Toast.LENGTH_SHORT).show();}
         }
 
     }

@@ -9,15 +9,34 @@ import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import java.util.Set;
 
-public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragment implements
+        SharedPreferences.OnSharedPreferenceChangeListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Instellingen laden
-        addPreferencesFromResource(R.xml.preferences);}
+        addPreferencesFromResource(R.xml.preferences);
+    Preference about = findPreference("pref_about");
+        about.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                new MaterialDialog.Builder(getActivity())
+                    .title("Over Roosterwijzigingchecker")
+                    .content(getString(R.string.overDezeApp))
+                    .positiveText("OK")
+                        .show();
+                return true;
+            }
+        });
+
+    }
+
+
     // Alle onderstaande code afkomstig van
     // http://gmariotti.blogspot.nl/2013/02/preference-summary-or-secondary-text.html
     @Override
@@ -45,6 +64,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
         //update summary
         updatePrefsSummary(sharedPreferences, findPreference(key));
+
     }
     /**
      * Update summary
