@@ -8,8 +8,11 @@
     <string name="geenWijzigingen">Er zijn geen wijzigingen.</string>
     <string name="geenKlas">Voer een klas in in het instellingenscherm.</string>
     <string name="geenClusters">Er zijn geen clusters ingevoerd.</string>
-    <string name="overDezeApp">Ontzettend lang verhaal, blablabla</string>
-    <string name="clusterUitleg">Hieronder kan je ervoor zorgen dat er op clusters wordt gefilterd. Clusters zijn de groepen waarin je leert, zoals dat in de bovenbouw gedaan wordt.
-        Als je in de bovenbouw zit, is het aanbevolen deze functie in te schakelen.
-        Als je ze inschakelt, kan je ze later in het instellingenscherm instellen.</string>
+    <string name="overDezeApp">Roosterwijzigingchecker is een app die ontwikkeld is door leerlingen van de RSG Tromp Meesters te Steenwijk. De app is in eerste instantie ontwikkeld voor de RSG Tromp Meesters zelf.
+        \n \n De app is gemaakt voor het profielwerkstuk. Daarom vragen wij geen geld voor het gebruik van deze app, en stoppen wij er geen advertenties in.
+        \n \n Indien je graag dingen terug wilt zien of een bug te melden hebt, kan je contact opnemen via rickdv@outlook.com Alle broncode is bovendien terug te lezen op Github.
+        De repo is RoosterwijzigingChecker, hier kan je ook feedback achterlaten.
+        \n \n Tenslotte, bedankt voor het gebruik van Roosterwijzigingchecker!</string>
+    <string name="clusterUitleg">In deze app is een mogelijkheid om op clusters te filteren. Clusters zijn de groepen waarin je leert, zoals dat in de bovenbouw gedaan wordt. \n Als je in de bovenbouw zit, is het aanbevolen deze functie in te schakelen.
+        \n \n Als je clusterfiltering inschakelt, kan je ze later in het instellingenscherm instellen.</string>
 </resources>
