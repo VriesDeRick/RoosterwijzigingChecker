@@ -9,4 +9,7 @@
     <string name="geenKlas">Voer een klas in in het instellingenscherm.</string>
     <string name="geenClusters">Er zijn geen clusters ingevoerd.</string>
     <string name="overDezeApp">Ontzettend lang verhaal, blablabla</string>
+    <string name="clusterUitleg">Hieronder kan je ervoor zorgen dat er op clusters wordt gefilterd. Clusters zijn de groepen waarin je leert, zoals dat in de bovenbouw gedaan wordt.
+        Als je in de bovenbouw zit, is het aanbevolen deze functie in te schakelen.
+        Als je ze inschakelt, kan je ze later in het instellingenscherm instellen.</string>
 </resources>

@@ -83,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(MainActivity.this);
 
+        //Checkt of 1e keer starten is voor wizard
+        check1ekeer();
+
 
     }
 
@@ -200,6 +203,24 @@ public class MainActivity extends AppCompatActivity {
     }
     public void vernieuwdToast(){
         Toast.makeText(getApplicationContext(), "Vernieuwd", Toast.LENGTH_LONG).show();
+    }
+
+    public void check1ekeer(){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean is1eKeer = sp.getBoolean("1ekeer", true);
+        if(is1eKeer){
+
+            //Wizard starten
+            Intent wizardInt = new Intent(getApplicationContext(),
+                    WizardActivity.class);
+            startActivityForResult(wizardInt, 1903);
+            //Mag niet volgende keer weer starten
+            is1eKeer = false;
+            SharedPreferences.Editor spEditor = PreferenceManager
+                    .getDefaultSharedPreferences(getApplicationContext()).edit();
+            spEditor.putBoolean("1ekeer", is1eKeer);
+            spEditor.commit();
+        }
     }
 
 
