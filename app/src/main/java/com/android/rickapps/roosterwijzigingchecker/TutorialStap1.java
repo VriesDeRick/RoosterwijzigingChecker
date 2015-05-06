@@ -12,9 +12,6 @@ import android.widget.EditText;
 import org.codepond.wizardroid.WizardStep;
 import org.codepond.wizardroid.persistence.ContextVariable;
 
-/**
- * Created by Rick on 5-5-2015.
- */
 public class TutorialStap1 extends WizardStep{
     /**
      * Tell WizarDroid that these are context variables.

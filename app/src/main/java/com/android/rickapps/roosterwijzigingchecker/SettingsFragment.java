@@ -1,6 +1,8 @@
 package com.android.rickapps.roosterwijzigingchecker;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -21,7 +23,8 @@ public class SettingsFragment extends PreferenceFragment implements
 
         // Instellingen laden
         addPreferencesFromResource(R.xml.preferences);
-    Preference about = findPreference("pref_about");
+        //Alle "over deze app"-kliks verwerken
+        Preference about = findPreference("pref_about");
         about.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -33,6 +36,33 @@ public class SettingsFragment extends PreferenceFragment implements
                 return true;
             }
         });
+        Preference goToGit = findPreference("pref_goToGit");
+        goToGit.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                //Opent Github in webbrowser
+                String gitURL = "https://github.com/Richyrick/RoosterwijzigingChecker";
+                Intent gitInt = new Intent(Intent.ACTION_VIEW);
+                gitInt.setData(Uri.parse(gitURL));
+                startActivity(gitInt);
+                return true;
+            }
+        });
+        Preference email = findPreference("pref_mail");
+        email.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                //Stuurt email naar ontwikkelaars' emailadres
+                Intent mailIntent = new Intent(Intent.ACTION_SEND);
+                mailIntent.setType("plain/text");
+                //TODO: Hier correcte waarden invullen
+                mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"testemail@gmail.com"});
+                mailIntent.putExtra(Intent.EXTRA_SUBJECT, "Feedback over RSG-Wijzigingen");
+                startActivity(mailIntent);
+                return true;
+            }
+        });
+
 
     }
 

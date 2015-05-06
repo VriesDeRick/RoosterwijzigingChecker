@@ -129,4 +129,14 @@
             android:title="Over Roosterwijzigingchecker"
             android:key="pref_about"
             android:enabled="true"/>
+        <Preference
+            android:title="Ga naar Github"
+            android:summary="Bekijk de broncode van deze app op Github"
+            android:enabled="true"
+            android:key="pref_goToGit" />
+        <Preference
+            android:title="E-mail de ontwikkelaars"
+            android:summary="Stuur feedback over deze app naar de ontwikkelaars"
+            android:enabled="true"
+            android:key="pref_mail" />
 </PreferenceScreen>
