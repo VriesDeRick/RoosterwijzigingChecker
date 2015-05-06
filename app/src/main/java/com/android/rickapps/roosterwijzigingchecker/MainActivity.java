@@ -378,9 +378,15 @@ public class MainActivity extends AppCompatActivity {
             //Clusters ophalen uit SP
             ArrayList<String> clusters = new ArrayList<>();
             for (int a = 1; a < 15; a++){
-                //TODO: Eerste letter kleine letter maken
+                //String initializen, anders kan hij hem niet toevoegen
+                String clusterLowCase = "";
                 String cluster = sp.getString("pref_cluster" + a, "");
-                clusters.add(cluster);
+                //If om nullpointer te voorkomen
+                if (!cluster.equals("")){
+                clusterLowCase = cluster.substring(0, 1).toLowerCase() +
+                        cluster.substring(1);
+                }
+                clusters.add(clusterLowCase);
             }
 
             //Lege clusters weghalen uit arraylist TODO: Kijken of singleton werkt/wat het is
