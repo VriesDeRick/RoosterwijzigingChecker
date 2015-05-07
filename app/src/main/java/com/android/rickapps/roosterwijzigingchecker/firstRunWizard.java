@@ -27,8 +27,8 @@ public class firstRunWizard extends BasicWizardLayout {
         setFinishButtonText("Voltooien");
 
         return new WizardFlow.Builder()
-                .addStep(TutorialStap1.class)           //Add your steps in the order you want them
-                //.addStep(TutorialStap2.class)           to appear and eventually call create()
-                .create();                              //to create the wizard flow.
+                .addStep(TutorialStap2.class)
+                .addStep(TutorialStap1.class)
+                .create();
     }
 }

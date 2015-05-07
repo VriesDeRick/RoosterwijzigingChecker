@@ -32,7 +32,7 @@ public class SettingsFragment extends PreferenceFragment implements
                     .title("Over Roosterwijzigingchecker")
                     .content(getString(R.string.overDezeApp))
                     .positiveText("OK")
-                        .show();
+                    .show();
                 return true;
             }
         });
@@ -59,6 +59,18 @@ public class SettingsFragment extends PreferenceFragment implements
                 mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"testemail@gmail.com"});
                 mailIntent.putExtra(Intent.EXTRA_SUBJECT, "Feedback over RSG-Wijzigingen");
                 startActivity(mailIntent);
+                return true;
+            }
+        });
+        Preference voorwaarden = findPreference("pref_voorwaarden");
+        voorwaarden.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                new MaterialDialog.Builder(getActivity())
+                        .title("Voorwaarden")
+                        .content(getString(R.string.voorwaarden))
+                        .positiveText("OK")
+                        .show();
                 return true;
             }
         });

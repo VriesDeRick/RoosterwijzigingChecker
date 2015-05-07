@@ -16,4 +16,8 @@
     <string name="clusterUitleg">In deze app is een mogelijkheid om op clusters te filteren. Clusters zijn de groepen waarin je leert, zoals dat in de bovenbouw gedaan wordt. \n Als je in de bovenbouw zit, is het aanbevolen deze functie in te schakelen.
         \n \n Als je clusterfiltering inschakelt, moet je ze later in het instellingenscherm instellen.</string>
     <string name="instellingenInleiding">Hieronder lopen we de belangrijkste instellingen even door. Alle instellingen zijn later aan te passen in het instellingenscherm. </string>
+    <string name="wizardOndertitel">Om te beginnen lopen we de voorwaarden en de instellingen even met je door. \n Door het gebruiken van deze app of door op \"volgende\" te drukken, ga je automatisch akkoord met onderstaande voorwaarden, die later terug te lezen zijn via het instellingenmenu.</string>
+    <string name="voorwaarden">De ontwikkelaars zijn, noch direct noch indirect, aansprakelijk voor beslissingen en/of handelingen die gedaan zijn naar aanleiding van of beïnvloed
+    door het gebruik van RSG-Wijzigingen. De ontwikkelaars hebben geen enkele aansprakelijkheid. De gebruiker heeft de volle aansprakelijkheid voor het gebruik van RSG-Wijzigingen.
+    \n \n Meldingen en/of inhoud van RSG-Wijzigingen zullen niet en mogen niet gebruikt worden voor discussies of andere redevoeringen met het schoolpersoneel. Tevens biedt de inhoud van deze app geen enkele grond voor argumenten.  </string>
 </resources>

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
@@ -12,37 +11,30 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Instellingen"
-        android:id="@+id/textViewTitel" />
+        android:text="Bedankt voor het downloaden van RSG-Wijzigingen!"
+        android:id="@+id/textTitel" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Om te beginnen, vul hieronder je klas in. "
-        android:id="@+id/textViewNaam" />
+        android:text="@string/wizardOndertitel"
+        android:id="@+id/textOndertitel" />
 
-    <EditText
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editTextKlas"
-        android:layout_marginTop="10dp" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Voorwaarden"
+        android:id="@+id/textTitelVoorwaarden"
+        android:layout_marginTop="15dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/clusterUitleg"
-        android:id="@+id/textViewClusterUitleg"
-        android:layout_marginTop="100dp" />
-
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Schakel clusters in"
-        android:id="@+id/checkBoxClusters"
-        android:checked="false"
+        android:text="@string/voorwaarden"
+        android:id="@+id/textVoorwaarden"
         android:layout_marginTop="0dp" />
-
 </LinearLayout>
 </ScrollView>
