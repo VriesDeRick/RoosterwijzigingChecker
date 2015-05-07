@@ -10,6 +10,7 @@ import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -58,7 +59,12 @@ public class SettingsFragment extends PreferenceFragment implements
                 //TODO: Hier correcte waarden invullen
                 mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"testemail@gmail.com"});
                 mailIntent.putExtra(Intent.EXTRA_SUBJECT, "Feedback over RSG-Wijzigingen");
-                startActivity(mailIntent);
+                //Error als er geen mailapp geïnstalleerd is
+                try{
+                    startActivity(mailIntent);
+                } catch(android.content.ActivityNotFoundException e){
+                    Toast.makeText(getActivity(), "Geen E-mailapplicaties gevonden", Toast.LENGTH_LONG).show();
+                }
                 return true;
             }
         });
