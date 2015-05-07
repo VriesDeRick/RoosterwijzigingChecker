@@ -229,14 +229,16 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public ArrayList doInBackground(Void... params) {
+            //wijzigingenList alleen bijwerken vanaf UI-Thread. tempList wordt in onPostExecute
+            //gekopieerd naar wijzigingenList, zodat er geen errors komen
+            ArrayList<String> tempList = new ArrayList<>();
             //String halen uit SP
             String klasTextS = PreferenceManager.getDefaultSharedPreferences
                     (getApplicationContext()).getString("pref_klas", "");
-            wijzigingenList.clear();
             //Checken of klas niet leeg is
             if (klasTextS.equals("")){
-                wijzigingenList.add(geenKlas);
-                return wijzigingenList;
+                tempList.add(geenKlas);
+                return tempList;
             }
             //String opsplitsen in 2 delen, om naar hoofdletters te converteren
             char charcijfer = klasTextS.charAt(0);
@@ -283,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
                                 String wijziging =
                                         Jsoup.parse(cols.get(1).toString()).text() + "e uur " +
                                         Jsoup.parse(cols.get(2).toString()).text() + " valt uit.";
-                                wijzigingenList.add(wijziging);
+                                tempList.add(wijziging);
                             }
                             else {
 
@@ -299,22 +301,22 @@ public class MainActivity extends AppCompatActivity {
                                     Jsoup.parse(cols.get(6).toString()).text() + " " +
                                     Jsoup.parse(cols.get(7).toString()).text() + " " +
                                     Jsoup.parse(cols.get(8).toString()).text() + " ";
-                            wijzigingenList.add(wijziging);}
+                            tempList.add(wijziging);}
 
                         }
                         //Geen wijzigingen pas bij laatste rij
                         if (i == rows.size() - 1){
-                                  //Checken of wijzigingenList leeg is, zo ja 1 ding toevoegen
-                                  if (wijzigingenList.isEmpty()){
-                                      wijzigingenList.add(geenWijziging);
+                                  //Checken of tempList leeg is, zo ja 1 ding toevoegen
+                                  if (tempList.isEmpty()){
+                                      tempList.add(geenWijziging);
                                   }
                             //Stand ophalen: staat in 1e tabel van HTML
                             Element tableDate = doc.select("table").get(0);
                             String dateFullText = tableDate.getElementsContainingOwnText("Stand:").text();
                             //Deel achter "Stand:" pakken
                             String FullTextSplit[] = dateFullText.split("Stand:");
-                            wijzigingenList.add(FullTextSplit[1]);
-                            return wijzigingenList;
+                            tempList.add(FullTextSplit[1]);
+                            return tempList;
 
                         }
 
@@ -322,16 +324,20 @@ public class MainActivity extends AppCompatActivity {
                    }
             }
             catch(java.io.IOException e) {
-                    //Error toevoegen aan wijzigingenList, dat wordt weergegeven in messagebox
-                    wijzigingenList.clear();
-                    wijzigingenList.add(verbindfoutStr);
-                    return wijzigingenList;
+                    //Error toevoegen aan tempList, dat wordt weergegeven in messagebox
+                    tempList.clear();
+                    tempList.add(verbindfoutStr);
+                    return tempList;
             }
             //AS wilt graag een return statment: here you go
-            return wijzigingenList;
+            return tempList;
         }
-        public void onPostExecute(ArrayList wijzigingenList){
+        public void onPostExecute(ArrayList tempList){
             progressDialog.dismiss();
+            //Kopieren naar wijzigingenList zodat listView bijgewerkt kan worden, eerst resultaten vorige weghalen
+            wijzigingenList.clear();
+            wijzigingenList.addAll(tempList);
+
             boolean isVerbindingsfout = false;
             boolean geenKlasBool = false;
             int listLaatste = wijzigingenList.size() - 1;
@@ -369,11 +375,13 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public ArrayList doInBackground(Void... params) {
+            //wijzigingenList alleen bijwerken vanaf UI-Thread. tempList wordt in onPostExecute
+            //gekopieerd naar wijzigingenList, zodat er geen errors komen
+            ArrayList<String> tempList = new ArrayList<>();
             //String van klas halen uit SP
             String klasTextS = PreferenceManager.getDefaultSharedPreferences
                     (getApplicationContext()).getString("pref_klas", "");
             String url = "http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm";
-            wijzigingenList.clear();
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             //Clusters ophalen uit SP
             ArrayList<String> clusters = new ArrayList<>();
@@ -393,13 +401,13 @@ public class MainActivity extends AppCompatActivity {
             clusters.removeAll(Collections.singleton(""));
             //Er moeten wel clusters zijn ingevoerd: Zo nee, komt AlertDialog via onPostExecute
             if (clusters.isEmpty()){
-                wijzigingenList.add(getString(R.string.geenClusters));
-                return wijzigingenList;
+                tempList.add(getString(R.string.geenClusters));
+                return tempList;
             }
             //Checken of klas niet leeg is
             if (klasTextS.equals("")){
-                wijzigingenList.add("Voer een klas in in het instellingenscherm.");
-                return wijzigingenList;
+                tempList.add("Voer een klas in in het instellingenscherm.");
+                return tempList;
             }
             //String opsplitsen in 2 delen, om naar hoofdletters te converteren
             char charcijfer = klasTextS.charAt(0);
@@ -446,7 +454,7 @@ public class MainActivity extends AppCompatActivity {
                             String wijziging =
                                     Jsoup.parse(cols.get(1).toString()).text() + "e uur " +
                                             Jsoup.parse(cols.get(2).toString()).text() + " valt uit.";
-                            wijzigingenList.add(wijziging);
+                            tempList.add(wijziging);
                         }
                         else {
 
@@ -462,22 +470,22 @@ public class MainActivity extends AppCompatActivity {
                                             Jsoup.parse(cols.get(6).toString()).text() + " " +
                                             Jsoup.parse(cols.get(7).toString()).text() + " " +
                                             Jsoup.parse(cols.get(8).toString()).text() + " ";
-                            wijzigingenList.add(wijziging);}
+                            tempList.add(wijziging);}
 
                     }
                     //Geen wijzigingen pas bij laatste rij en de laatste cluster
                     if (i == rows.size() - 1 && b == clusters.size() - 1){
-                        //Checken of wijzigingenList leeg is, zo ja 1 ding toevoegen
-                        if (wijzigingenList.isEmpty()){
-                            wijzigingenList.add(geenWijziging);
+                        //Checken of tempList leeg is, zo ja 1 ding toevoegen
+                        if (tempList.isEmpty()){
+                            tempList.add(geenWijziging);
                         }
                         //Stand ophalen: staat in 1e tabel van HTML
                         Element tableDate = doc.select("table").get(0);
                         String dateFullText = tableDate.getElementsContainingOwnText("Stand:").text();
                         //Deel achter "Stand:" pakken
                         String FullTextSplit[] = dateFullText.split("Stand:");
-                        wijzigingenList.add(FullTextSplit[1]);
-                        return wijzigingenList;
+                        tempList.add(FullTextSplit[1]);
+                        return tempList;
 
                     }
 
@@ -485,39 +493,43 @@ public class MainActivity extends AppCompatActivity {
                 } }
             }
             catch(java.io.IOException e) {
-                //Error toevoegen aan wijzigingenList, dat wordt weergegeven in messagebox
-                wijzigingenList.clear();
-                wijzigingenList.add(verbindfoutStr);
-                return wijzigingenList;
+                //Error toevoegen aan tempList, dat wordt weergegeven in messagebox
+                tempList.clear();
+                tempList.add(verbindfoutStr);
+                return tempList;
             }
             //AS wilt graag een return statment: here you go
-            return null;
+            return tempList;
         }
 
 
 
-        public void onPostExecute(ArrayList wijzigingenList){
+        public void onPostExecute(ArrayList tempList){
             progressDialog.dismiss();
+            //Kopieren naar wijzigingenList zodat listView bijgewerkt kan worden, eerst resultaten vorige weghalen
+            wijzigingenList.clear();
+            wijzigingenList.addAll(tempList);
+
             boolean isVerbindingsfout = false;
             boolean geenKlasBool = false;
             boolean geenClusters = false;
             int listLaatste = wijzigingenList.size() - 1;
-            String list0 = wijzigingenList.get(listLaatste).toString();
-            if (list0.equals(geenKlas)){
+            String listlaatst = wijzigingenList.get(listLaatste);
+            if (listlaatst.equals(geenKlas)){
                 geenKlasAlert();
                 geenKlasBool = true;
             }
-            if (list0.equals(getString(R.string.geenClusters))){
+            if (listlaatst.equals(getString(R.string.geenClusters))){
                 geenClusters = true;
                 geenClusterAlert();
             }
-            if (list0.equals(verbindfoutStr)){
+            if (listlaatst.equals(verbindfoutStr)){
                 verbindfoutAlert();
                 isVerbindingsfout = true;
             }
             if (!geenKlasBool && !isVerbindingsfout && !geenClusters){
                 //Er is dus geen verbindfout en klasfout/clusterfout, list0 bevat dus stand
-                String standZin = "Stand van" + list0;
+                String standZin = "Stand van" + listlaatst;
                 wijzigingenList.remove(listLaatste);
                 sPsaver(wijzigingenList, standZin);
 

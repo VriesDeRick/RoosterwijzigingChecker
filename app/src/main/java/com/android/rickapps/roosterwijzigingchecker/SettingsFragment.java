@@ -59,7 +59,7 @@ public class SettingsFragment extends PreferenceFragment implements
                 //TODO: Hier correcte waarden invullen
                 mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"testemail@gmail.com"});
                 mailIntent.putExtra(Intent.EXTRA_SUBJECT, "Feedback over RSG-Wijzigingen");
-                //Error als er geen mailapp geïnstalleerd is
+                //Error als er geen mailapp geinstalleerd is
                 try{
                     startActivity(mailIntent);
                 } catch(android.content.ActivityNotFoundException e){
