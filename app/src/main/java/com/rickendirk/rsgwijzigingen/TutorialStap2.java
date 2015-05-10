@@ -1,10 +1,12 @@
-package com.android.rickapps.roosterwijzigingchecker;
+package com.rickendirk.rsgwijzigingen;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.rickendirk.rsgwijzigingen.R;
 
 import org.codepond.wizardroid.WizardStep;
 

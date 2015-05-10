@@ -1,9 +1,11 @@
-package com.android.rickapps.roosterwijzigingchecker;
+package com.rickendirk.rsgwijzigingen;
 
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+
+import com.rickendirk.rsgwijzigingen.R;
 
 public class SettingsActivity extends AppCompatActivity{
     @Override

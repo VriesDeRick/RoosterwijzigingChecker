@@ -1,4 +1,4 @@
-package com.android.rickapps.roosterwijzigingchecker;
+package com.rickendirk.rsgwijzigingen;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +13,7 @@ import android.preference.PreferenceFragment;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.rickendirk.rsgwijzigingen.R;
 
 import java.util.Set;
 

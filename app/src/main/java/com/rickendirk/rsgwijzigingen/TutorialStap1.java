@@ -1,4 +1,4 @@
-package com.android.rickapps.roosterwijzigingchecker;
+package com.rickendirk.rsgwijzigingen;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
+
+import com.rickendirk.rsgwijzigingen.R;
 
 import org.codepond.wizardroid.WizardStep;
 import org.codepond.wizardroid.persistence.ContextVariable;

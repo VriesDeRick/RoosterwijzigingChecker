@@ -1,4 +1,4 @@
-package com.android.rickapps.roosterwijzigingchecker;
+package com.rickendirk.rsgwijzigingen;
 
 import org.codepond.wizardroid.WizardFlow;
 import org.codepond.wizardroid.layouts.BasicWizardLayout;
