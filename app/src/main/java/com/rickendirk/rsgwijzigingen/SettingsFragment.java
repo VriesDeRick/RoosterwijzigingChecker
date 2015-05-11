@@ -57,8 +57,7 @@ public class SettingsFragment extends PreferenceFragment implements
                 //Stuurt email naar ontwikkelaars' emailadres
                 Intent mailIntent = new Intent(Intent.ACTION_SEND);
                 mailIntent.setType("plain/text");
-                //TODO: Hier correcte waarden invullen
-                mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"testemail@gmail.com"});
+                mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"wijzigingchecker@outlook.com"});
                 mailIntent.putExtra(Intent.EXTRA_SUBJECT, "Feedback over RSG-Wijzigingen");
                 //Error als er geen mailapp geinstalleerd is
                 try{

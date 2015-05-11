@@ -12,7 +12,8 @@
             android:title="Zoek automatisch"
             android:summary="Schakel automatisch zoeken in"
             android:key="pref_auto_zoek"
-            android:defaultValue="false" />
+            android:defaultValue="false"
+            android:enabled="false"/>
         <EditTextPreference
             android:title="Zoektijd 1"
             android:summary="Zoek tijd 1. Wijze van invullen is hh:mm (zoals 13:55)"
@@ -122,7 +123,7 @@
         android:title="Over deze app"
         android:key="pref_aboutCat" />
         <Preference
-            android:title="Over Roosterwijzigingchecker"
+            android:title="@string/overApp"
             android:key="pref_about"
             android:enabled="true"/>
         <Preference
@@ -140,7 +141,8 @@
             android:summary="Stuur feedback over deze app naar de ontwikkelaars"
             android:enabled="true"
             android:key="pref_mail" />
-        <CheckBoxPreference android:key="pref_but_bold"
+        <CheckBoxPreference
+            android:key="pref_but_bold"
             android:title="Maak zoekknop dikgedrukt"
             android:summary="Let op: dit is puur voor debugging-doeleinden"
             android:defaultValue="false"
