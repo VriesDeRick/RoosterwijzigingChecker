@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">RSG-Wijzigingen</string>
     <string name="app_version">v1.0.1</string>
-    <string name="overApp">Over RSG-Wijzigingen v1.0.1</string>
+    <string name="overApp">Over RSG-Wijzigingen v1.0.2</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Instellingen</string>
