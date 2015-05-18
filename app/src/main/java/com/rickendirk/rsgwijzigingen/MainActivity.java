@@ -355,19 +355,13 @@ public class MainActivity extends AppCompatActivity {
             wijzigingenList.clear();
             wijzigingenList.addAll(tempList);
 
-            boolean isVerbindingsfout = false;
-            boolean geenKlasBool = false;
             int listLaatste = wijzigingenList.size() - 1;
             String list0 = wijzigingenList.get(listLaatste).toString();
             if (list0.equals(geenKlas)){
                 geenKlasAlert();
-                geenKlasBool = true;
-            }
-            if (list0.equals(verbindfoutStr)){
+            } else if (list0.equals(verbindfoutStr)){
                 verbindfoutAlert();
-                isVerbindingsfout = true;
-            }
-            if (!geenKlasBool && !isVerbindingsfout){
+            } else {
                 //Er is dus geen verbindfout en klasfout, list0 bevat stand
                 String standZin = "Stand van" + list0;
                 wijzigingenList.remove(listLaatste);
@@ -543,24 +537,15 @@ public class MainActivity extends AppCompatActivity {
             wijzigingenList.clear();
             wijzigingenList.addAll(tempList);
 
-            boolean isVerbindingsfout = false;
-            boolean geenKlasBool = false;
-            boolean geenClusters = false;
             int listLaatste = wijzigingenList.size() - 1;
             String listlaatst = wijzigingenList.get(listLaatste);
             if (listlaatst.equals(geenKlas)){
                 geenKlasAlert();
-                geenKlasBool = true;
-            }
-            if (listlaatst.equals(getString(R.string.geenClusters))){
-                geenClusters = true;
+            } else if (listlaatst.equals(getString(R.string.geenClusters))){
                 geenClusterAlert();
-            }
-            if (listlaatst.equals(verbindfoutStr)){
+            } else if (listlaatst.equals(verbindfoutStr)){
                 verbindfoutAlert();
-                isVerbindingsfout = true;
-            }
-            if (!geenKlasBool && !isVerbindingsfout && !geenClusters){
+            } else {
                 //Er is dus geen verbindfout en klasfout/clusterfout, list0 bevat dus stand
                 String standZin = "Stand van" + listlaatst;
                 wijzigingenList.remove(listLaatste);
