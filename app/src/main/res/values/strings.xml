@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">RSG-Wijzigingen</string>
-    <string name="app_version">v1.0.1</string>
-    <string name="overApp">Over RSG-Wijzigingen v1.0.2</string>
+    <string name="app_version">v1.0.3</string>
+    <string name="overApp">Over RSG-Wijzigingen v1.0.3</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Instellingen</string>
@@ -22,4 +22,7 @@
     <string name="voorwaarden">De ontwikkelaars zijn, noch direct noch indirect, aansprakelijk voor beslissingen en/of handelingen die gedaan zijn naar aanleiding van of beïnvloed
     door het gebruik van RSG-Wijzigingen. De ontwikkelaars hebben geen enkele aansprakelijkheid. De gebruiker heeft de volle aansprakelijkheid voor het gebruik van RSG-Wijzigingen.
     \n \n Meldingen en/of inhoud van RSG-Wijzigingen zullen niet en mogen niet gebruikt worden voor discussies of andere redevoeringen met het schoolpersoneel. Tevens biedt de inhoud van deze app geen enkele grond voor argumenten.  </string>
+    <string name="verkerdeKlas">De klas die je hebt ingevoerd, bevat een letter als eerste teken. Sinds het schooljaar
+    2013/2014 zijn de klasnamen anders, waardoor het eerste teken het jaar is waarin je zit. \n \n
+    Wil je je klas automatisch laten corrigeren of wil je deze handmatig aanpassen?</string>
 </resources>

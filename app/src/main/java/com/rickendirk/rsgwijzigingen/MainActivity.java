@@ -19,7 +19,6 @@ import android.app.ProgressDialog;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.rickendirk.rsgwijzigingen.R;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -223,6 +222,44 @@ public class MainActivity extends AppCompatActivity {
             spEditor.commit();
         }
     }
+    public void EersteTekenKlasLetter(){
+        new MaterialDialog.Builder(this)
+                .title("Klas bestaat niet")
+                .content(R.string.verkerdeKlas)
+                .positiveText("Verbeter automatisch")
+                .negativeText("Verbeter handmatig")
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        super.onNegative(dialog);
+                        openSettings();
+                    }
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        klasCorrector();
+                        checker(findViewById(R.id.home));
+                    }
+                })
+                .show();
+    }
+    public void klasCorrector(){
+        String klasFout = PreferenceManager.getDefaultSharedPreferences(this)
+                .getString("pref_klas", "");
+        char[] c = klasFout.toCharArray();
+        //Letter opslaan
+        char letter = c[0];
+        //Cijfer naar 1e plaats verplaatsen
+        c[0] = c[1];
+        //Letter naar 2e plaats zetten
+        c[1] = letter;
+        String klasGoed = new String(c);
+        SharedPreferences.Editor spEditor = PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext()).edit();
+        spEditor.putString("pref_klas", klasGoed);
+        spEditor.commit();
+
+        Toast.makeText(getApplicationContext(), "Nieuwe klas is: " + klasGoed, Toast.LENGTH_LONG).show();
+    }
 
 
     //Zoekalgoritme voor klassen
@@ -239,6 +276,11 @@ public class MainActivity extends AppCompatActivity {
             //Checken of klas niet leeg is
             if (klasTextS.equals("")){
                 tempList.add(geenKlas);
+                return tempList;
+            }
+            //Eerste teken klas mag geen letter zijn
+            if(Character.isLetter(klasTextS.charAt(0))) {
+                tempList.add("EersteTekenLetter");
                 return tempList;
             }
             //String opsplitsen in 2 delen, om naar hoofdletters te converteren
@@ -356,14 +398,17 @@ public class MainActivity extends AppCompatActivity {
             wijzigingenList.addAll(tempList);
 
             int listLaatste = wijzigingenList.size() - 1;
-            String list0 = wijzigingenList.get(listLaatste).toString();
-            if (list0.equals(geenKlas)){
+            String listlaatst = wijzigingenList.get(listLaatste).toString();
+            if (listlaatst.equals(geenKlas)){
                 geenKlasAlert();
-            } else if (list0.equals(verbindfoutStr)){
+            } else if (listlaatst.equals(verbindfoutStr)){
                 verbindfoutAlert();
-            } else {
-                //Er is dus geen verbindfout en klasfout, list0 bevat stand
-                String standZin = "Stand van" + list0;
+            }else if (listlaatst.equals("EersteTekenLetter")){
+                EersteTekenKlasLetter();
+            }
+            else {
+                //Er is dus geen verbindfout en klasfout, listlaatst bevat stand
+                String standZin = "Stand van" + listlaatst;
                 wijzigingenList.remove(listLaatste);
                 sPsaver(wijzigingenList, standZin);
 
@@ -418,6 +463,11 @@ public class MainActivity extends AppCompatActivity {
             //Checken of klas niet leeg is
             if (klasTextS.equals("")){
                 tempList.add("Voer een klas in in het instellingenscherm.");
+                return tempList;
+            }
+            //Eerste teken klas mag geen letter zijn
+            if(Character.isLetter(klasTextS.charAt(0))){
+                tempList.add("EersteTekenLetter");
                 return tempList;
             }
             //String opsplitsen in 2 delen, om naar hoofdletters te converteren
@@ -545,8 +595,11 @@ public class MainActivity extends AppCompatActivity {
                 geenClusterAlert();
             } else if (listlaatst.equals(verbindfoutStr)){
                 verbindfoutAlert();
-            } else {
-                //Er is dus geen verbindfout en klasfout/clusterfout, list0 bevat dus stand
+            }else if (listlaatst.equals("EersteTekenLetter")){
+                EersteTekenKlasLetter();
+            }
+            else {
+                //Er is dus geen verbindfout en klasfout/clusterfout, listlaatst bevat dus stand
                 String standZin = "Stand van" + listlaatst;
                 wijzigingenList.remove(listLaatste);
                 sPsaver(wijzigingenList, standZin);
