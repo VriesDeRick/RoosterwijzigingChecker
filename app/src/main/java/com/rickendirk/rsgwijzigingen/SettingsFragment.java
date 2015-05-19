@@ -10,10 +10,8 @@ import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
+import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
-
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.rickendirk.rsgwijzigingen.R;
 
 import java.util.Set;
 
@@ -30,10 +28,10 @@ public class SettingsFragment extends PreferenceFragment implements
         about.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                new MaterialDialog.Builder(getActivity())
-                    .title("Over Roosterwijzigingchecker")
-                    .content(getString(R.string.overDezeApp))
-                    .positiveText("OK")
+                new AlertDialog.Builder(getActivity())
+                    .setTitle("Over Roosterwijzigingchecker")
+                    .setMessage(getString(R.string.overDezeApp))
+                    .setPositiveButton("OK", null)
                     .show();
                 return true;
             }
@@ -72,10 +70,10 @@ public class SettingsFragment extends PreferenceFragment implements
         voorwaarden.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                new MaterialDialog.Builder(getActivity())
-                        .title("Voorwaarden")
-                        .content(getString(R.string.voorwaarden))
-                        .positiveText("OK")
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Voorwaarden")
+                        .setMessage(getString(R.string.voorwaarden))
+                        .setPositiveButton("OK", null)
                         .show();
                 return true;
             }

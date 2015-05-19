@@ -1,12 +1,14 @@
 package com.rickendirk.rsgwijzigingen;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,8 +19,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.app.ProgressDialog;
 import android.widget.Toast;
-
-import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -156,14 +156,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void geenKlasAlert(){
-        new MaterialDialog.Builder(this)
-                .title("Geen klas ingevoerd")
-                .content("Er is geen klas ingevoerd in het instellingenscherm")
-                .positiveText("Stel een klas in")
-                .callback(new MaterialDialog.ButtonCallback() {
+        new AlertDialog.Builder(this)
+                .setTitle("Geen klas ingevoerd")
+                .setMessage("Er is geen klas ingevoerd in het instellingenscherm")
+                .setPositiveButton("Stel een klas in", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        super.onPositive(dialog);
+                    public void onClick(DialogInterface dialogInterface, int i) {
                         openSettings();
                     }
                 })
@@ -171,22 +169,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void verbindfoutAlert(){
-        new MaterialDialog.Builder(this)
-                .title("Verbindingsfout")
-                .content("Er was een verbindingsfout. Controleer je internetverbinding of probeer het later opnieuw.")
-                .positiveText("OK")
+        new AlertDialog.Builder(this)
+                .setTitle("Verbindingsfout")
+                .setMessage("Er was een verbindingsfout. Controleer je internetverbinding of probeer het later opnieuw.")
+                .setPositiveButton("OK", null)
                 .show();
     }
     public void geenClusterAlert(){
-        new MaterialDialog.Builder(this)
-                .title("Geen clusters")
-                .content("Clusterfiltering is ingeschakeld, maar er zijn geen clusters ingevuld. " +
-                        "Vul clusters in of schakel clusterfiltering uit.")
-                .positiveText("Ga naar het instellingenscherm")
-                .callback(new MaterialDialog.ButtonCallback() {
+        new AlertDialog.Builder(this)
+                .setTitle("Geen clusters")
+                .setMessage(getString(R.string.geenClusterMelding))
+                .setPositiveButton("Ga naar het instellingenscherm", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        super.onPositive(dialog);
+                    public void onClick(DialogInterface dialogInterface, int i) {
                         openSettings();
                     }
                 })
@@ -223,21 +218,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     public void EersteTekenKlasLetter(){
-        new MaterialDialog.Builder(this)
-                .title("Klas bestaat niet")
-                .content(R.string.verkerdeKlas)
-                .positiveText("Verbeter automatisch")
-                .negativeText("Verbeter handmatig")
-                .callback(new MaterialDialog.ButtonCallback() {
+        new AlertDialog.Builder(this)
+                .setTitle("Klas bestaat niet")
+                .setMessage(R.string.verkeerdeKlas)
+                .setPositiveButton("Automatisch", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onNegative(MaterialDialog dialog) {
-                        super.onNegative(dialog);
-                        openSettings();
-                    }
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
+                    public void onClick(DialogInterface dialogInterface, int i) {
                         klasCorrector();
                         checker(findViewById(R.id.home));
+                    }
+                })
+                .setNeutralButton("Handmatig", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        openSettings();
                     }
                 })
                 .show();
