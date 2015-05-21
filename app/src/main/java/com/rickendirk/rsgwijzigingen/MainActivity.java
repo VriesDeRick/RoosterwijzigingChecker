@@ -326,34 +326,38 @@ public class MainActivity extends AppCompatActivity {
                             }
                             else {
                                 String wijzigingKaal =
-                                    // Voegt alle kolommen samen tot 1 string
-                                    // .text() zorgt voor leesbare text
-                                    // Spaties voor leesbaarheid
-                                    Jsoup.parse(cols.get(1).toString()).text() + "e uur " +
-                                    Jsoup.parse(cols.get(2).toString()).text() + " " +
-                                    Jsoup.parse(cols.get(3).toString()).text() + " wordt " +
-                                    Jsoup.parse(cols.get(4).toString()).text() + " " +
-                                    Jsoup.parse(cols.get(5).toString()).text() + " in " +
-                                    Jsoup.parse(cols.get(6).toString()).text();
+                                        // Voegt alle kolommen samen tot 1 string
+                                        // .text() zorgt voor leesbare text
+                                        // Spaties voor leesbaarheid
+                                        Jsoup.parse(cols.get(1).toString()).text() + "e uur " +
+                                                Jsoup.parse(cols.get(2).toString()).text() + " " +
+                                                Jsoup.parse(cols.get(3).toString()).text() + " wordt " +
+                                                Jsoup.parse(cols.get(4).toString()).text() + " " +
+                                                Jsoup.parse(cols.get(5).toString()).text() + " in " +
+                                                Jsoup.parse(cols.get(6).toString()).text();
 
                                 //ipv en naar bevatten een "/" ivm uren (ma 12-04 / 4)
                                 String ipv = "";
-                                if(Jsoup.parse(cols.get(7).toString()).text().contains("/")){
-                                ipv = "ipv " + Jsoup.parse(cols.get(7).toString()).text();
+                                if (Jsoup.parse(cols.get(7).toString()).text().contains("/")) {
+                                    ipv = "ipv " + Jsoup.parse(cols.get(7).toString()).text();
                                 }
                                 String naar = "";
-                                if (Jsoup.parse(cols.get(8).toString()).text().contains("/")){
+                                if (Jsoup.parse(cols.get(8).toString()).text().contains("/")) {
                                     naar = "naar " + Jsoup.parse(cols.get(8).toString()).text() + " ";
                                 }
                                 String vervangingsTekst = "";
                                 //&nbsp; staat in lege cell, encoding enz, zie volgende link:
                                 // http://stackoverflow.com/questions/26837034/how-to-tell-if-a-html-table-has-an-empty-cell-nbsp-using-jsoup
-                                if (!Jsoup.parse(cols.get(9).toString()).text().equals("\u00a0")){
-                                    vervangingsTekst = "(" + Jsoup.parse(cols.get(9).toString()).text() + ")";
+                                //Soms veregeten ze de opmerkingen, dan krijg je size+ 9 en error
+                                if (cols.size() > 9) {
+                                    if (!Jsoup.parse(cols.get(9).toString()).text().equals("\u00a0")) {
+                                        vervangingsTekst = "(" + Jsoup.parse(cols.get(9).toString()).text() + ")";
+                                    }
                                 }
                                 String wijziging = wijzigingKaal + " " + ipv + " " + naar + " "
                                         + vervangingsTekst;
                                 tempList.add(wijziging);
+
                             }
 
                         }
