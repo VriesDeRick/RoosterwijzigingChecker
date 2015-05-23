@@ -31,6 +31,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.melnykov.fab.FloatingActionButton;
+
+
 
 public class MainActivity extends AppCompatActivity {
     @SuppressWarnings("unchecked")
@@ -85,6 +88,16 @@ public class MainActivity extends AppCompatActivity {
 
         //Checkt of 1e keer starten is voor wizard
         check1ekeer();
+
+        //FAB (floatingActionButton) regelen
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                checker(findViewById(R.id.home));
+            }
+        });
+        fab.show();
 
 
     }
