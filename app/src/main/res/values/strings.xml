@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">RSG-Wijzigingen</string>
-    <string name="app_version">v1.0.4</string>
-    <string name="overApp">Over RSG-Wijzigingen v1.0.4</string>
+    <string name="app_version">v1.0.5</string>
+    <string name="overApp">Over RSG-Wijzigingen v1.0.5</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Instellingen</string>
@@ -14,7 +14,7 @@
         \n \n De app is gemaakt voor het profielwerkstuk. Daarom vragen wij geen geld voor het gebruik van deze app, en stoppen wij er geen advertenties in.
         \n \n Indien je graag dingen terug wilt zien of een bug te melden hebt, kan je contact opnemen via de "Feedback"-knop in het instellingenscherm.
         \n Alle broncode is daarnaast terug te lezen op Github, je kan deze vinden via de link hieronder
-        \n \n Tenslotte, bedankt voor het gebruik van Roosterwijzigingchecker!</string>
+        \n \n Tenslotte, bedankt voor het gebruik van RSG-Wijzigingen!</string>
     <string name="clusterUitleg">In deze app is een mogelijkheid om op clusters te filteren. Clusters zijn de groepen waarin je leert, zoals dat in de bovenbouw gedaan wordt. \n Als je in de bovenbouw zit, is het aanbevolen deze functie in te schakelen.
         \n \n Als je clusterfiltering inschakelt, moet je ze later in het instellingenscherm instellen.</string>
     <string name="instellingenInleiding">Hieronder lopen we de belangrijkste instellingen even door. Alle instellingen zijn later aan te passen in het instellingenscherm. </string>

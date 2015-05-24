@@ -99,7 +99,9 @@ public class MainActivity extends AppCompatActivity {
         });
         fab.show();
 
-
+        //Dag en datum bovenaan aanpassen
+        String dagEnDatum = sp.getString("dagEnDatum", "geenWaarde");
+        dagEnDatumUpdater(dagEnDatum);
     }
 
 
@@ -200,13 +202,14 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .show();
     }
-    public void sPsaver(ArrayList wijzigingenList, String standZin){
+    public void sPsaver(ArrayList wijzigingenList, String standZin, String dagEnDatum){
         SharedPreferences.Editor spEditor = PreferenceManager
                 .getDefaultSharedPreferences(getApplicationContext()).edit();
         Set<String> wijzigingenSet = new HashSet<>();
             wijzigingenSet.addAll(wijzigingenList);
         spEditor.putStringSet("last_wijzigingenList", wijzigingenSet);
         spEditor.putString("stand", standZin);
+        spEditor.putString("dagEnDatum", dagEnDatum);
         spEditor.commit();
     }
     public void vernieuwdToast(){
@@ -266,6 +269,13 @@ public class MainActivity extends AppCompatActivity {
         spEditor.commit();
 
         Toast.makeText(getApplicationContext(), "Nieuwe klas is: " + klasGoed, Toast.LENGTH_LONG).show();
+    }
+    public void dagEnDatumUpdater(String dagEnDatum){
+        TextView dagDatumView = (TextView) findViewById(R.id.wijzigingenBanner);
+        if (!dagEnDatum.equals("geenWaarde")){
+            dagDatumView.setText("Wijzigingen voor: " + dagEnDatum);
+        }
+
     }
 
 
@@ -380,6 +390,17 @@ public class MainActivity extends AppCompatActivity {
                                   if (tempList.isEmpty()){
                                       tempList.add(geenWijziging);
                                   }
+                            //Dag waarvoor wijzigingen zijn ophalen
+                            Element dag = doc.getElementsByAttributeValueContaining("style", "font-size:11.5pt")
+                                    .first();
+                            String dagStr = dag.text();
+                            // Woorden staan verkeerd om: omwisselen
+                            int indexVanSpatie = dagStr.indexOf(" ");
+                            String datum = dagStr.substring(0, indexVanSpatie);
+                            String rest = dagStr.substring(indexVanSpatie + 1);
+                            String dagGoed = rest + " " + datum;
+                            tempList.add(dagGoed);
+
                             //Stand ophalen: staat in 1e tabel van HTML
                             Element tableDate = doc.select("table").get(0);
                             String dateFullText = tableDate.getElementsContainingOwnText("Stand:").text();
@@ -409,7 +430,7 @@ public class MainActivity extends AppCompatActivity {
             wijzigingenList.addAll(tempList);
 
             int listLaatste = wijzigingenList.size() - 1;
-            String listlaatst = wijzigingenList.get(listLaatste).toString();
+            String listlaatst = wijzigingenList.get(listLaatste);
             if (listlaatst.equals(geenKlas)){
                 geenKlasAlert();
             } else if (listlaatst.equals(verbindfoutStr)){
@@ -420,14 +441,24 @@ public class MainActivity extends AppCompatActivity {
             else {
                 //Er is dus geen verbindfout en klasfout, listlaatst bevat stand
                 String standZin = "Stand van" + listlaatst;
+                //Dag met datum ophalen uit lijst
+                int dagIndex = wijzigingenList.size() - 2;
+                String dagEnDatum = wijzigingenList.get(dagIndex);
+
                 wijzigingenList.remove(listLaatste);
-                sPsaver(wijzigingenList, standZin);
+                //Dag en datum moeten er ook uit, nu is die de laatste
+                wijzigingenList.remove(wijzigingenList.size() - 1);
+                sPsaver(wijzigingenList, standZin, dagEnDatum);
 
                 ListView listView = (ListView) findViewById(R.id.wijzigingenList);
                 listView.invalidateViews();
 
                 TextView textStandView = (TextView) findViewById(R.id.textStand);
                 textStandView.setText(standZin);
+
+                //Dag en datum updaten
+                dagEnDatumUpdater(dagEnDatum);
+
                 //Mag toast met vernieuwd niet bij verbindingsfout etc
                 vernieuwdToast();
             }
@@ -567,6 +598,17 @@ public class MainActivity extends AppCompatActivity {
                         if (tempList.isEmpty()){
                             tempList.add(geenWijziging);
                         }
+                        //Dag waarvoor wijzigingen zijn ophalen
+                        Element dag = doc.getElementsByAttributeValueContaining("style", "font-size:11.5pt")
+                                .first();
+                        String dagStr = dag.text();
+                        // Woorden staan verkeerd om: omwisselen
+                        int indexVanSpatie = dagStr.indexOf(" ");
+                        String datum = dagStr.substring(0, indexVanSpatie);
+                        String rest = dagStr.substring(indexVanSpatie + 1);
+                        String dagGoed = rest + " " + datum;
+                        tempList.add(dagGoed);
+
                         //Stand ophalen: staat in 1e tabel van HTML
                         Element tableDate = doc.select("table").get(0);
                         String dateFullText = tableDate.getElementsContainingOwnText("Stand:").text();
@@ -612,14 +654,23 @@ public class MainActivity extends AppCompatActivity {
             else {
                 //Er is dus geen verbindfout en klasfout/clusterfout, listlaatst bevat dus stand
                 String standZin = "Stand van" + listlaatst;
+                int dagIndex = wijzigingenList.size() - 2;
+                String dagEnDatum = wijzigingenList.get(dagIndex);
+
                 wijzigingenList.remove(listLaatste);
-                sPsaver(wijzigingenList, standZin);
+                //Dag en datum moeten er ook uit, nu is die de laatste
+                wijzigingenList.remove(wijzigingenList.size() - 1);
+
+                sPsaver(wijzigingenList, standZin, dagEnDatum);
 
                 ListView listView = (ListView) findViewById(R.id.wijzigingenList);
                 listView.invalidateViews();
 
                 TextView textStandView = (TextView) findViewById(R.id.textStand);
                 textStandView.setText(standZin);
+
+                //Dag en datum updaten
+                dagEnDatumUpdater(dagEnDatum);
                 //Mag toast met vernieuwd niet bij verbindingsfout etc
                 vernieuwdToast();
             }
