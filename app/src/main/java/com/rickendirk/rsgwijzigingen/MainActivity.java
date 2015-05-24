@@ -38,8 +38,6 @@ import com.melnykov.fab.FloatingActionButton;
 public class MainActivity extends AppCompatActivity {
     @SuppressWarnings("unchecked")
     public ArrayList<String> wijzigingenList = new ArrayList<>();
-    String geenKlas = null;
-    String verbindfoutStr = null;
     String geenWijziging = null;
     ProgressDialog progressDialog;
 
@@ -80,8 +78,6 @@ public class MainActivity extends AppCompatActivity {
         setTitle("Roosterwijzigingen");
 
         //Strings aanpassen uit strings.xml
-        geenKlas = getString(R.string.geenKlas);
-        verbindfoutStr = getString(R.string.internet_error);
         geenWijziging = getString(R.string.geenWijzigingen);
 
         progressDialog = new ProgressDialog(MainActivity.this);
@@ -273,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
     public void dagEnDatumUpdater(String dagEnDatum){
         TextView dagDatumView = (TextView) findViewById(R.id.wijzigingenBanner);
         if (!dagEnDatum.equals("geenWaarde")){
-            dagDatumView.setText("Wijzigingen voor: " + dagEnDatum);
+            dagDatumView.setText("Wijzigingen voor " + dagEnDatum);
         }
 
     }
@@ -292,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
                     (getApplicationContext()).getString("pref_klas", "");
             //Checken of klas niet leeg is
             if (klasTextS.equals("")){
-                tempList.add(geenKlas);
+                tempList.add("geenKlas");
                 return tempList;
             }
             //Eerste teken klas mag geen letter zijn
@@ -393,7 +389,7 @@ public class MainActivity extends AppCompatActivity {
                             //Dag waarvoor wijzigingen zijn ophalen
                             Element dag = doc.getElementsByAttributeValueContaining("style", "font-size:11.5pt")
                                     .first();
-                            String dagStr = dag.text();
+                            String dagStr = dag.text().toLowerCase();
                             // Woorden staan verkeerd om: omwisselen
                             int indexVanSpatie = dagStr.indexOf(" ");
                             String datum = dagStr.substring(0, indexVanSpatie);
@@ -417,7 +413,7 @@ public class MainActivity extends AppCompatActivity {
             catch(java.io.IOException e) {
                     //Error toevoegen aan tempList, dat wordt weergegeven in messagebox
                     tempList.clear();
-                    tempList.add(verbindfoutStr);
+                    tempList.add("verbindFout");
                     return tempList;
             }
             //AS wilt graag een return statment: here you go
@@ -431,36 +427,40 @@ public class MainActivity extends AppCompatActivity {
 
             int listLaatste = wijzigingenList.size() - 1;
             String listlaatst = wijzigingenList.get(listLaatste);
-            if (listlaatst.equals(geenKlas)){
-                geenKlasAlert();
-            } else if (listlaatst.equals(verbindfoutStr)){
-                verbindfoutAlert();
-            }else if (listlaatst.equals("EersteTekenLetter")){
-                EersteTekenKlasLetter();
-            }
-            else {
-                //Er is dus geen verbindfout en klasfout, listlaatst bevat stand
-                String standZin = "Stand van" + listlaatst;
-                //Dag met datum ophalen uit lijst
-                int dagIndex = wijzigingenList.size() - 2;
-                String dagEnDatum = wijzigingenList.get(dagIndex);
+            switch (listlaatst) {
+                case "geenKlas":
+                    geenKlasAlert();
+                    break;
+                case "verbindFout":
+                    verbindfoutAlert();
+                    break;
+                case "EersteTekenLetter":
+                    EersteTekenKlasLetter();
+                    break;
+                default:
+                    //Er is dus geen verbindfout en klasfout, listlaatst bevat stand
+                    String standZin = "Stand van" + listlaatst;
+                    //Dag met datum ophalen uit lijst
+                    int dagIndex = wijzigingenList.size() - 2;
+                    String dagEnDatum = wijzigingenList.get(dagIndex);
 
-                wijzigingenList.remove(listLaatste);
-                //Dag en datum moeten er ook uit, nu is die de laatste
-                wijzigingenList.remove(wijzigingenList.size() - 1);
-                sPsaver(wijzigingenList, standZin, dagEnDatum);
+                    wijzigingenList.remove(listLaatste);
+                    //Dag en datum moeten er ook uit, nu is die de laatste
+                    wijzigingenList.remove(wijzigingenList.size() - 1);
+                    sPsaver(wijzigingenList, standZin, dagEnDatum);
 
-                ListView listView = (ListView) findViewById(R.id.wijzigingenList);
-                listView.invalidateViews();
+                    ListView listView = (ListView) findViewById(R.id.wijzigingenList);
+                    listView.invalidateViews();
 
-                TextView textStandView = (TextView) findViewById(R.id.textStand);
-                textStandView.setText(standZin);
+                    TextView textStandView = (TextView) findViewById(R.id.textStand);
+                    textStandView.setText(standZin);
 
-                //Dag en datum updaten
-                dagEnDatumUpdater(dagEnDatum);
+                    //Dag en datum updaten
+                    dagEnDatumUpdater(dagEnDatum);
 
-                //Mag toast met vernieuwd niet bij verbindingsfout etc
-                vernieuwdToast();
+                    //Mag toast met vernieuwd niet bij verbindingsfout etc
+                    vernieuwdToast();
+                    break;
             }
 
 
@@ -499,12 +499,12 @@ public class MainActivity extends AppCompatActivity {
             clusters.removeAll(Collections.singleton(""));
             //Er moeten wel clusters zijn ingevoerd: Zo nee, komt AlertDialog via onPostExecute
             if (clusters.isEmpty()){
-                tempList.add(getString(R.string.geenClusters));
+                tempList.add("geenClusters");
                 return tempList;
             }
             //Checken of klas niet leeg is
             if (klasTextS.equals("")){
-                tempList.add("Voer een klas in in het instellingenscherm.");
+                tempList.add("geenKlas");
                 return tempList;
             }
             //Eerste teken klas mag geen letter zijn
@@ -601,7 +601,7 @@ public class MainActivity extends AppCompatActivity {
                         //Dag waarvoor wijzigingen zijn ophalen
                         Element dag = doc.getElementsByAttributeValueContaining("style", "font-size:11.5pt")
                                 .first();
-                        String dagStr = dag.text();
+                        String dagStr = dag.text().toLowerCase();
                         // Woorden staan verkeerd om: omwisselen
                         int indexVanSpatie = dagStr.indexOf(" ");
                         String datum = dagStr.substring(0, indexVanSpatie);
@@ -625,7 +625,7 @@ public class MainActivity extends AppCompatActivity {
             catch(java.io.IOException e) {
                 //Error toevoegen aan tempList, dat wordt weergegeven in messagebox
                 tempList.clear();
-                tempList.add(verbindfoutStr);
+                tempList.add("verbindFout");
                 return tempList;
             }
             //AS wilt graag een return statment: here you go
@@ -642,37 +642,42 @@ public class MainActivity extends AppCompatActivity {
 
             int listLaatste = wijzigingenList.size() - 1;
             String listlaatst = wijzigingenList.get(listLaatste);
-            if (listlaatst.equals(geenKlas)){
-                geenKlasAlert();
-            } else if (listlaatst.equals(getString(R.string.geenClusters))){
-                geenClusterAlert();
-            } else if (listlaatst.equals(verbindfoutStr)){
-                verbindfoutAlert();
-            }else if (listlaatst.equals("EersteTekenLetter")){
-                EersteTekenKlasLetter();
-            }
-            else {
-                //Er is dus geen verbindfout en klasfout/clusterfout, listlaatst bevat dus stand
-                String standZin = "Stand van" + listlaatst;
-                int dagIndex = wijzigingenList.size() - 2;
-                String dagEnDatum = wijzigingenList.get(dagIndex);
+            switch (listlaatst) {
+                case "geenKlas":
+                    geenKlasAlert();
+                    break;
+                case "geenClusters":
+                    geenClusterAlert();
+                    break;
+                case "verbindFout":
+                    verbindfoutAlert();
+                    break;
+                case "EersteTekenLetter":
+                    EersteTekenKlasLetter();
+                    break;
+                default:
+                    //Er is dus geen verbindfout en klasfout/clusterfout, listlaatst bevat dus stand
+                    String standZin = "Stand van" + listlaatst;
+                    int dagIndex = wijzigingenList.size() - 2;
+                    String dagEnDatum = wijzigingenList.get(dagIndex);
 
-                wijzigingenList.remove(listLaatste);
-                //Dag en datum moeten er ook uit, nu is die de laatste
-                wijzigingenList.remove(wijzigingenList.size() - 1);
+                    wijzigingenList.remove(listLaatste);
+                    //Dag en datum moeten er ook uit, nu is die de laatste
+                    wijzigingenList.remove(wijzigingenList.size() - 1);
 
-                sPsaver(wijzigingenList, standZin, dagEnDatum);
+                    sPsaver(wijzigingenList, standZin, dagEnDatum);
 
-                ListView listView = (ListView) findViewById(R.id.wijzigingenList);
-                listView.invalidateViews();
+                    ListView listView = (ListView) findViewById(R.id.wijzigingenList);
+                    listView.invalidateViews();
 
-                TextView textStandView = (TextView) findViewById(R.id.textStand);
-                textStandView.setText(standZin);
+                    TextView textStandView = (TextView) findViewById(R.id.textStand);
+                    textStandView.setText(standZin);
 
-                //Dag en datum updaten
-                dagEnDatumUpdater(dagEnDatum);
-                //Mag toast met vernieuwd niet bij verbindingsfout etc
-                vernieuwdToast();
+                    //Dag en datum updaten
+                    dagEnDatumUpdater(dagEnDatum);
+                    //Mag toast met vernieuwd niet bij verbindingsfout etc
+                    vernieuwdToast();
+                    break;
             }
 
 

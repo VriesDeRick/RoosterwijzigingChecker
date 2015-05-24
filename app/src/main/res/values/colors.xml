@@ -5,8 +5,8 @@
     <item name="blue" type="color">#4021DB</item>
     <item name="lighter_blue" type="color">#1E7CC9</item>
     <item name="statusBarDarker" type="color">#1E52C9</item>
-    <item name="accent" type="color">#D90000</item>
     <item name="gmailRood" type="color">#dd4b39</item>
+    <item name="roodHalf" type="color">#80dd4b39</item>
 
 
     <item name="purple" type="color">#FFAA66CC</item>
