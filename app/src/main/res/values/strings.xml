@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">RSG-Wijzigingen</string>
-    <string name="app_version">v1.0.5</string>
-    <string name="overApp">Over RSG-Wijzigingen v1.0.5</string>
+    <string name="app_version">v1.0.6</string>
+    <string name="overApp">Over RSG-Wijzigingen v1.0.6</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Instellingen</string>
@@ -27,4 +27,7 @@
     Wil je je klas automatisch laten corrigeren of wil je deze handmatig aanpassen?</string>
     <string name="geenClusterMelding">Clusterfiltering is ingeschakeld, maar er zijn geen clusters ingevuld. Vul clusters
     in of schakel clusterfiltering uit.</string>
+    <string name="klasMeerDan4Tekens">De klas die je hebt gekozen bevat meer dan 4 tekens. Klassen kunnen
+    niet meer dan 4 tekens bevatten. Let op dat je geen enters of spaties in je klas hebt staan. Pas je klas
+    aan in het instellingenscherm.</string>
 </resources>

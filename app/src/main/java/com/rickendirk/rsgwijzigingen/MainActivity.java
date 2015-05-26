@@ -273,6 +273,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+    public void klasMeerDan4Tekens(){
+        new AlertDialog.Builder(this)
+                .setTitle("Klas meer dan 4 tekens")
+                .setMessage(R.string.klasMeerDan4Tekens)
+                .setPositiveButton("Naar het instellingenscherm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        openSettings();
+                    }
+                })
+                .show();
+    }
 
 
     //Zoekalgoritme voor klassen
@@ -301,25 +313,28 @@ public class MainActivity extends AppCompatActivity {
             String klascijfer = String.valueOf(charcijfer);
             char charafdeling = klasTextS.charAt(1);
             String klasafdelingBig = String.valueOf(charafdeling).toUpperCase();
-            //Sommige klassen hebben 2 delen, andere 3, andere 4
-            String klasCorrect = "";
-            //Onderstaand bij 3-delige klas, laatste deel moet kleine letter zijn.
-            if(klasTextS.length() == 3){
-                char klasabc = klasTextS.charAt(2);
-                String klasabcSmall = String.valueOf(klasabc).toLowerCase();
-                klasCorrect = klascijfer + klasafdelingBig + klasabcSmall;
-            }
-            if (klasTextS.length() == 4){
-                char klasafdeling2 = klasTextS.charAt(2);
-                String klasafdeling2Big = String.valueOf(klasafdeling2).toUpperCase();
-                char klasabc = klasTextS.charAt(3);
-                String klasabcSmall = String.valueOf(klasabc).toLowerCase();
+            //Onderstaand voor hoofdlettercorrectie
+            String klasCorrect; //KlasCorrect is klas na hoofdlettercorrectie
+            switch (klasTextS.length()){
+                case 2:
+                    klasCorrect = klascijfer + klasafdelingBig;
+                    break;
+                case 3:
+                    char klasabc = klasTextS.charAt(2);
+                    String klasabcSmall = String.valueOf(klasabc).toLowerCase();
+                    klasCorrect = klascijfer + klasafdelingBig + klasabcSmall;
+                    break;
+                case 4:
+                    char klasafdeling2 = klasTextS.charAt(2);
+                    String klasafdeling2Big = String.valueOf(klasafdeling2).toUpperCase();
+                    klasabc = klasTextS.charAt(3);
+                    klasabcSmall = String.valueOf(klasabc).toLowerCase();
 
-                klasCorrect = klascijfer + klasafdelingBig + klasafdeling2Big + klasabcSmall;
-            }
-            //Onderstaand bij 2-delige klas
-            if (klasTextS.length() == 2){
-                klasCorrect = klascijfer + klasafdelingBig;
+                    klasCorrect = klascijfer + klasafdelingBig + klasafdeling2Big + klasabcSmall;
+                    break;
+                default:
+                    tempList.add("klasMeerDan4Tekens");
+                    return tempList;
             }
 
             //Try en catch in het geval dat de internetverbinding mist
@@ -437,6 +452,9 @@ public class MainActivity extends AppCompatActivity {
                 case "EersteTekenLetter":
                     EersteTekenKlasLetter();
                     break;
+                case "klasMeerDan4Tekens":
+                    klasMeerDan4Tekens();
+                    break;
                 default:
                     //Er is dus geen verbindfout en klasfout, listlaatst bevat stand
                     String standZin = "Stand van" + listlaatst;
@@ -517,25 +535,28 @@ public class MainActivity extends AppCompatActivity {
             String klascijfer = String.valueOf(charcijfer);
             char charafdeling = klasTextS.charAt(1);
             String klasafdelingBig = String.valueOf(charafdeling).toUpperCase();
-            //Sommige klassen hebben 2 delen, andere 3, andere 4
-            String klasCorrect = null;
-            //Onderstaand bij 3-delige klas, laatste deel moet kleine letter zijn.
-            if(klasTextS.length() == 3){
-                char klasabc = klasTextS.charAt(2);
-                String klasabcSmall = String.valueOf(klasabc).toLowerCase();
-                klasCorrect = klascijfer + klasafdelingBig + klasabcSmall;
-            }
-            if (klasTextS.length() == 4){
-                char klasafdeling2 = klasTextS.charAt(2);
-                String klasafdeling2Big = String.valueOf(klasafdeling2).toUpperCase();
-                char klasabc = klasTextS.charAt(3);
-                String klasabcSmall = String.valueOf(klasabc).toLowerCase();
+            //Onderstaand voor hoofdlettercorrectie
+            String klasCorrect; //KlasCorrect is klas na hoofdlettercorrectie
+            switch (klasTextS.length()){
+                case 2:
+                    klasCorrect = klascijfer + klasafdelingBig;
+                    break;
+                case 3:
+                    char klasabc = klasTextS.charAt(2);
+                    String klasabcSmall = String.valueOf(klasabc).toLowerCase();
+                    klasCorrect = klascijfer + klasafdelingBig + klasabcSmall;
+                    break;
+                case 4:
+                    char klasafdeling2 = klasTextS.charAt(2);
+                    String klasafdeling2Big = String.valueOf(klasafdeling2).toUpperCase();
+                    klasabc = klasTextS.charAt(3);
+                    klasabcSmall = String.valueOf(klasabc).toLowerCase();
 
-                klasCorrect = klascijfer + klasafdelingBig + klasafdeling2Big + klasabcSmall;
-            }
-            //Onderstaand bij 2-delige klas
-            if (klasTextS.length() == 2){
-                klasCorrect = klascijfer + klasafdelingBig;
+                    klasCorrect = klascijfer + klasafdelingBig + klasafdeling2Big + klasabcSmall;
+                    break;
+                default:
+                    tempList.add("klasMeerDan4Tekens");
+                    return tempList;
             }
             //Try en catch in het geval dat de internetverbinding mist
             try {
@@ -583,8 +604,10 @@ public class MainActivity extends AppCompatActivity {
                             String vervangingsTekst = "";
                             //&nbsp; staat in lege cell, encoding enz, zie volgende link:
                             // http://stackoverflow.com/questions/26837034/how-to-tell-if-a-html-table-has-an-empty-cell-nbsp-using-jsoup
-                            if (!Jsoup.parse(cols.get(9).toString()).text().equals("\u00a0")){
-                                vervangingsTekst = "(" + Jsoup.parse(cols.get(9).toString()).text() + ")";
+                            if (cols.size() > 9) {
+                                if (!Jsoup.parse(cols.get(9).toString()).text().equals("\u00a0")) {
+                                    vervangingsTekst = "(" + Jsoup.parse(cols.get(9).toString()).text() + ")";
+                                }
                             }
                             String wijziging = wijzigingKaal + " " + ipv + " " + naar + " "
                                     + vervangingsTekst;
@@ -651,6 +674,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case "verbindFout":
                     verbindfoutAlert();
+                    break;
+                case "klasMeerDan4Tekens":
+                    klasMeerDan4Tekens();
                     break;
                 case "EersteTekenLetter":
                     EersteTekenKlasLetter();
