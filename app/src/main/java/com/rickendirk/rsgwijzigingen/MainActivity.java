@@ -85,15 +85,6 @@ public class MainActivity extends AppCompatActivity {
         //Checkt of 1e keer starten is voor wizard
         check1ekeer();
 
-        //FAB (floatingActionButton) regelen
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                checker(findViewById(R.id.home));
-            }
-        });
-        fab.show();
 
         //Dag en datum bovenaan aanpassen
         String dagEnDatum = sp.getString("dagEnDatum", "geenWaarde");

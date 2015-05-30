@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
@@ -43,18 +44,16 @@
         android:layout_below="@+id/wijzigingenList"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
-    <com.melnykov.fab.FloatingActionButton
+
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_action_autorenew"
-        fab:fab_colorNormal="@color/gmailRood"
-        fab:fab_colorRipple="@color/roodHalf"
-        fab:fab_type="normal"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"/>
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_action_autorenew"
+        android:clickable="true"
+        android:onClick="checker" />
 
 </RelativeLayout>

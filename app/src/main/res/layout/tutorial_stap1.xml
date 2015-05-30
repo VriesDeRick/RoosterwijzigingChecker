@@ -22,11 +22,17 @@
         android:text="Om te beginnen, vul hieronder je klas in. "
         android:id="@+id/textViewNaam" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTextKlas"
-        android:layout_marginTop="10dp" />
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editTextKlas"
+            android:layout_marginTop="10dp"
+            android:hint="Klas"/>
+    </android.support.design.widget.TextInputLayout>
 
     <TextView
         android:layout_width="wrap_content"
