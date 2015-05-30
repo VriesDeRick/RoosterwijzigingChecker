@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
             openSettings();
         }
         if (id == R.id.action_refresh) {
-            checker(findViewById(R.id.button));
+            checker(findViewById(R.id.home));
         }
 
 
@@ -130,20 +130,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 1874){
-            button_bold();
+            //Puur hier voor test-doeleinden
         }
     }
-
-    private void button_bold() {
-        Button button = (Button) findViewById(R.id.button);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if (sharedPreferences.getBoolean("pref_but_bold", false)){
-            button.setTypeface(null, Typeface.BOLD);
-        } else button.setTypeface(null, Typeface.NORMAL);
-
-
-    }
-
     public void checker(View view){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Boolean clusters_enabled = sp.getBoolean("pref_cluster_enabled", false);
