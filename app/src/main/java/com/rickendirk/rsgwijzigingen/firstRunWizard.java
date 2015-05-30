@@ -28,7 +28,7 @@ public class firstRunWizard extends BasicWizardLayout {
 
         return new WizardFlow.Builder()
                 .addStep(TutorialStap2.class)
-                .addStep(TutorialStap1.class)
+                .addStep(TutorialStap1.class, true)
                 .create();
     }
 }

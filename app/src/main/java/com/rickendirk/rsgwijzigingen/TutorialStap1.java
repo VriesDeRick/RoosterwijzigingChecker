@@ -3,13 +3,14 @@ package com.rickendirk.rsgwijzigingen;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-import com.rickendirk.rsgwijzigingen.R;
 
 import org.codepond.wizardroid.WizardStep;
 import org.codepond.wizardroid.persistence.ContextVariable;
@@ -41,6 +42,23 @@ public class TutorialStap1 extends WizardStep{
         //Get reference to the textboxes
         EditText klasET = (EditText) v.findViewById(R.id.editTextKlas);
         CheckBox clustersCB = (CheckBox) v.findViewById(R.id.checkBoxClusters);
+
+        klasET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                notifyCompleted();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
         //and set default values by using Context Variables
         //klasET.setText(firstname);
