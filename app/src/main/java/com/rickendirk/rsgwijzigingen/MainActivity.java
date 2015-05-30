@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -228,7 +229,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         klasCorrector();
-                        checker(findViewById(R.id.home));
                     }
                 })
                 .setNeutralButton("Handmatig", new DialogInterface.OnClickListener() {
@@ -240,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
     public void klasCorrector(){
-        String klasFout = PreferenceManager.getDefaultSharedPreferences(this)
+        final String klasFout = PreferenceManager.getDefaultSharedPreferences(this)
                 .getString("pref_klas", "");
         char[] c = klasFout.toCharArray();
         //Letter opslaan
@@ -250,12 +250,19 @@ public class MainActivity extends AppCompatActivity {
         //Letter naar 2e plaats zetten
         c[1] = letter;
         String klasGoed = new String(c);
-        SharedPreferences.Editor spEditor = PreferenceManager
+        final SharedPreferences.Editor spEditor = PreferenceManager
                 .getDefaultSharedPreferences(getApplicationContext()).edit();
         spEditor.putString("pref_klas", klasGoed);
         spEditor.commit();
-
-        Toast.makeText(getApplicationContext(), "Nieuwe klas is: " + klasGoed, Toast.LENGTH_LONG).show();
+        Snackbar
+                .make(findViewById(R.id.coordinatorlayout), "Gecorrigeerde klas is " + klasGoed  ,Snackbar.LENGTH_LONG)
+                .setAction("Ongedaan maken", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        spEditor.putString("pref_klas", klasFout);
+                        spEditor.commit();
+                    }
+                }).show();
     }
     public void dagEnDatumUpdater(String dagEnDatum){
         TextView dagDatumView = (TextView) findViewById(R.id.wijzigingenBanner);
