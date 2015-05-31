@@ -8,7 +8,8 @@
         android:allowBackup="true"
         android:icon="@mipmap/rsg_2"
         android:label="Wijzigingen"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        android:backupAgent="BackupAgent">
         <activity
             android:name="com.rickendirk.rsgwijzigingen.MainActivity"
             android:label="Wijzigingen" >
@@ -27,6 +28,8 @@
         </activity>
         <activity android:name="com.rickendirk.rsgwijzigingen.WizardActivity"
             android:parentActivityName="com.rickendirk.rsgwijzigingen.MainActivity"/>
+        <meta-data android:name="com.google.android.backup.api_key"
+            android:value="AEdPqrEAAAAIhCfkSCF4iq6jIv0CfUiAkR6JnuKzRnWgZZbJmA" />
     </application>
 
 </manifest>

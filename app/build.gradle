@@ -10,8 +10,8 @@ android {
         applicationId "com.rickendirk.rsgwijzigingen"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 8
-        versionName "1.0.7"
+        versionCode 10
+        versionName "1.0.7.2"
     }
     buildTypes {
         release {

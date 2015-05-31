@@ -1,10 +1,10 @@
 package com.rickendirk.rsgwijzigingen;
 
 
+import android.app.backup.BackupManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
@@ -15,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.app.ProgressDialog;
@@ -31,8 +30,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import com.melnykov.fab.FloatingActionButton;
 
 
 
@@ -82,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
         geenWijziging = getString(R.string.geenWijzigingen);
 
         progressDialog = new ProgressDialog(MainActivity.this);
-
         //Checkt of 1e keer starten is voor wizard
         check1ekeer();
 
@@ -119,18 +115,20 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //Onderstaand puur tijdelijk voor testdoeleinden
     private void openSettings() {
         Intent settingsIntent = new Intent(getApplicationContext(),
                 SettingsActivity.class);
         startActivityForResult(settingsIntent, 1874);
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 1874){
-            //Puur hier voor test-doeleinden
+            //Nieuwe backup van instellingen doen
+            BackupManager bm = new BackupManager(this);
+            bm.dataChanged();
         }
     }
     public void checker(View view){
