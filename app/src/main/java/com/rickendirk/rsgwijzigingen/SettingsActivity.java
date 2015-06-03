@@ -2,12 +2,18 @@ package com.rickendirk.rsgwijzigingen;
 
 
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 
-import com.rickendirk.rsgwijzigingen.R;
-
 public class SettingsActivity extends AppCompatActivity{
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_settings, menu);
+        return true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +31,17 @@ public class SettingsActivity extends AppCompatActivity{
             finish();
             return true;
         }
-        else return super.onOptionsItemSelected(item);
+        if (id == R.id.action_help){
+            helpDialog();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    public void helpDialog(){
+        new AlertDialog.Builder(this)
+                .setTitle("Hulp voor instellingen")
+                .setMessage(R.string.settingsHelp)
+                .setPositiveButton("OK", null)
+                .show();
     }
 
 }
