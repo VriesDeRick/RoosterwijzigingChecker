@@ -39,7 +39,8 @@ public class SettingsActivity extends AppCompatActivity{
     public void helpDialog(){
         new AlertDialog.Builder(this)
                 .setTitle("Hulp voor instellingen")
-                .setMessage(R.string.settingsHelp)
+                //.setMessage(R.string.settingsHelp)
+                .setView(R.layout.help_dialog)
                 .setPositiveButton("OK", null)
                 .show();
     }

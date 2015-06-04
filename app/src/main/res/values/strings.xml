@@ -30,10 +30,10 @@
     <string name="klasMeerDan4Tekens">De klas die je hebt gekozen bevat meer dan 4 tekens. Klassen kunnen
     niet meer dan 4 tekens bevatten. Let op dat je geen enters of spaties in je klas hebt staan. Pas je klas
     aan in het instellingenscherm.</string>
-    <string name="settingsHelp">Dit is het instellingenscherm. In dit scherm kan je o.a. je klas en clusters wijzigigen. \n\n<b>Clusters</b> zijn
+    <string name="settingsHelpBovenImage">Dit is het instellingenscherm. In dit scherm kan je o.a. je klas en clusters wijzigigen. \n\n<b>Clusters</b> zijn
     leergroepen binnen de bovenbouw. Omdat hier vaak meerdere klassen per vak aanwezig zijn, hebben de clusternamen vaak nummers erin,
     zoals dutl2 of latl9. \nIndien je in de bovenbouw zit, kan je je clusters vinden op je rooster of in Magister.
-    \nAls je in Magister naar je rooster gaat, zie je daar je vakken, zoals V5<b>econ8</b>. econ8 is
-    dan de cluster, die je in het instellingenscherm invoert. Let hierbij op hoofdletters zoals in wis<b>B</b>6. Het eerste teken
-        wordt automatisch een kleine letter gemaakt. \n\n<b>Automatisch zoeken</b> werkt nog niet, daarom zijn deze opties voorlopig uitgeschakeld. </string>
+    \nAls je in Magister naar je rooster gaat, zie je daar je vakken, zoals V5<b>schk4</b>, zoals in onderstaande afbeelding. </string>
+    <string name="settingsHelpOnderImage">schk4 is dan de cluster, die je in het instellingenscherm invoert. Let hierbij op hoofdletters zoals in wis<b>B</b>6. Het eerste teken
+        wordt automatisch een kleine letter gemaakt. \n\n<b>Automatisch zoeken</b> werkt nog niet, daarom zijn deze opties voorlopig uitgeschakeld.</string>
 </resources>
