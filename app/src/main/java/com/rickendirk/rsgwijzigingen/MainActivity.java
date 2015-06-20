@@ -406,13 +406,8 @@ public class MainActivity extends AppCompatActivity {
                                       tempList.add(geenWijziging);
                                   }
                             //Dag waarvoor wijzigingen zijn ophalen
-                            Element dag = doc.getElementsByAttributeValueContaining("style", "font-size:11.5pt")
-                                    .first();
-                            //TODO: Hier degelijke oplossing voor vinden
-                            String dagStr;
-                            if (dag == null){
-                                dagStr = "08-04-2015 Woensdag";
-                            } else dagStr = dag.text().toLowerCase();
+                            Element dag = doc.select("body > div > div:nth-child(2) > p > b > span").first();
+                            String dagStr = dag.text().toLowerCase();
                             // Woorden staan verkeerd om: omwisselen
                             int indexVanSpatie = dagStr.indexOf(" ");
                             String datum = dagStr.substring(0, indexVanSpatie);
@@ -630,8 +625,7 @@ public class MainActivity extends AppCompatActivity {
                             tempList.add(geenWijziging);
                         }
                         //Dag waarvoor wijzigingen zijn ophalen
-                        Element dag = doc.getElementsByAttributeValueContaining("style", "font-size:11.5pt")
-                                .first();
+                        Element dag = doc.select("body > div > div:nth-child(2) > p > b > span").first();
                         String dagStr = dag.text().toLowerCase();
                         // Woorden staan verkeerd om: omwisselen
                         int indexVanSpatie = dagStr.indexOf(" ");
