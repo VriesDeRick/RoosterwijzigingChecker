@@ -270,6 +270,25 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .show();
     }
+    public String getURL(){
+        int nummerOud = PreferenceManager.getDefaultSharedPreferences(this)
+                .getInt("URLInt", 2);
+        //Wisselen tussen URL's via even/oneven nummer: if is even, else is oneven
+        String URLStr;
+        if (nummerOud%2 == 0){
+             URLStr = "https://raw.githubusercontent.com/Richyrick/RoosterwijzigingChecker/master/deps/example_website.htm";
+        } else{
+             URLStr = "https://raw.githubusercontent.com/Richyrick/RoosterwijzigingChecker/master/deps/example_website_2.htm";
+        }
+        int nummerNieuw = nummerOud + 1;
+        //Nieuw nummer opslaan voor volgende keer
+        SharedPreferences.Editor spEditor = PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext()).edit();
+        spEditor.putInt("URLInt", nummerNieuw);
+        spEditor.commit();
+
+        return URLStr;
+    }
 
 
     //Zoekalgoritme voor klassen
@@ -324,7 +343,7 @@ public class MainActivity extends AppCompatActivity {
 
             //Try en catch in het geval dat de internetverbinding mist
             try {
-                String url = "http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm";
+                String url = getURL();
                 Document doc = Jsoup.connect(url).get();
                     Element table = doc.select("table").get(1);
                     Elements rows = table.select("tr");
@@ -389,7 +408,11 @@ public class MainActivity extends AppCompatActivity {
                             //Dag waarvoor wijzigingen zijn ophalen
                             Element dag = doc.getElementsByAttributeValueContaining("style", "font-size:11.5pt")
                                     .first();
-                            String dagStr = dag.text().toLowerCase();
+                            //TODO: Hier degelijke oplossing voor vinden
+                            String dagStr;
+                            if (dag == null){
+                                dagStr = "08-04-2015 Woensdag";
+                            } else dagStr = dag.text().toLowerCase();
                             // Woorden staan verkeerd om: omwisselen
                             int indexVanSpatie = dagStr.indexOf(" ");
                             String datum = dagStr.substring(0, indexVanSpatie);
@@ -482,7 +505,7 @@ public class MainActivity extends AppCompatActivity {
             //String van klas halen uit SP
             String klasTextS = PreferenceManager.getDefaultSharedPreferences
                     (getApplicationContext()).getString("pref_klas", "");
-            String url = "http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm";
+            String url = getURL();
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             //Clusters ophalen uit SP
             ArrayList<String> clusters = new ArrayList<>();
