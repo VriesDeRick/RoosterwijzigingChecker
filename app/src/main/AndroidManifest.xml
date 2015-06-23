@@ -30,6 +30,9 @@
             android:parentActivityName="com.rickendirk.rsgwijzigingen.MainActivity"/>
         <meta-data android:name="com.google.android.backup.api_key"
             android:value="AEdPqrEAAAAIhCfkSCF4iq6jIv0CfUiAkR6JnuKzRnWgZZbJmA" />
+        <service
+            android:name=".ZoekService">
+        </service>
     </application>
 
 </manifest>
