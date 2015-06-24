@@ -37,7 +37,7 @@ public class ZoekService extends IntentService{
     private void broadcastResult(ArrayList wijzigingen, Boolean clusters_enabled) {
         Intent broadcastIntent = new Intent();
         broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-        broadcastIntent.setAction(MainActivity.ZoekReceiver.ACTION_RESP);
+        broadcastIntent.setAction(MainActivity.ZoekReceiver.ACTION_RESP); //Nodig voor intentfilter
         broadcastIntent.putParcelableArrayListExtra("wijzigingen", wijzigingen);
         if (clusters_enabled){
             broadcastIntent.putExtra("clustersAan", true);
@@ -357,8 +357,6 @@ public class ZoekService extends IntentService{
                         return tempList;
 
                     }
-
-
                 } }
         }
         catch(java.io.IOException e) {
@@ -370,7 +368,5 @@ public class ZoekService extends IntentService{
         //AS wilt graag een return statment: here you go
         return tempList;
     }
-
-
     }
 

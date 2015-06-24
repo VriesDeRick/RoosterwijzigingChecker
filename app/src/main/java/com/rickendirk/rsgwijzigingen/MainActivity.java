@@ -79,15 +79,7 @@ public class MainActivity extends AppCompatActivity {
         //Dag en datum bovenaan aanpassen
         String dagEnDatum = sp.getString("dagEnDatum", "geenWaarde");
         dagEnDatumUpdater(dagEnDatum);
-
-        //Receiver regelen vor intentservice van zoeken
-        IntentFilter filter = new IntentFilter(ZoekReceiver.ACTION_RESP);
-        filter.addCategory(Intent.CATEGORY_DEFAULT);
-        receiver = new ZoekReceiver();
-        registerReceiver(receiver, filter);
     }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -270,13 +262,31 @@ public class MainActivity extends AppCompatActivity {
     public class ZoekReceiver extends BroadcastReceiver {
 
         public static final String ACTION_RESP =
-                "com.rickendirk.intent.action.MESSAGE_PROCESSED";
+                "com.rickendirk.intent.action.MESSAGE_PROCESSED"; //Nodig voor intentfilter
         @Override
         public void onReceive(Context context, Intent intent) {
             ArrayList wijzigingen = intent.getParcelableArrayListExtra("wijzigingen");
+            //Boolean wordt nog niet gebruikt, maar laten staan voor het geval dat
             boolean clusters_enabled = intent.getBooleanExtra("clustersAan", false);
             naZoeken(wijzigingen);
         }
+    }
+     public void registerReceiver(){
+         IntentFilter filter = new IntentFilter(ZoekReceiver.ACTION_RESP);
+         filter.addCategory(Intent.CATEGORY_DEFAULT);
+         receiver = new ZoekReceiver();
+         registerReceiver(receiver, filter);
+     }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver();
     }
 
     private void naZoeken(ArrayList wijzigingen) {
