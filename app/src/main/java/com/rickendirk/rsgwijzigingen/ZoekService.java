@@ -336,7 +336,7 @@ public class ZoekService extends IntentService{
                     if (i == rows.size() - 1 && b == clusters.size() - 1){
                         //Checken of tempList leeg is, zo ja 1 ding toevoegen
                         if (tempList.isEmpty()){
-                            tempList.add("Er zijn geen wijzigingen");
+                            tempList.add("Er zijn geen wijzigingen.");
                         }
                         //Dag waarvoor wijzigingen zijn ophalen
                         Element dag = doc.select("body > div > div:nth-child(2) > p > b > span").first();
