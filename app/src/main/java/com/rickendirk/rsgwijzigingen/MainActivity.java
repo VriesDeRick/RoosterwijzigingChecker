@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -23,13 +22,7 @@ import android.widget.TextView;
 import android.app.ProgressDialog;
 import android.widget.Toast;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,7 +32,6 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity {
     @SuppressWarnings("unchecked")
     public ArrayList<String> wijzigingenList = new ArrayList<>();
-    String geenWijziging = null;
     ProgressDialog progressDialog;
     private ZoekReceiver receiver;
 
@@ -78,9 +70,6 @@ public class MainActivity extends AppCompatActivity {
 
         //Titel actionBar aanpassen
         setTitle("Roosterwijzigingen");
-
-        //Strings aanpassen uit strings.xml
-        geenWijziging = getString(R.string.geenWijzigingen);
 
         progressDialog = new ProgressDialog(MainActivity.this);
         //Checkt of 1e keer starten is voor wizard
@@ -277,25 +266,7 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .show();
     }
-    public String getURL(){
-        int nummerOud = PreferenceManager.getDefaultSharedPreferences(this)
-                .getInt("URLInt", 2);
-        //Wisselen tussen URL's via even/oneven nummer: if is even, else is oneven
-        String URLStr;
-        if (nummerOud%2 == 0){
-             URLStr = "https://raw.githubusercontent.com/Richyrick/RoosterwijzigingChecker/master/deps/example_website.htm";
-        } else{
-             URLStr = "https://raw.githubusercontent.com/Richyrick/RoosterwijzigingChecker/master/deps/example_website_2.htm";
-        }
-        int nummerNieuw = nummerOud + 1;
-        //Nieuw nummer opslaan voor volgende keer
-        SharedPreferences.Editor spEditor = PreferenceManager
-                .getDefaultSharedPreferences(getApplicationContext()).edit();
-        spEditor.putInt("URLInt", nummerNieuw);
-        spEditor.commit();
 
-        return URLStr;
-    }
     public class ZoekReceiver extends BroadcastReceiver {
 
         public static final String ACTION_RESP =
@@ -304,13 +275,11 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             ArrayList wijzigingen = intent.getParcelableArrayListExtra("wijzigingen");
             boolean clusters_enabled = intent.getBooleanExtra("clustersAan", false);
-            if (clusters_enabled){
-                naZoekenClusters(wijzigingen);
-            } else naZoekenKlas(wijzigingen);
+            naZoeken(wijzigingen);
         }
     }
 
-    private void naZoekenKlas(ArrayList wijzigingen) {
+    private void naZoeken(ArrayList wijzigingen) {
         progressDialog.dismiss();
         //Kopieren naar wijzigingenList zodat listView bijgewerkt kan worden, eerst resultaten vorige weghalen
         wijzigingenList.clear();
@@ -330,6 +299,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case "klasMeerDan4Tekens":
                 klasMeerDan4Tekens();
+                break;
+            //Onderstaande case kan alleen bij clusterzoeken
+            case "geenClusters":
+                geenClusterAlert();
                 break;
             default:
                 //Er is dus geen verbindfout en klasfout, listlaatst bevat stand
@@ -356,55 +329,5 @@ public class MainActivity extends AppCompatActivity {
                 vernieuwdToast();
                 break;
         }
-    }
-
-    private void naZoekenClusters(ArrayList wijzigingen) {
-            progressDialog.dismiss();
-            //Kopieren naar wijzigingenList zodat listView bijgewerkt kan worden, eerst resultaten vorige weghalen
-            wijzigingenList.clear();
-            wijzigingenList.addAll(wijzigingen);
-
-            int listLaatste = wijzigingenList.size() - 1;
-            String listlaatst = wijzigingenList.get(listLaatste);
-            switch (listlaatst) {
-                case "geenKlas":
-                    geenKlasAlert();
-                    break;
-                case "geenClusters":
-                    geenClusterAlert();
-                    break;
-                case "verbindFout":
-                    verbindfoutAlert();
-                    break;
-                case "klasMeerDan4Tekens":
-                    klasMeerDan4Tekens();
-                    break;
-                case "EersteTekenLetter":
-                    EersteTekenKlasLetter();
-                    break;
-                default:
-                    //Er is dus geen verbindfout en klasfout/clusterfout, listlaatst bevat dus stand
-                    String standZin = "Stand van" + listlaatst;
-                    int dagIndex = wijzigingenList.size() - 2;
-                    String dagEnDatum = wijzigingenList.get(dagIndex);
-
-                    wijzigingenList.remove(listLaatste);
-                    //Dag en datum moeten er ook uit, nu is die de laatste
-                    wijzigingenList.remove(wijzigingenList.size() - 1);
-
-                    sPsaver(wijzigingenList, standZin, dagEnDatum);
-
-                    ListView listView = (ListView) findViewById(R.id.wijzigingenList);
-                    listView.invalidateViews();
-
-                    TextView textStandView = (TextView) findViewById(R.id.textStand);
-                    textStandView.setText(standZin);
-
-                    //Dag en datum updaten
-                    dagEnDatumUpdater(dagEnDatum);
-                    //Mag toast met vernieuwd niet bij verbindingsfout etc
-                    vernieuwdToast();
-                    break;
-            }
     }
 }
