@@ -35,7 +35,7 @@
     zoals dutl2 of latl9. \nIndien je in de bovenbouw zit, kan je je clusters vinden op je rooster of in Magister.
     \nAls je in Magister naar je rooster gaat, zie je daar je vakken, zoals V5<b>schk4</b>, zoals in onderstaande afbeelding. </string>
     <string name="settingsHelpOnderImage">schk4 is dan de cluster, die je in het instellingenscherm invoert. Let hierbij op hoofdletters zoals in wis<b>B</b>6. Het eerste teken
-        wordt automatisch een kleine letter gemaakt. \n\n<u><b>Automatisch zoeken</b></u> \n\n
-        Automatisch zoeken geeft je een notificatie op een dor jou ingesteld tijdstip wanneer je een roosterwijziging hebt. Om dit te laten werken moet je
-    de zoektijd op de volgende wijze invoeren:<b> hh:mm</b>. Een voorbeeld is dus 08:55 of 14:30.</string>
+        wordt automatisch een kleine letter gemaakt. \n\n<u><b>Automatisch zoeken</b></u> \n\nAutomatisch zoeken geeft je een
+        notificatie op een door jou ingesteld tijdstip wanneer je een roosterwijziging hebt. Om dit te laten werken moet je
+        de zoektijd op de volgende wijze invoeren:<b> hh:mm</b>. Een voorbeeld is dus <b>0</b>8:55 of 14:30. </string>
 </resources>
