@@ -1,16 +1,15 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:actionBarStyle">@style/MyActionBar</item>
-        <item name="android:actionBarTabTextStyle">@style/MyActionBarTabText</item>
         <item name="colorPrimaryDark">@color/statusBarDarker</item>
+        <item name="colorPrimary">@color/lighter_blue</item>
         <item name="colorAccent">@color/gmailRood</item>
         <item name="alertDialogTheme">@style/AlertDialogStyle</item>
+        <item name="windowNoTitle">true</item>
         <!-- Support library compatibility -->
-        <item name="actionBarStyle">@style/MyActionBar</item>
-        <item name="actionBarTabTextStyle">@style/MyActionBarTabText</item>
+        <item name="windowActionBar">false</item>
 
 
     </style>
