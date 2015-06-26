@@ -69,14 +69,14 @@ public class MainFragment extends Fragment{
         String dagEnDatum = sp.getString("dagEnDatum", "geenWaarde");
         dagEnDatumUpdater(dagEnDatum);
 
-        //op fab
+        /*op fab
         View fab = mainView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 checker(view);
             }
-        });
+        });*/
         
         return mainView;
 
