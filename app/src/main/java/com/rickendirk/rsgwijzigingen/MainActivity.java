@@ -27,11 +27,14 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
+
+        setTitle("Roosterwijzigingen");
     }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new MainFragment(), "Persoonlijk");
+        adapter.addFrag(new WebFragment(), "Algemeen");
         viewPager.setAdapter(adapter);
     }
 
