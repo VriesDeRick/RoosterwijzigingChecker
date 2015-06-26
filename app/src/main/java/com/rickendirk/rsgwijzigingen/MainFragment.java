@@ -97,7 +97,7 @@ public class MainFragment extends Fragment{
             bm.dataChanged();
         }
     }
-    public void checker(View view){
+    public void checker(){
 
         progressDialog.setTitle("Aan het laden");
         progressDialog.setMessage("De roosterwijzigingentabel wordt geladen en doorzocht");

@@ -7,12 +7,26 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 
 public class WebFragment extends Fragment {
+
+    WebView webView;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.temp_testlayout, container, false);
+        View mainView = inflater.inflate(R.layout.web_layout, container, false);
+
+        webView = (WebView) mainView.findViewById(R.id.webView);
+        refresh();
+        webView.getSettings().setBuiltInZoomControls(true);
+
+        return mainView;
+
     }
+    public void refresh(){
+        webView.loadUrl("http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm");
+    }
+
 }
