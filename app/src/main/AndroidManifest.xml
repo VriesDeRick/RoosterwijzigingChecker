@@ -12,7 +12,8 @@
         android:backupAgent="BackupAgent">
         <activity
             android:name="com.rickendirk.rsgwijzigingen.MainActivity"
-            android:label="Wijzigingen" >
+            android:label="Wijzigingen"
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
