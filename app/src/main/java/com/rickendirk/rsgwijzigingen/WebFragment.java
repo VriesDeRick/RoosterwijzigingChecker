@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 public class WebFragment extends Fragment {
 
@@ -27,6 +28,8 @@ public class WebFragment extends Fragment {
     }
     public void refresh(){
         webView.loadUrl("http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm");
+
+        Toast.makeText(getActivity(), "Pagina is vernieuwd", Toast.LENGTH_LONG).show();
     }
 
 }
