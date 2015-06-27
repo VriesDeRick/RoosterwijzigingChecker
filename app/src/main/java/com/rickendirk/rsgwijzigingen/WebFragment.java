@@ -25,7 +25,7 @@ public class WebFragment extends Fragment {
 
         webView = (WebView) mainView.findViewById(R.id.webView);
         webView.getSettings().setBuiltInZoomControls(true);
-        webView.setWebViewClient(new WebViewClient(){
+        webView.setWebViewClient(new WebViewClient() {
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -46,7 +46,7 @@ public class WebFragment extends Fragment {
 
     }
     public void refresh(){
-        webView.loadUrl("http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm");
+        webView.loadUrl("http://www.googledrive.com/host/0Bwyvbj_hCVmNOHhnUGZFRnZpMUk");
 
 
     }
@@ -56,5 +56,17 @@ public class WebFragment extends Fragment {
     public boolean isLoading(){
         return isLoading;
     }
+    //Onderstaand voor veranderen oriëntatie apparaat
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        webView.saveState(outState);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        webView.restoreState(savedInstanceState);
+    }
 }
