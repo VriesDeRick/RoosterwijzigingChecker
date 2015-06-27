@@ -36,12 +36,12 @@ public class MainActivity extends AppCompatActivity {
         setTitle("Roosterwijzigingen");
 
         View fab = findViewById(R.id.fab);
-
+        final ViewPagerAdapter adapter = (ViewPagerAdapter) viewPager.getAdapter();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int itemID = viewPager.getCurrentItem();
-                ViewPagerAdapter adapter = (ViewPagerAdapter) viewPager.getAdapter();
+
                 if (itemID == 0){
                     //Persoonlijke pagina, dus checken
                     MainFragment mainFragment = (MainFragment) adapter.getItem(itemID);
@@ -52,6 +52,33 @@ public class MainActivity extends AppCompatActivity {
                     WebFragment webFragment = (WebFragment) adapter.getItem(itemID);
                     webFragment.refresh();
                 }
+
+            }
+        });
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int position = tab.getPosition();
+                switch (position){
+                    case 1:
+                        //webview fragment
+                        WebFragment webFragment = (WebFragment) adapter.getItem(position);
+                        boolean isFinished = webFragment.isFinished();
+                        boolean isLoading = webFragment.isLoading();
+                        if (!isLoading && !isFinished){
+                            webFragment.refresh();
+                        }
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
 
             }
         });
