@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
+                viewPager.setCurrentItem(position);
                 switch (position){
                     case 1:
                         //webview fragment
