@@ -36,7 +36,7 @@ public class MainFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mainView = inflater.inflate(R.layout.activity_personal, container, false);
+        mainView = inflater.inflate(R.layout.fragment_personal, container, false);
         ListView listView = (ListView) mainView.findViewById(R.id.wijzigingenList);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
                 getActivity(),
@@ -69,15 +69,6 @@ public class MainFragment extends Fragment{
         String dagEnDatum = sp.getString("dagEnDatum", "geenWaarde");
         dagEnDatumUpdater(dagEnDatum);
 
-        /*op fab
-        View fab = mainView.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                checker(view);
-            }
-        });*/
-        
         return mainView;
 
     }

@@ -21,10 +21,12 @@ public class WebFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View mainView = inflater.inflate(R.layout.web_layout, container, false);
+        View mainView = inflater.inflate(R.layout.fragment_web, container, false);
 
         webView = (WebView) mainView.findViewById(R.id.webView);
         webView.getSettings().setBuiltInZoomControls(true);
+        webView.getSettings().setLoadWithOverviewMode(true);
+        webView.getSettings().setUseWideViewPort(true);
         webView.setWebViewClient(new WebViewClient() {
 
             @Override

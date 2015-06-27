@@ -51,5 +51,4 @@
 
 
 </RelativeLayout>
-    <!--- TODO: FAB fixen -->
 </android.support.design.widget.CoordinatorLayout>
