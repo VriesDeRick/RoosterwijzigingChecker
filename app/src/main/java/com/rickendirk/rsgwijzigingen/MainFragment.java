@@ -69,6 +69,8 @@ public class MainFragment extends Fragment{
         String dagEnDatum = sp.getString("dagEnDatum", "geenWaarde");
         dagEnDatumUpdater(dagEnDatum);
 
+        setRetainInstance(true);
+
         return mainView;
 
     }

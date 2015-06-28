@@ -9,6 +9,8 @@ import android.os.Bundle;
 
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,9 +18,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,13 +29,13 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //Viewpager gebeuren regelen
+
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
         setupViewPager(viewPager);
 
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
-
 
         setTitle("Roosterwijzigingen");
 
@@ -43,12 +46,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 int itemID = viewPager.getCurrentItem();
 
-                if (itemID == 0){
+                if (itemID == 0) {
                     //Persoonlijke pagina, dus checken
                     MainFragment mainFragment = (MainFragment) adapter.getItem(itemID);
                     mainFragment.checker();
                 }
-                if (itemID == 1){
+                if (itemID == 1) {
                     //Algemeen, dus pagina vernieuwen
                     WebFragment webFragment = (WebFragment) adapter.getItem(itemID);
                     webFragment.refresh();
@@ -61,16 +64,13 @@ public class MainActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
                 viewPager.setCurrentItem(position);
-                switch (position){
-                    case 1:
-                        //webview fragment
-                        WebFragment webFragment = (WebFragment) adapter.getItem(position);
-                        boolean isFinished = webFragment.isFinished();
-                        boolean isLoading = webFragment.isLoading();
-                        if (!isLoading && !isFinished){
-                            webFragment.refresh();
-                        }
-                        break;
+                if (position == 1) {//webview fragment
+                    WebFragment webFragment = (WebFragment) adapter.getItem(position);
+                    boolean isFinished = webFragment.isFinished();
+                    boolean isLoading = webFragment.isLoading();
+                    if (!isLoading && !isFinished) {
+                        webFragment.refresh();
+                    }
                 }
             }
 
@@ -88,8 +88,19 @@ public class MainActivity extends AppCompatActivity {
     }
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new MainFragment(), "Persoonlijk");
-        adapter.addFrag(new WebFragment(), "Algemeen");
+
+        FragmentManager fmg = getSupportFragmentManager();
+        List<Fragment> list = fmg.getFragments();
+        if (list == null){
+            //Geen bestaande fragments, dus nieuwe fragments toevoegen en listeners neerzetten
+            adapter.addFrag(new MainFragment(), "Persoonlijk");
+            adapter.addFrag(new WebFragment(), "Algemeen");
+        }
+        else {
+            //Al wel bestaande fragments, dus die weer aan de adapter koppelen
+            adapter.addFrag(list.get(0), "Persoonlijk");
+            adapter.addFrag(list.get(1), "Algemeen");
+        }
         viewPager.setAdapter(adapter);
     }
 

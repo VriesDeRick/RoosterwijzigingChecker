@@ -12,8 +12,7 @@
         android:backupAgent="BackupAgent">
         <activity
             android:name="com.rickendirk.rsgwijzigingen.MainActivity"
-            android:label="Wijzigingen"
-            android:configChanges="orientation|screenSize">
+            android:label="Wijzigingen">
             <!-- Bovenstaand zorgt ervoor dat na orientatieverandering de activity niet herladen wordt.
            Geeft pas glitchy gedrag bij 2e draai, dus zo houden, te overriden met onConfigurationChanged-->
             <intent-filter>

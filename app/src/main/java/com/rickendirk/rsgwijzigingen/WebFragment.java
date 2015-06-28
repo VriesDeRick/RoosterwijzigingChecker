@@ -17,9 +17,10 @@ public class WebFragment extends Fragment {
     WebView webView;
     private boolean isLoading = false;
     private boolean isFinished = false;
+    boolean is1eKeerGenegeerd = false;
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
 
         View mainView = inflater.inflate(R.layout.fragment_web, container, false);
 
@@ -43,7 +44,7 @@ public class WebFragment extends Fragment {
             }
         });
 
-
+        setRetainInstance(true);
         return mainView;
 
     }
