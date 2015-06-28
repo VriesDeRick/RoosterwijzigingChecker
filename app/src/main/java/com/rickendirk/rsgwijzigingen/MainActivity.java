@@ -4,8 +4,10 @@ package com.rickendirk.rsgwijzigingen;
 
 import android.content.Intent;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -82,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        check1ekeer();
     }
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -116,5 +119,22 @@ public class MainActivity extends AppCompatActivity {
                 SettingsActivity.class);
         startActivityForResult(settingsIntent, 1874);
 
+    }
+    public void check1ekeer(){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean is1eKeer = sp.getBoolean("1ekeer", true);
+        if(is1eKeer){
+
+            //Wizard starten
+            Intent wizardInt = new Intent(getApplicationContext(),
+                    WizardActivity.class);
+            startActivityForResult(wizardInt, 1903);
+            //Mag niet volgende keer weer starten
+            is1eKeer = false;
+            SharedPreferences.Editor spEditor = PreferenceManager
+                    .getDefaultSharedPreferences(getApplicationContext()).edit();
+            spEditor.putBoolean("1ekeer", is1eKeer);
+            spEditor.commit();
+        }
     }
 }

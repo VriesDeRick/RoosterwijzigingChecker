@@ -145,23 +145,6 @@ public class MainFragment extends Fragment{
         Toast.makeText(getActivity(), "Vernieuwd", Toast.LENGTH_LONG).show();
     }
 
-    public void check1ekeer(){
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        boolean is1eKeer = sp.getBoolean("1ekeer", true);
-        if(is1eKeer){
-
-            //Wizard starten
-            Intent wizardInt = new Intent(getActivity(),
-                    WizardActivity.class);
-            startActivityForResult(wizardInt, 1903);
-            //Mag niet volgende keer weer starten
-            is1eKeer = false;
-            SharedPreferences.Editor spEditor = PreferenceManager
-                    .getDefaultSharedPreferences(getActivity()).edit();
-            spEditor.putBoolean("1ekeer", is1eKeer);
-            spEditor.commit();
-        }
-    }
     public void EersteTekenKlasLetter(){
         new AlertDialog.Builder(getActivity())
                 .setTitle("Klas bestaat niet")
