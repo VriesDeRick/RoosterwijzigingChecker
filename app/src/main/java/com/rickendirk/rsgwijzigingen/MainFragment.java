@@ -179,7 +179,7 @@ public class MainFragment extends Fragment{
         spEditor.putString("pref_klas", klasGoed);
         spEditor.commit();
         Snackbar
-                .make(mainView.findViewById(R.id.coordinatorlayout), "Gecorrigeerde klas is " + klasGoed, Snackbar.LENGTH_LONG)
+                .make(getActivity().findViewById(R.id.main_coordinatorlayout), "Gecorrigeerde klas is " + klasGoed, Snackbar.LENGTH_LONG)
                 .setAction("Ongedaan maken", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
