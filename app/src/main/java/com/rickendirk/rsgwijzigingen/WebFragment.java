@@ -26,6 +26,7 @@ public class WebFragment extends Fragment {
 
         webView = (WebView) mainView.findViewById(R.id.webView);
         webView.getSettings().setBuiltInZoomControls(true);
+        webView.getSettings().setDisplayZoomControls(false);
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setUseWideViewPort(true);
         webView.setWebViewClient(new WebViewClient() {
