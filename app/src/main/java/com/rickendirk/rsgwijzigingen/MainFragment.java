@@ -46,28 +46,30 @@ public class MainFragment extends Fragment{
         //listView updaten met oude wijzigingen: eerst Set ophalen van SP
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         Set<String> wijzigingenSet = sp.getStringSet("last_wijzigingenList", null);
-        //nullpointer voorkomen
-        if (wijzigingenSet != null){
+        //nullpointer voorkomen en hoeft niet als orientatie veranderd, te zien aan bundle
+        if (wijzigingenSet != null && savedInstanceState == null){
+            //Set omzetten naar list
             List<String> wijzigingenList_old = new ArrayList<>(wijzigingenSet);
             //Loop om wijzigingen van ene arrayList naar andere over te zetten
             for (int i = 0; i < wijzigingenList_old.size(); i++){
                 wijzigingenList.add(wijzigingenList_old.get(i));
+                //listView updaten om eventuele wijzigingen te laten zien
+                listView.invalidateViews();
+                //Nieuwe objecten niet als orientatie veranderd, dan hopen ze op, dus hier geplaatst
+                progressDialog = new ProgressDialog(getActivity());
+
+
             }
         }
-        //listView updaten om eventuele wijzigingen te laten zien
-        listView.invalidateViews();
-
         //Stand updaten naar laatste stand
         TextView standView = (TextView) mainView.findViewById(R.id.textStand);
         String standZin = sp.getString("stand", null);
         if (standZin != null){
             standView.setText(standZin);
         }
-
-        progressDialog = new ProgressDialog(getActivity());
-
         String dagEnDatum = sp.getString("dagEnDatum", "geenWaarde");
         dagEnDatumUpdater(dagEnDatum);
+
 
         setRetainInstance(true);
 
