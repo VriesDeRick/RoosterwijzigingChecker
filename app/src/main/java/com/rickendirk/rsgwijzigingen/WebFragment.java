@@ -23,6 +23,9 @@ public class WebFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
 
         View mainView = inflater.inflate(R.layout.fragment_web, container, false);
+        if (savedInstanceState != null){
+            is1eKeerGenegeerd = true;
+        }
 
         webView = (WebView) mainView.findViewById(R.id.webView);
         webView.getSettings().setBuiltInZoomControls(true);
@@ -41,7 +44,10 @@ public class WebFragment extends Fragment {
             public void onPageFinished(WebView view, String url) {
                 isFinished = true;
                 isLoading = false;
-                Toast.makeText(getActivity(), "Pagina is vernieuwd", Toast.LENGTH_LONG).show();
+                //Ondestaande if voorkomt weergeven "pagina is vernieuwd" bij oriëntatie-verandering
+                if (is1eKeerGenegeerd){
+                    is1eKeerGenegeerd = false;
+                } else Toast.makeText(getActivity(), "Pagina is vernieuwd", Toast.LENGTH_LONG).show();
             }
         });
 
