@@ -37,6 +37,8 @@ public class WebFragment extends Fragment {
         progressDialog.setMessage("Even geduld alstublieft, de pagina wordt geladen");
         progressDialog.setProgressNumberFormat(null);
 
+
+
         webView = (WebView) mainView.findViewById(R.id.webView);
         WebSettings webSettings = webView.getSettings();
         webSettings.setBuiltInZoomControls(true);
