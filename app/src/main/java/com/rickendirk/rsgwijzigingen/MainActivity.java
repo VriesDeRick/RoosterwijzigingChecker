@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.preference.PreferenceManager;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -71,6 +73,9 @@ public class MainActivity extends AppCompatActivity {
                     if (!isLoading && !isFinished) {
                         webFragment.refresh();
                     }
+                } else{
+                    //Gewone fragment, dus toolbar moet weer bovenaan gaan staan
+                    expandToolbar();
                 }
             }
 
@@ -146,6 +151,19 @@ public class MainActivity extends AppCompatActivity {
                     .getDefaultSharedPreferences(getApplicationContext()).edit();
             spEditor.putBoolean("1ekeer", is1eKeer);
             spEditor.commit();
+        }
+    }
+    public void expandToolbar(){
+        //  Oplossing afkomstig van http://stackoverflow.com/questions/30655939/
+        //  android-programmatically-collapse-or-expand-collapsingtoolbarlayout
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
+                appBarLayout.getLayoutParams();
+        AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
+        CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_coordinatorlayout);
+        if (behavior != null){
+            behavior.setTopAndBottomOffset(0);
+            behavior.onNestedPreScroll(coordinatorLayout, appBarLayout, null, 0, 1, new int[2]);
         }
     }
 }
