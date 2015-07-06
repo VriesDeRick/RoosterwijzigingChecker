@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 public class WebFragment extends Fragment {
 
-    WebView webView;
+    NestedWebView webView;
     private boolean isLoading = false;
     private boolean isFinished = false;
     boolean is1eKeerGenegeerd = false;
@@ -28,7 +28,8 @@ public class WebFragment extends Fragment {
             is1eKeerGenegeerd = true;
         }
 
-        webView = (WebView) mainView.findViewById(R.id.webView);
+        webView = (NestedWebView) mainView.findViewById(R.id.webView);
+        webView.setNestedScrollingEnabled(true);
         WebSettings webSettings = webView.getSettings();
         webSettings.setBuiltInZoomControls(true);
         webSettings.setDisplayZoomControls(false);
