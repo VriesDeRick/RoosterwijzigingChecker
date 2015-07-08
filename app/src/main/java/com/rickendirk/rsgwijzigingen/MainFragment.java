@@ -93,11 +93,12 @@ public class MainFragment extends Fragment{
         }
     }
     public void checker(){
-
+        if (progressDialog == null) progressDialog = new ProgressDialog(getActivity()); //NPE voorkomen
         progressDialog.setTitle("Aan het laden");
         progressDialog.setMessage("De roosterwijzigingentabel wordt geladen en doorzocht");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
+
         Intent zoekIntent = new Intent(getActivity(), ZoekService.class);
         getActivity().startService(zoekIntent);
     }
