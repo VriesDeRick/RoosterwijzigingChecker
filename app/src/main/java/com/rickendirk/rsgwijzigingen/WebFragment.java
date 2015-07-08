@@ -1,7 +1,6 @@
 package com.rickendirk.rsgwijzigingen;
 
 
-import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,6 +12,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public class WebFragment extends Fragment {
@@ -21,7 +21,7 @@ public class WebFragment extends Fragment {
     private boolean isLoading = false;
     private boolean isFinished = false;
     boolean is1eKeerGenegeerd = false;
-    ProgressDialog progressDialog;
+    ProgressBar progressBar;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
@@ -30,12 +30,7 @@ public class WebFragment extends Fragment {
         if (savedInstanceState != null){
             is1eKeerGenegeerd = true;
         }
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.setMax(100);
-        progressDialog.setTitle("Pagina wordt geladen");
-        progressDialog.setMessage("Even geduld alstublieft, de pagina wordt geladen");
-        progressDialog.setProgressNumberFormat(null);
+        progressBar = (ProgressBar) getActivity().findViewById(R.id.progressBar);
 
         webView = (NestedWebView) mainView.findViewById(R.id.webView);
         webView.setNestedScrollingEnabled(true);
@@ -50,8 +45,7 @@ public class WebFragment extends Fragment {
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 isLoading = true;
                 isFinished = false;
-                progressDialog.setProgress(0);
-                progressDialog.show();
+                progressBar.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -63,13 +57,13 @@ public class WebFragment extends Fragment {
                     is1eKeerGenegeerd = false;
                 } else
                     Toast.makeText(getActivity(), "Pagina is vernieuwd", Toast.LENGTH_LONG).show();
-                progressDialog.dismiss();
+                progressBar.setVisibility(View.GONE);
             }
         });
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                progressDialog.setProgress(newProgress);
+                progressBar.setProgress(newProgress);
                 super.onProgressChanged(view, newProgress);
             }
         });
