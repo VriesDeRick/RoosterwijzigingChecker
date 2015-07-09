@@ -43,6 +43,6 @@
         app:layout_anchorGravity="bottom|right|end"
         app:borderWidth="0dp"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_action_autorenew" />
+        android:src="@drawable/ic_action_refresh" />
 
 </android.support.design.widget.CoordinatorLayout>
