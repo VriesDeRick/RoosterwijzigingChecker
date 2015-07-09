@@ -5,9 +5,11 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -22,6 +24,25 @@ public class WebFragment extends Fragment {
     private boolean isFinished = false;
     boolean is1eKeerGenegeerd = false;
     ProgressBar progressBar;
+    private ViewTreeObserver.OnScrollChangedListener onScrollChangedListener;
+    private SwipeRefreshLayout swipeLayout;
+    // Delen hiervan afkomstig van 2e antw op http://stackoverflow.com/questions/24923021/
+    // swiperefreshlayout-tab-layout-webview-cant-scroll-up
+
+    @Override
+    public void onStart() {
+        swipeLayout.getViewTreeObserver().addOnScrollChangedListener(onScrollChangedListener =
+                new ViewTreeObserver.OnScrollChangedListener() {
+                    @Override
+                    public void onScrollChanged() {
+                        if (webView.getScrollY() == 0){
+                            swipeLayout.setEnabled(true);
+                        } else swipeLayout.setEnabled(false);
+                    }
+                });
+        super.onStart();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
@@ -58,6 +79,7 @@ public class WebFragment extends Fragment {
                 } else
                     Toast.makeText(getActivity(), "Pagina is vernieuwd", Toast.LENGTH_LONG).show();
                 progressBar.setVisibility(View.GONE);
+                swipeLayout.setRefreshing(false);
             }
         });
         webView.setWebChromeClient(new WebChromeClient() {
@@ -67,6 +89,15 @@ public class WebFragment extends Fragment {
                 super.onProgressChanged(view, newProgress);
             }
         });
+        swipeLayout = (SwipeRefreshLayout) mainView.findViewById(R.id.swipeLayout);
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+            }
+        });
+        swipeLayout.setColorSchemeResources(R.color.gmailRood, R.color.orange,
+                R.color.lighter_blue, R.color.green);
 
         setRetainInstance(true);
         return mainView;
@@ -74,8 +105,6 @@ public class WebFragment extends Fragment {
     }
     public void refresh(){
         webView.loadUrl("http://www.googledrive.com/host/0Bwyvbj_hCVmNOHhnUGZFRnZpMUk");
-
-
     }
     public boolean isFinished(){
         return isFinished;
@@ -95,5 +124,11 @@ public class WebFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         webView.restoreState(savedInstanceState);
+    }
+
+    @Override
+    public void onStop() {
+        swipeLayout.getViewTreeObserver().removeOnScrollChangedListener(onScrollChangedListener);
+        super.onStop();
     }
 }

@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         setTitle("Roosterwijzigingen");
 
-        View fab = findViewById(R.id.fab);
+        final View fab = findViewById(R.id.fab);
         final ViewPagerAdapter adapter = (ViewPagerAdapter) viewPager.getAdapter();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,9 +73,11 @@ public class MainActivity extends AppCompatActivity {
                     if (!isLoading && !isFinished) {
                         webFragment.refresh();
                     }
+                    fab.setVisibility(View.GONE);
                 } else{
                     //Gewone fragment, dus toolbar moet weer bovenaan gaan staan
                     expandToolbar();
+                    fab.setVisibility(View.VISIBLE);
                 }
             }
 
