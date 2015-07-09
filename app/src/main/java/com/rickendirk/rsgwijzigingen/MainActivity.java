@@ -136,6 +136,23 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
+        switch (id){
+            case R.id.action_settings:
+                openSettings();
+                break;
+            case R.id.action_refresh:
+                int fragmentID = viewPager.getCurrentItem();
+                List<Fragment> list = getSupportFragmentManager().getFragments();
+                if (fragmentID == 0){
+                    MainFragment mainFragment = (MainFragment) list.get(0);
+                    mainFragment.checker();
+                } else {
+                    WebFragment webFragment = (WebFragment) list.get(1);
+                    webFragment.refresh();
+                }
+                break;
+        }
+
         if (id == R.id.action_settings) {
             openSettings();
         }
