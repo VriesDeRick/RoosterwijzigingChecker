@@ -24,6 +24,7 @@ import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
+    ViewPager viewPager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
-        setupViewPager(viewPager);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        setupViewPager();
 
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
@@ -93,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         });
         check1ekeer();
     }
-    private void setupViewPager(ViewPager viewPager) {
+    private void setupViewPager() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         FragmentManager fmg = getSupportFragmentManager();
@@ -116,6 +117,15 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (viewPager.getCurrentItem() == 0) { //MainFragment, app aflsuiten
+            super.onBackPressed();
+        } else{ //Naar vorig item gaan
+            viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+        }
     }
 
     @Override
