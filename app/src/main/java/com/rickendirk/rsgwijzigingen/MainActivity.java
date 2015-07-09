@@ -2,6 +2,7 @@ package com.rickendirk.rsgwijzigingen;
 
 
 
+import android.animation.Animator;
 import android.content.Intent;
 
 import android.content.SharedPreferences;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -25,6 +27,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     ViewPager viewPager;
+    int animDuration;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,13 +39,14 @@ public class MainActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         setupViewPager();
 
+        animDuration = getResources().getInteger(android.R.integer.config_longAnimTime);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
 
         setTitle("Roosterwijzigingen");
 
-        final View fab = findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         final ViewPagerAdapter adapter = (ViewPagerAdapter) viewPager.getAdapter();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,10 +79,11 @@ public class MainActivity extends AppCompatActivity {
                         webFragment.refresh();
                     }
                     fab.setVisibility(View.GONE);
+                    fadeOut(fab);
                 } else{
                     //Gewone fragment, dus toolbar moet weer bovenaan gaan staan
                     expandToolbar();
-                    fab.setVisibility(View.VISIBLE);
+                    fadeIn(fab);
                 }
             }
 
@@ -194,5 +199,57 @@ public class MainActivity extends AppCompatActivity {
             behavior.setTopAndBottomOffset(0);
             behavior.onNestedPreScroll(coordinatorLayout, appBarLayout, null, 0, 1, new int[2]);
         }
+    }
+    //Onderstaand deels afkomstig van http://developer.android.com/training/animation/crossfade.html
+    private void fadeOut(final FloatingActionButton fab){
+        fab.animate()
+                .alpha(0f)
+                .setDuration(animDuration)
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        fab.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
+
+                    }
+                });
+    }
+    private void fadeIn(final FloatingActionButton fab){
+        fab.animate()
+                .alpha(1f)
+                .setDuration(animDuration)
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+                        fab.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
+
+                    }
+                });
     }
 }
