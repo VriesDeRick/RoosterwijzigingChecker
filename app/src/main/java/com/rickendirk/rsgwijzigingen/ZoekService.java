@@ -135,17 +135,28 @@ public class ZoekService extends IntentService{
                         tempList.add(wijziging);
                     }
                     else {
-                        String wijzigingKaal =
-                                // Voegt alle kolommen samen tot 1 string
-                                // .text() zorgt voor leesbare text
-                                // Spaties voor leesbaarheid
-                                Jsoup.parse(cols.get(1).toString()).text() + "e uur " +
-                                        Jsoup.parse(cols.get(2).toString()).text() + " " +
-                                        Jsoup.parse(cols.get(3).toString()).text() + " wordt " +
-                                        Jsoup.parse(cols.get(4).toString()).text() + " " +
-                                        Jsoup.parse(cols.get(5).toString()).text() + " in " +
-                                        Jsoup.parse(cols.get(6).toString()).text();
-
+                        String vakOud = Jsoup.parse(cols.get(2).toString()).text();
+                        String docentOud = Jsoup.parse(cols.get(3).toString()).text();
+                        String vakNieuw = Jsoup.parse(cols.get(4).toString()).text();
+                        String docentNieuw = Jsoup.parse(cols.get(5).toString()).text();
+                        String wijzigingKaal;
+                        if (vakOud.equals(vakNieuw) && !docentOud.equals(docentNieuw)){
+                            // Opvang door andere docent: dit staat alleen bij klas omdat
+                            // dit amper gebeurt bij clusters
+                            wijzigingKaal = Jsoup.parse(cols.get(1).toString()).text() + "e uur " +
+                                    docentOud + " wordt opgevangen door " + docentNieuw + ".";
+                        } else { //Geen opvang door andere docent, lokaalwijziging oid
+                            wijzigingKaal =
+                                    // Voegt alle kolommen samen tot 1 string
+                                    // .text() zorgt voor leesbare text
+                                    // Spaties voor leesbaarheid
+                                    Jsoup.parse(cols.get(1).toString()).text() + "e uur " +
+                                            Jsoup.parse(cols.get(2).toString()).text() + " " +
+                                            Jsoup.parse(cols.get(3).toString()).text() + " wordt " +
+                                            Jsoup.parse(cols.get(4).toString()).text() + " " +
+                                            Jsoup.parse(cols.get(5).toString()).text() + " in " +
+                                            Jsoup.parse(cols.get(6).toString()).text();
+                        }
                         //ipv en naar bevatten een "/" ivm uren (ma 12-04 / 4)
                         String ipv = "";
                         if (Jsoup.parse(cols.get(7).toString()).text().contains("/")) {
@@ -158,7 +169,7 @@ public class ZoekService extends IntentService{
                         String vervangingsTekst = "";
                         //&nbsp; staat in lege cell, encoding enz, zie volgende link:
                         // http://stackoverflow.com/questions/26837034/how-to-tell-if-a-html-table-has-an-empty-cell-nbsp-using-jsoup
-                        //Soms veregeten ze de opmerkingen, dan krijg je size+ 9 en error
+                        //Soms veregeten ze de opmerkingen, dan krijg je size = 9 en error
                         if (cols.size() > 9) {
                             if (!Jsoup.parse(cols.get(9).toString()).text().equals("\u00a0")) {
                                 vervangingsTekst = "(" + Jsoup.parse(cols.get(9).toString()).text() + ")";
@@ -368,5 +379,5 @@ public class ZoekService extends IntentService{
         //AS wilt graag een return statment: here you go
         return tempList;
     }
-    }
+}
 
