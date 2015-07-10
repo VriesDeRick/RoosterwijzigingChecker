@@ -37,7 +37,7 @@ public class ZoekService extends IntentService{
     private void broadcastResult(ArrayList wijzigingen, Boolean clusters_enabled) {
         Intent broadcastIntent = new Intent();
         broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-        broadcastIntent.setAction(MainActivity.ZoekReceiver.ACTION_RESP); //Nodig voor intentfilter
+        broadcastIntent.setAction(MainFragment.ZoekReceiver.ACTION_RESP); //Nodig voor intentfilter
         broadcastIntent.putParcelableArrayListExtra("wijzigingen", wijzigingen);
         if (clusters_enabled){
             broadcastIntent.putExtra("clustersAan", true);
