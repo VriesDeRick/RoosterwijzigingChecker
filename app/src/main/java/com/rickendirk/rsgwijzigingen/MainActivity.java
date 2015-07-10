@@ -158,10 +158,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
         }
-
-        if (id == R.id.action_settings) {
-            openSettings();
-        }
         return super.onOptionsItemSelected(item);
     }
 
