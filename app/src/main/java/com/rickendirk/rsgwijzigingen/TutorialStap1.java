@@ -52,12 +52,20 @@ public class TutorialStap1 extends WizardStep{
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onTextChanged(CharSequence charSequence, int start, int before, int i2) {
                 notifyCompleted();
                 //TODO: Goede oplossing vinden hiervoor
                 InputMethodManager imm = (InputMethodManager) getActivity().
                         getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(klasET, InputMethodManager.SHOW_IMPLICIT);
+
+                if (charSequence.length() > 0){
+                    char char1 = charSequence.charAt(0);
+                    boolean isLetter = Character.isLetter(char1);
+                    if (isLetter){
+                        klasET.setError("1e teken moet een cijfer zijn");
+                    }
+                }
             }
 
             @Override
