@@ -1,5 +1,6 @@
 package com.rickendirk.rsgwijzigingen;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -8,6 +9,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
@@ -40,7 +42,7 @@ public class TutorialStap1 extends WizardStep{
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tutorial_stap1, container, false);
         //Get reference to the textboxes
-        EditText klasET = (EditText) v.findViewById(R.id.editTextKlas);
+        final EditText klasET = (EditText) v.findViewById(R.id.editTextKlas);
         CheckBox clustersCB = (CheckBox) v.findViewById(R.id.checkBoxClusters);
 
         klasET.addTextChangedListener(new TextWatcher() {
@@ -52,6 +54,10 @@ public class TutorialStap1 extends WizardStep{
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 notifyCompleted();
+                //TODO: Goede oplossing vinden hiervoor
+                InputMethodManager imm = (InputMethodManager) getActivity().
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(klasET, InputMethodManager.SHOW_IMPLICIT);
             }
 
             @Override
