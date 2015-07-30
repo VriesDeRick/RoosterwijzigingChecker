@@ -78,12 +78,13 @@ public class MainActivity extends AppCompatActivity {
                     if (!isLoading && !isFinished) {
                         webFragment.refresh();
                     }
-                    fab.setVisibility(View.GONE);
-                    fadeOut(fab);
+                    //fadeOut(fab);
+                    fab.hide();
                 } else{
                     //Gewone fragment, dus toolbar moet weer bovenaan gaan staan
                     expandToolbar();
-                    fadeIn(fab);
+                    //fadeIn(fab);
+                    fab.show();
                 }
             }
 
@@ -196,57 +197,5 @@ public class MainActivity extends AppCompatActivity {
             behavior.setTopAndBottomOffset(0);
             behavior.onNestedPreScroll(coordinatorLayout, appBarLayout, null, 0, 1, new int[2]);
         }
-    }
-    //Onderstaand deels afkomstig van http://developer.android.com/training/animation/crossfade.html
-    private void fadeOut(final FloatingActionButton fab){
-        fab.animate()
-                .alpha(0f)
-                .setDuration(animDuration)
-                .setListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animator) {
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animator) {
-                        fab.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animator) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animator) {
-
-                    }
-                });
-    }
-    private void fadeIn(final FloatingActionButton fab){
-        fab.animate()
-                .alpha(1f)
-                .setDuration(animDuration)
-                .setListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animator) {
-                        fab.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animator) {
-
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animator) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animator) {
-
-                    }
-                });
     }
 }
