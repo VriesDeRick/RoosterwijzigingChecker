@@ -22,6 +22,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -29,7 +31,7 @@ import java.util.Set;
 
 public class MainFragment extends Fragment{
     public ArrayList<String> wijzigingenList = new ArrayList<>();
-    ProgressDialog progressDialog;
+    MaterialDialog progressDialog;
     private ZoekReceiver receiver;
     View mainView;
 
@@ -56,9 +58,6 @@ public class MainFragment extends Fragment{
                 //listView updaten om eventuele wijzigingen te laten zien
                 listView.invalidateViews();
                 //Nieuwe objecten niet als orientatie veranderd, dan hopen ze op, dus hier geplaatst
-                progressDialog = new ProgressDialog(getActivity());
-
-
             }
         }
         //Stand updaten naar laatste stand
@@ -93,12 +92,11 @@ public class MainFragment extends Fragment{
         }
     }
     public void checker(){
-        if (progressDialog == null) progressDialog = new ProgressDialog(getActivity()); //NPE voorkomen
-        progressDialog.setTitle("Aan het laden");
-        progressDialog.setMessage("De roosterwijzigingentabel wordt geladen en doorzocht");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.show();
-
+        progressDialog = new MaterialDialog.Builder(getActivity())
+                .title("Aan het laden")
+                .content("De roosterwijzigingentabel wordt geladen en doorzocht")
+                .progress(true, 0)
+                .show();
         Intent zoekIntent = new Intent(getActivity(), ZoekService.class);
         getActivity().startService(zoekIntent);
     }
