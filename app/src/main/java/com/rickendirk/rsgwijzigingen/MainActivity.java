@@ -78,12 +78,10 @@ public class MainActivity extends AppCompatActivity {
                     if (!isLoading && !isFinished) {
                         webFragment.refresh();
                     }
-                    //fadeOut(fab);
                     fab.hide();
                 } else{
                     //Gewone fragment, dus toolbar moet weer bovenaan gaan staan
                     expandToolbar();
-                    //fadeIn(fab);
                     fab.show();
                 }
             }
