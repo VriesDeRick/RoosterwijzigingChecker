@@ -12,19 +12,16 @@
             android:title="Zoek automatisch"
             android:summary="Schakel automatisch zoeken in"
             android:key="pref_auto_zoek"
-            android:defaultValue="false"
-            android:enabled="false"/>
-        <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
+            android:defaultValue="false"/>
+        <Preference
             android:title="Zoektijd 1"
-            android:summary="Zoek tijd 1. Wijze van invullen is hh:mm (zoals 13:55)"
+            android:summary="Tijd waarop automatisch wordt gezocht naar updates"
             android:key="pref_auto_tijd1"
-            android:defaultValue=""
             android:dependency="pref_auto_zoek"/>
-        <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
+        <Preference
             android:title="Zoektijd 2"
-            android:summary="Zoek tijd 1. Wijze van invullen is hh:mm (zoals 07:55)"
+            android:summary="Tijd waarop automatisch wordt gezocht naar updates"
             android:key="pref_auto_tijd2"
-            android:defaultValue=""
             android:dependency="pref_auto_zoek"/>
     <PreferenceCategory
         android:title="Clusterinstellingen"
