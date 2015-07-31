@@ -128,10 +128,16 @@ public class SettingsFragment extends PreferenceFragment implements
         long timeInMsCal2 = sp.getLong("timeMs2", 0);
         //Als er geen tijd is huidige tijd pakken
         if (timeInMsCal1 == 0){
-            timeInMsCal1 = Calendar.getInstance().getTimeInMillis();
+            Calendar tijdOchtend = Calendar.getInstance();
+            tijdOchtend.set(Calendar.HOUR_OF_DAY, 7);
+            tijdOchtend.set(Calendar.MINUTE, 50);
+            timeInMsCal1 = tijdOchtend.getTimeInMillis();
         }
         if (timeInMsCal2 == 0){
-            timeInMsCal2 = Calendar.getInstance().getTimeInMillis();
+            Calendar tijdMidag = Calendar.getInstance();
+            tijdMidag.set(Calendar.HOUR_OF_DAY, 14);
+            tijdMidag.set(Calendar.MINUTE, 5);
+            timeInMsCal2 = tijdMidag.getTimeInMillis();
         }
         calendar1.setTimeInMillis(timeInMsCal1);
         calendar2.setTimeInMillis(timeInMsCal2);
