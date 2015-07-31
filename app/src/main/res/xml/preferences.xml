@@ -15,12 +15,12 @@
             android:defaultValue="false"/>
         <Preference
             android:title="Zoektijd 1"
-            android:summary="Tijd waarop automatisch wordt gezocht naar updates"
+            android:summary="@string/timePickerSum"
             android:key="pref_auto_tijd1"
             android:dependency="pref_auto_zoek"/>
         <Preference
             android:title="Zoektijd 2"
-            android:summary="Tijd waarop automatisch wordt gezocht naar updates"
+            android:summary="@string/timePickerSum"
             android:key="pref_auto_tijd2"
             android:dependency="pref_auto_zoek"/>
     <PreferenceCategory

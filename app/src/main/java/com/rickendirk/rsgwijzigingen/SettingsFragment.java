@@ -147,6 +147,7 @@ public class SettingsFragment extends PreferenceFragment implements
             calendar2.set(Calendar.MINUTE, minute);
             saveToSP(2);
         }
+        setTimeSummary();
         //TODO: Verwijzing naar Dirks Method hier
     }
 
@@ -208,14 +209,9 @@ public class SettingsFragment extends PreferenceFragment implements
             listPref.setSummary(listPref.getEntry());
 
         } else if (pref instanceof EditTextPreference) {
-            //Mag niet updaten bij tijdprefs
-            Preference tijd1 = findPreference("pref_auto_tijd1");
-            Preference tijd2 = findPreference("pref_auto_tijd2");
             // EditPreference
-            if (!pref.equals(tijd1) && !pref.equals(tijd2)){
             EditTextPreference editTextPref = (EditTextPreference) pref;
             editTextPref.setSummary(editTextPref.getText());
-            }
 
         } else if (pref instanceof MultiSelectListPreference) {
             // MultiSelectList Preference
@@ -251,6 +247,18 @@ public class SettingsFragment extends PreferenceFragment implements
             initPrefsSummary(getPreferenceManager().getSharedPreferences(),
                     getPreferenceScreen().getPreference(i));
         }
+        //Beschrijvingen timepickers goedzetten
+        setTimeSummary();
+    }
+
+    private void setTimeSummary() {
+        Preference time1 = findPreference("pref_auto_tijd1");
+        time1.setSummary(getString(R.string.timePickerSum) + ". Huidig: "
+                + timeFormat.format(calendar1.getTime()));
+        //Zelfde voor 2e picker
+        Preference time2 = findPreference("pref_auto_tijd2");
+        time2.setSummary(getString(R.string.timePickerSum) + ". Huidig: "
+                + timeFormat.format(calendar2.getTime()));
     }
 
     /*

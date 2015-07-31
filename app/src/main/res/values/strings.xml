@@ -38,4 +38,5 @@
         wordt automatisch een kleine letter gemaakt. \n\n<u><b>Automatisch zoeken</b></u> \n\nAutomatisch zoeken geeft je een
         notificatie op een door jou ingesteld tijdstip wanneer je een roosterwijziging hebt. Om dit te laten werken moet je
         de zoektijd op de volgende wijze invoeren:<b> hh:mm</b>. Een voorbeeld is dus <b>0</b>8:55 of 14:30. </string>
+    <string name="timePickerSum">Tijd waarop automatisch wordt gezocht naar updates</string>
 </resources>
