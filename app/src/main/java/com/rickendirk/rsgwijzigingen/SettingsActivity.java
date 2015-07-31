@@ -8,7 +8,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 public class SettingsActivity extends AppCompatActivity{
+    Tracker tracker;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_settings, menu);
@@ -24,6 +28,10 @@ public class SettingsActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        ApplicClass application = (ApplicClass) getApplication();
+        tracker = application.getDefaultTracker();
+        tracker.setScreenName("SettingsActivity");
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();

@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -31,6 +34,13 @@ public class ZoekService extends IntentService{
         else {
             wijzigingen = checkerKlas();
         }
+        //Tracken dat er is gezocht
+        ApplicClass application = (ApplicClass) getApplication();
+        Tracker tracker = application.getDefaultTracker();
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Acties")
+                .setAction("Zoeken")
+                .build());
         broadcastResult(wijzigingen, clusters_enabled);
     }
 

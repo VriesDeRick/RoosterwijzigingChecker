@@ -22,12 +22,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
     ViewPager viewPager;
     int animDuration;
+    Tracker tracker;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,10 +83,14 @@ public class MainActivity extends AppCompatActivity {
                         webFragment.refresh();
                     }
                     fab.hide();
-                } else{
+                    tracker.setScreenName("naar_webFragment");
+                    tracker.send(new HitBuilders.ScreenViewBuilder().build());
+                } else {
                     //Gewone fragment, dus toolbar moet weer bovenaan gaan staan
                     expandToolbar();
                     fab.show();
+                    tracker.setScreenName("naar_mainFragment");
+                    tracker.send(new HitBuilders.ScreenViewBuilder().build());
                 }
             }
 
@@ -98,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         check1ekeer();
+        ApplicClass application = (ApplicClass) getApplication();
+        tracker = application.getDefaultTracker();
     }
     private void setupViewPager() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -115,6 +125,13 @@ public class MainActivity extends AppCompatActivity {
             adapter.addFrag(list.get(1), "Algemeen");
         }
         viewPager.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        tracker.setScreenName("mainActivity");
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override

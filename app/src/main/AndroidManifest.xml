@@ -3,13 +3,15 @@
     package="com.rickendirk.rsgwijzigingen">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/rsg_2"
         android:label="Wijzigingen"
         android:theme="@style/AppTheme"
-        android:backupAgent="BackupAgent">
+        android:backupAgent="BackupAgent"
+        android:name=".ApplicClass">
         <activity
             android:name="com.rickendirk.rsgwijzigingen.MainActivity"
             android:label="Wijzigingen">
