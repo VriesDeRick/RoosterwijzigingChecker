@@ -108,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
         check1ekeer();
         ApplicClass application = (ApplicClass) getApplication();
         tracker = application.getDefaultTracker();
+        tracker.setScreenName("onCreate_MainAcitivity");
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
     private void setupViewPager() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -130,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        tracker.setScreenName("mainActivity");
+        tracker.setScreenName("onResume_MainActivity");
         tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
