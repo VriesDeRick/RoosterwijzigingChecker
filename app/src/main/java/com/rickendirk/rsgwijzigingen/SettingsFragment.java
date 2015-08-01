@@ -45,11 +45,15 @@ public class SettingsFragment extends PreferenceFragment implements
         about.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
+                /*
                 new AlertDialog.Builder(getActivity())
                         .setTitle("Over Roosterwijzigingchecker")
                         .setMessage(getString(R.string.overDezeApp))
                         .setPositiveButton("OK", null)
                         .show();
+                return true; */
+                Intent overAppIntent = new Intent(getActivity(), overAppActivity.class);
+                startActivity(overAppIntent);
                 return true;
             }
         });

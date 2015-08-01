@@ -28,10 +28,11 @@
             android:theme="@style/AppTheme"
             android:parentActivityName="com.rickendirk.rsgwijzigingen.MainActivity">
 
-
         </activity>
         <activity android:name="com.rickendirk.rsgwijzigingen.WizardActivity"
             android:parentActivityName="com.rickendirk.rsgwijzigingen.MainActivity"/>
+        <activity android:name=".overAppActivity"
+            android:parentActivityName=".SettingsActivity" />
         <meta-data android:name="com.google.android.backup.api_key"
             android:value="AEdPqrEAAAAIhCfkSCF4iq6jIv0CfUiAkR6JnuKzRnWgZZbJmA" />
         <service
