@@ -7,6 +7,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 public class overAppActivity extends AppCompatActivity{
 
     @Override
@@ -23,6 +26,11 @@ public class overAppActivity extends AppCompatActivity{
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.overAppTabLayout);
         tabLayout.setupWithViewPager(viewPager);
+
+        ApplicClass application = (ApplicClass) getApplication();
+        Tracker tracker = application.getDefaultTracker();
+        tracker.setScreenName("naar_overAppActivity");
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
 
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
