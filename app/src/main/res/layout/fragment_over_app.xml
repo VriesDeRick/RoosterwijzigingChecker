@@ -7,9 +7,27 @@
     android:paddingTop="16dp"
     android:paddingRight="16dp">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/overDezeApp"/>
+        android:text="@string/overDezeApp"
+        android:id="@+id/overAppTextView"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bekijk de broncode op Github"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/overAppTextView"
+        android:id="@+id/toGithubButton"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"/>
+
+    </RelativeLayout>
 
 </android.support.v4.widget.NestedScrollView>

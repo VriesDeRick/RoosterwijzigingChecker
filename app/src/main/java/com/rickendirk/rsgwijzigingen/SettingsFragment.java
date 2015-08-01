@@ -45,27 +45,8 @@ public class SettingsFragment extends PreferenceFragment implements
         about.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                /*
-                new AlertDialog.Builder(getActivity())
-                        .setTitle("Over Roosterwijzigingchecker")
-                        .setMessage(getString(R.string.overDezeApp))
-                        .setPositiveButton("OK", null)
-                        .show();
-                return true; */
                 Intent overAppIntent = new Intent(getActivity(), overAppActivity.class);
                 startActivity(overAppIntent);
-                return true;
-            }
-        });
-        Preference goToGit = findPreference("pref_goToGit");
-        goToGit.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                //Opent Github in webbrowser
-                String gitURL = "https://github.com/Richyrick/RoosterwijzigingChecker";
-                Intent gitInt = new Intent(Intent.ACTION_VIEW);
-                gitInt.setData(Uri.parse(gitURL));
-                startActivity(gitInt);
                 return true;
             }
         });
@@ -84,18 +65,6 @@ public class SettingsFragment extends PreferenceFragment implements
                 } catch(android.content.ActivityNotFoundException e){
                     Toast.makeText(getActivity(), "Geen E-mailapplicaties gevonden", Toast.LENGTH_LONG).show();
                 }
-                return true;
-            }
-        });
-        Preference voorwaarden = findPreference("pref_voorwaarden");
-        voorwaarden.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                new AlertDialog.Builder(getActivity())
-                        .setTitle("Voorwaarden")
-                        .setMessage(getString(R.string.voorwaarden))
-                        .setPositiveButton("OK", null)
-                        .show();
                 return true;
             }
         });
