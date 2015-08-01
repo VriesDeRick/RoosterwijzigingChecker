@@ -32,6 +32,7 @@
         <activity android:name="com.rickendirk.rsgwijzigingen.WizardActivity"
             android:parentActivityName="com.rickendirk.rsgwijzigingen.MainActivity"/>
         <activity android:name=".overAppActivity"
+            android:label="Over RSG-Wijzigingen"
             android:parentActivityName=".SettingsActivity" />
         <meta-data android:name="com.google.android.backup.api_key"
             android:value="AEdPqrEAAAAIhCfkSCF4iq6jIv0CfUiAkR6JnuKzRnWgZZbJmA" />
