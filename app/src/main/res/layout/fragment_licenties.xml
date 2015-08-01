@@ -14,14 +14,98 @@
             android:text="Jsoup"
             android:textSize="20sp"
             android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             android:paddingTop="16dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/jsoupLicentieTekst"
             android:text="@string/jouspLicentie"
             android:layout_below="@id/jsoupLicentieTitel"
             android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             android:paddingTop="16dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/androidLibLicentieTitel"
+            android:textStyle="bold"
+            android:text="Android Support Libraries"
+            android:textSize="20sp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp"
+            android:layout_below="@id/jsoupLicentieTekst"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/androidLibLicentieTekst"
+            android:text="@string/androidSupportLibLicentie"
+            android:layout_below="@id/androidLibLicentieTitel"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/wizarDroidLicentieTitel"
+            android:textStyle="bold"
+            android:text="WizarDroid"
+            android:textSize="20sp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp"
+            android:layout_below="@id/androidLibLicentieTekst"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/wizarDroidLicentieTekst"
+            android:text="@string/wizarDroidLicentie"
+            android:layout_below="@id/wizarDroidLicentieTitel"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/MaterialDialogsTitel"
+            android:textStyle="bold"
+            android:text="Material Dialogs"
+            android:textSize="20sp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp"
+            android:layout_below="@id/wizarDroidLicentieTekst"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/MaterialDialogsTekst"
+            android:text="@string/MaterialDialogsLicentie"
+            android:layout_below="@id/MaterialDialogsTitel"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/TimePickerLicentieTitel"
+            android:textStyle="bold"
+            android:text="DateTimePicker"
+            android:textSize="20sp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp"
+            android:layout_below="@id/MaterialDialogsTekst"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/TimePickerLicentieTekst"
+            android:text="@string/TimePickerLicentie"
+            android:layout_below="@id/TimePickerLicentieTitel"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"/>
 
     </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>
