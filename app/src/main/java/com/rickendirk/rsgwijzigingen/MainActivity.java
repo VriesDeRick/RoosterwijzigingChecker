@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fmg = getSupportFragmentManager();
         List<Fragment> list = fmg.getFragments();
         if (list == null){
-            //Geen bestaande fragments, dus nieuwe fragments toevoegen en listeners neerzetten
+            //Geen bestaande fragments, dus nieuwe fragments toevoegen
             adapter.addFrag(new MainFragment(), "Persoonlijk");
             adapter.addFrag(new WebFragment(), "Algemeen");
         }
