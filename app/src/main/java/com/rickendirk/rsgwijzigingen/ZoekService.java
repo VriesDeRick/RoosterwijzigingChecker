@@ -37,11 +37,21 @@ public class ZoekService extends IntentService{
         //Tracken dat er is gezocht
         ApplicClass application = (ApplicClass) getApplication();
         Tracker tracker = application.getDefaultTracker();
-        tracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Acties")
-                .setAction("Zoeken")
-                .build());
-        broadcastResult(wijzigingen, clusters_enabled);
+        boolean isAchtergrond = intent.getBooleanExtra("isAchtergrond", false);
+        if (isAchtergrond){
+            tracker.send(new HitBuilders.EventBuilder()
+                    .setCategory("Acties")
+                    .setAction("Zoeken_achtergrond")
+                    .build());
+            // TODO: Method om notificatie te maken hier verwijzen
+        } else {
+            tracker.send(new HitBuilders.EventBuilder()
+                    .setCategory("Acties")
+                    .setAction("Zoeken_voorgrond")
+                    .build());
+            broadcastResult(wijzigingen, clusters_enabled);
+        }
+
     }
 
     private void broadcastResult(ArrayList wijzigingen, Boolean clusters_enabled) {
