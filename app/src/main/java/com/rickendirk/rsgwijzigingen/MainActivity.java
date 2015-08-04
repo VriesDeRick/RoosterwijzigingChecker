@@ -83,14 +83,19 @@ public class MainActivity extends AppCompatActivity {
                         webFragment.refresh();
                     }
                     fab.hide();
-                    tracker.setScreenName("naar_webFragment");
-                    tracker.send(new HitBuilders.ScreenViewBuilder().build());
+                    tracker.send(new HitBuilders.EventBuilder()
+                    .setCategory("Navigatie")
+                    .setAction("naar_webFragment")
+                    .build());
+
                 } else {
                     //Gewone fragment, dus toolbar moet weer bovenaan gaan staan
                     expandToolbar();
                     fab.show();
-                    tracker.setScreenName("naar_mainFragment");
-                    tracker.send(new HitBuilders.ScreenViewBuilder().build());
+                    tracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Navigatie")
+                            .setAction("naar_mainFragment")
+                            .build());
                 }
             }
 
