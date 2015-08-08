@@ -1,5 +1,8 @@
 package com.rickendirk.rsgwijzigingen;
 
+import android.content.res.Configuration;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.app.ProgressDialog;
 import android.app.backup.BackupManager;
@@ -13,8 +16,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -240,6 +245,29 @@ public class MainFragment extends Fragment{
     public void onResume() {
         super.onResume();
         registerReceiver();
+        //Zorg voor scrollview enablen na orientatieverandering
+        ControllableAppBarLayout appBarLayout = (ControllableAppBarLayout) getActivity().findViewById(R.id.appBarLayout);
+        appBarLayout.expandToolbar();
+        regelscrollView();
+
+    }
+
+    private void regelscrollView() {
+        NestedScrollView scrollView = (NestedScrollView) getActivity().findViewById(R.id.personalScrollView);
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE){
+            //Scrollview enablen
+            scrollView.setOnTouchListener(null);
+
+        } else {
+            scrollView.setOnTouchListener(new View.OnTouchListener() {
+                //Scrollen disablen
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    return true;
+                }
+            });
+        }
     }
 
     private void naZoeken(ArrayList wijzigingen) {
