@@ -35,7 +35,7 @@ public class ZoekService extends IntentService{
             wijzigingen = checkerKlas();
         }
         //Tracken dat er is gezocht
-        ApplicClass application = (ApplicClass) getApplication();
+        OwnApplication application = (OwnApplication) getApplication();
         Tracker tracker = application.getDefaultTracker();
         boolean isAchtergrond = intent.getBooleanExtra("isAchtergrond", false);
         if (isAchtergrond){

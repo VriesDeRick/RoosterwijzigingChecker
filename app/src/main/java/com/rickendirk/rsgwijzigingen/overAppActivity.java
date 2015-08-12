@@ -15,7 +15,7 @@ public class overAppActivity extends AppCompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.over_app_activity);
+        setContentView(R.layout.activity_over_app);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.overAppToolbar);
         setSupportActionBar(toolbar);
@@ -27,7 +27,7 @@ public class overAppActivity extends AppCompatActivity{
         TabLayout tabLayout = (TabLayout) findViewById(R.id.overAppTabLayout);
         tabLayout.setupWithViewPager(viewPager);
 
-        ApplicClass application = (ApplicClass) getApplication();
+        OwnApplication application = (OwnApplication) getApplication();
         Tracker tracker = application.getDefaultTracker();
         tracker.setScreenName("naar_overAppActivity");
         tracker.send(new HitBuilders.ScreenViewBuilder().build());

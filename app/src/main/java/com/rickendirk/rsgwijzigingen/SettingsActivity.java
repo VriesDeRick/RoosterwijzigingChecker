@@ -28,7 +28,7 @@ public class SettingsActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ApplicClass application = (ApplicClass) getApplication();
+        OwnApplication application = (OwnApplication) getApplication();
         tracker = application.getDefaultTracker();
         tracker.setScreenName("SettingsActivity");
         tracker.send(new HitBuilders.ScreenViewBuilder().build());

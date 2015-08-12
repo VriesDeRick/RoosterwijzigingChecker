@@ -5,7 +5,7 @@ import android.app.Application;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 
-public class ApplicClass extends Application {
+public class OwnApplication extends Application {
     public static GoogleAnalytics analytics;
     public static Tracker tracker;
 

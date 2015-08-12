@@ -11,7 +11,7 @@
         android:label="Wijzigingen"
         android:theme="@style/AppTheme"
         android:backupAgent="BackupAgent"
-        android:name=".ApplicClass">
+        android:name=".OwnApplication">
         <activity
             android:name="com.rickendirk.rsgwijzigingen.MainActivity"
             android:label="Wijzigingen">
