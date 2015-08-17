@@ -243,7 +243,7 @@ public class ZoekService extends IntentService{
             tempList.add("verbindFout");
             return tempList;
         }
-        //Hier hoort hij niet te komen
+        //Zover hoort de method NOOIT te komen
         tempList.add("andereFout");
         return tempList;
     }
