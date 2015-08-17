@@ -263,6 +263,9 @@ public class MainFragment extends Fragment{
             case "klasMeerDan4Tekens":
                 klasMeerDan4Tekens();
                 break;
+            case "geenTabel":
+                geenTabelAlert();
+                break;
             //Onderstaande case kan alleen bij clusterzoeken
             case "geenClusters":
                 geenClusterAlert();
@@ -292,5 +295,14 @@ public class MainFragment extends Fragment{
                 vernieuwdToast();
                 break;
         }
+    }
+
+    private void geenTabelAlert() {
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Geen tabel gevonden")
+                .setMessage("Er was geen geschikte roostertabel gevonden. Mogelijkheden zijn dat het" +
+                        " vakantie of toetsweek is. Probeer het later opnieuw.")
+                .setPositiveButton("OK", null)
+                .show();
     }
 }

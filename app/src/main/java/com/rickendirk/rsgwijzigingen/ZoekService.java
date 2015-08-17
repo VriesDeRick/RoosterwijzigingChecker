@@ -137,7 +137,12 @@ public class ZoekService extends IntentService{
         try {
             String url = getURL();
             Document doc = Jsoup.connect(url).get();
-            Element table = doc.select("table").get(1);
+            Elements tables = doc.select("table");
+            if (tables.size() < 1){
+                //Geen geschikte tabel aanwezig
+                tempList.add("geenTabel");
+            }
+            Element table = tables.get(1);
             Elements rows = table.select("tr");
             //Loop genereren, voor elke row kijken of het de goede tekst bevat
             //Beginnen bij 4e, bovenstaande is niet belangrijk
