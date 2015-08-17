@@ -68,7 +68,8 @@ public class ZoekService extends IntentService{
         sendBroadcast(broadcastIntent);
     }
 
-
+    /*
+    Op dit moment is onderstaande code niet nodig, laat het staan voor testdoeleinden
     public String getURL(){
         int nummerOud = PreferenceManager.getDefaultSharedPreferences(this)
                 .getInt("URLInt", 2);
@@ -87,7 +88,7 @@ public class ZoekService extends IntentService{
         spEditor.commit();
 
         return URLStr;
-    }
+    } */
 
     private ArrayList<String> checkerKlas() {
         ArrayList<String> tempList = new ArrayList<>();
@@ -135,12 +136,13 @@ public class ZoekService extends IntentService{
 
         //Try en catch in het geval dat de internetverbinding mist
         try {
-            String url = getURL();
+            String url = "http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm";
             Document doc = Jsoup.connect(url).get();
             Elements tables = doc.select("table");
-            if (tables.size() < 1){
+            if (tables.size() < 2){
                 //Geen geschikte tabel aanwezig
                 tempList.add("geenTabel");
+                return tempList;
             }
             Element table = tables.get(1);
             Elements rows = table.select("tr");
@@ -230,7 +232,6 @@ public class ZoekService extends IntentService{
                     String FullTextSplit[] = dateFullText.split("Stand:");
                     tempList.add(FullTextSplit[1]);
                     return tempList;
-
                 }
 
 
@@ -242,7 +243,8 @@ public class ZoekService extends IntentService{
             tempList.add("verbindFout");
             return tempList;
         }
-        //AS wilt graag een return statment: here you go
+        //Hier hoort hij niet te komen
+        tempList.add("andereFout");
         return tempList;
     }
     private ArrayList<String> checkerClusters() {
@@ -250,7 +252,7 @@ public class ZoekService extends IntentService{
         //String van klas halen uit SP
         String klasTextS = PreferenceManager.getDefaultSharedPreferences
                 (getApplicationContext()).getString("pref_klas", "");
-        String url = getURL();
+        String url = "http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm";
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         //Clusters ophalen uit SP
         ArrayList<String> clusters = new ArrayList<>();
@@ -314,7 +316,13 @@ public class ZoekService extends IntentService{
         //Try en catch in het geval dat de internetverbinding mist
         try {
             Document doc = Jsoup.connect(url).get();
-            Element table = doc.select("table").get(1);
+            Elements tables = doc.select("table");
+            if (tables.size() < 1){
+                //Geen geschikte tabel aanwezig
+                tempList.add("geenTabel");
+                return tempList;
+            }
+            Element table = tables.get(1);
             Elements rows = table.select("tr");
             //Eerste loop is om 2e loop te herhalen voor iedere cluster, tweede loop
             //doorzoekt dan op zowel klas als cluster

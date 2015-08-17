@@ -266,6 +266,9 @@ public class MainFragment extends Fragment{
             case "geenTabel":
                 geenTabelAlert();
                 break;
+            case "andereFout":
+                andereFoutAlert();
+                break;
             //Onderstaande case kan alleen bij clusterzoeken
             case "geenClusters":
                 geenClusterAlert();
@@ -295,6 +298,14 @@ public class MainFragment extends Fragment{
                 vernieuwdToast();
                 break;
         }
+    }
+
+    private void andereFoutAlert() {
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Er ging iets fout")
+                .setMessage("Er iets fout gegaan. Meld dit aan de ontwikkelaar.")
+                .setPositiveButton("OK", null)
+                .show();
     }
 
     private void geenTabelAlert() {
