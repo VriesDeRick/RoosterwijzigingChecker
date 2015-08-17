@@ -12,7 +12,8 @@
             android:title="Zoek automatisch"
             android:summary="Schakel automatisch zoeken in"
             android:key="pref_auto_zoek"
-            android:defaultValue="false"/>
+            android:defaultValue="false"
+            android:enabled="false"/>
         <Preference
             android:title="Zoektijd 1"
             android:summary="@string/timePickerSum"
