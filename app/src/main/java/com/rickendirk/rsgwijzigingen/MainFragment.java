@@ -1,7 +1,6 @@
 package com.rickendirk.rsgwijzigingen;
 
 import android.support.v4.app.Fragment;
-import android.app.ProgressDialog;
 import android.app.backup.BackupManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,7 +12,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.AlertDialogWrapper;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.ArrayList;
@@ -104,7 +103,7 @@ public class MainFragment extends Fragment{
 
 
     public void geenKlasAlert(){
-        new AlertDialog.Builder(getActivity())
+        new AlertDialogWrapper.Builder(getActivity())
                 .setTitle("Geen klas ingevoerd")
                 .setMessage("Er is geen klas ingevoerd in het instellingenscherm")
                 .setPositiveButton("Stel een klas in", new DialogInterface.OnClickListener() {
@@ -117,14 +116,14 @@ public class MainFragment extends Fragment{
     }
 
     public void verbindfoutAlert(){
-        new AlertDialog.Builder(getActivity())
+        new AlertDialogWrapper.Builder(getActivity())
                 .setTitle("Verbindingsfout")
                 .setMessage("Er was een verbindingsfout. Controleer je internetverbinding of probeer het later opnieuw.")
                 .setPositiveButton("OK", null)
                 .show();
     }
     public void geenClusterAlert(){
-        new AlertDialog.Builder(getActivity())
+        new AlertDialogWrapper.Builder(getActivity())
                 .setTitle("Geen clusters")
                 .setMessage(getString(R.string.geenClusterMelding))
                 .setPositiveButton("Ga naar het instellingenscherm", new DialogInterface.OnClickListener() {
@@ -150,7 +149,7 @@ public class MainFragment extends Fragment{
     }
 
     public void EersteTekenKlasLetter(){
-        new AlertDialog.Builder(getActivity())
+        new AlertDialogWrapper.Builder(getActivity())
                 .setTitle("Klas bestaat niet")
                 .setMessage(R.string.verkeerdeKlas)
                 .setPositiveButton("Automatisch", new DialogInterface.OnClickListener() {
@@ -200,7 +199,7 @@ public class MainFragment extends Fragment{
 
     }
     public void klasMeerDan4Tekens(){
-        new AlertDialog.Builder(getActivity())
+        new AlertDialogWrapper.Builder(getActivity())
                 .setTitle("Klas meer dan 4 tekens")
                 .setMessage(R.string.klasMeerDan4Tekens)
                 .setPositiveButton("Naar het instellingenscherm", new DialogInterface.OnClickListener() {
@@ -303,7 +302,7 @@ public class MainFragment extends Fragment{
     }
 
     private void andereFoutAlert() {
-        new AlertDialog.Builder(getActivity())
+        new AlertDialogWrapper.Builder(getActivity())
                 .setTitle("Er ging iets fout")
                 .setMessage("Er iets fout gegaan. Meld dit aan de ontwikkelaar.")
                 .setPositiveButton("OK", null)
@@ -311,7 +310,7 @@ public class MainFragment extends Fragment{
     }
 
     private void geenTabelAlert() {
-        new AlertDialog.Builder(getActivity())
+        new AlertDialogWrapper.Builder(getActivity())
                 .setTitle("Geen tabel gevonden")
                 .setMessage("Er was geen geschikte roostertabel gevonden. Mogelijkheden zijn dat het" +
                         " vakantie of toetsweek is. Probeer het later opnieuw.")
