@@ -57,7 +57,6 @@ public class MainFragment extends Fragment{
                 wijzigingenList.add(wijzigingenList_old.get(i));
                 //listView updaten om eventuele wijzigingen te laten zien
                 listView.invalidateViews();
-                //Nieuwe objecten niet als orientatie veranderd, dan hopen ze op, dus hier geplaatst
             }
         }
         //Stand updaten naar laatste stand
@@ -75,6 +74,7 @@ public class MainFragment extends Fragment{
         return mainView;
 
     }
+
     private void openSettings() {
         Intent settingsIntent = new Intent(getActivity(),
                 SettingsActivity.class);
@@ -240,16 +240,15 @@ public class MainFragment extends Fragment{
     public void onResume() {
         super.onResume();
         registerReceiver();
+        ListView listView = (ListView) mainView.findViewById(R.id.wijzigingenList);
+        listView.invalidateViews();
     }
 
-    private void naZoeken(ArrayList wijzigingen) {
+    private void naZoeken(ArrayList<String> wijzigingen) {
         progressDialog.dismiss();
-        //Kopieren naar wijzigingenList zodat listView bijgewerkt kan worden, eerst resultaten vorige weghalen
-        wijzigingenList.clear();
-        wijzigingenList.addAll(wijzigingen);
 
-        int listLaatste = wijzigingenList.size() - 1;
-        String listlaatst = wijzigingenList.get(listLaatste);
+        int listLaatste = wijzigingen.size() - 1;
+        String listlaatst = wijzigingen.get(listLaatste);
         switch (listlaatst) {
             case "geenKlas":
                 geenKlasAlert();
@@ -274,6 +273,9 @@ public class MainFragment extends Fragment{
                 geenClusterAlert();
                 break;
             default:
+                //Kopieren naar wijzigingenList zodat listView bijgewerkt kan worden, eerst resultaten vorige weghalen
+                wijzigingenList.clear();
+                wijzigingenList.addAll(wijzigingen);
                 //Er is dus geen verbindfout en klasfout, listlaatst bevat stand
                 String standZin = "Stand van" + listlaatst;
                 //Dag met datum ophalen uit lijst
