@@ -104,7 +104,7 @@ public class WebFragment extends Fragment {
 
     }
     public void refresh(){
-        webView.loadUrl("http://www.googledrive.com/host/0Bwyvbj_hCVmNOHhnUGZFRnZpMUk");
+        webView.loadUrl("http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm");
         swipeLayout.setRefreshing(true);
     }
     public boolean isFinished(){
