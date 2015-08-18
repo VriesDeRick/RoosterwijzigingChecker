@@ -1,9 +1,13 @@
 package com.rickendirk.rsgwijzigingen;
 
 import android.app.IntentService;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.app.TaskStackBuilder;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -17,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class ZoekService extends IntentService{
+
+    public static final int notifID = 3395;
 
     public ZoekService(){
         super("Zoekservice");
@@ -43,7 +49,7 @@ public class ZoekService extends IntentService{
                     .setCategory("Acties")
                     .setAction("Zoeken_achtergrond")
                     .build());
-            // TODO: Method om notificatie te maken hier verwijzen
+            sendNotification(wijzigingen);
         } else {
             tracker.send(new HitBuilders.EventBuilder()
                     .setCategory("Acties")
@@ -52,6 +58,74 @@ public class ZoekService extends IntentService{
             broadcastResult(wijzigingen, clusters_enabled);
         }
 
+    }
+
+    private void sendNotification(ArrayList<String> wijzigingen) {
+        boolean isFoutMelding = isFoutmelding(wijzigingen);
+        boolean zijnWijzigingen = zijnWijzigingen(wijzigingen);
+        ArrayList<String> schoneLijst = new ArrayList<>();
+        if (!isFoutMelding){
+            schoneLijst = maakLijstSchoon(wijzigingen);
+        }
+
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.rsg_2)
+                .setContentTitle("Roosterwijzigingen");
+        if (isFoutMelding){
+            builder.setContentText("Er was een fout. Probeer het handmatig opnieuw");
+        } else {
+            if (zijnWijzigingen){
+                if (schoneLijst.size() == 1){
+                    builder.setContentText(schoneLijst.get(0));
+                } else {
+                    builder.setContentText("Er zijn " + schoneLijst.size() + " wijzigingen!");
+                    NotificationCompat.InboxStyle inboxStyle =
+                            new NotificationCompat.InboxStyle();
+                    inboxStyle.setBigContentTitle("De roosterwijzigingen zijn:");
+                    for (int i = 0; i < schoneLijst.size(); i++){
+                        inboxStyle.addLine(schoneLijst.get(i));
+                    }
+                    builder.setStyle(inboxStyle);
+                }
+            } else {
+                builder.setContentText("Er zijn geen roosterwijzigingen.");
+            }
+        }
+        Intent resultIntent = new Intent(this, MainActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent pendingIntent =
+                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+        NotificationManagerCompat notifManager = NotificationManagerCompat.from(this);
+        notifManager.notify(notifID, builder.build());
+    }
+
+    private ArrayList<String> maakLijstSchoon(ArrayList<String> wijzigingen) {
+        wijzigingen.remove(wijzigingen.size() - 1);
+        wijzigingen.remove(wijzigingen.size() - 1);
+        return wijzigingen;
+    }
+
+    private boolean zijnWijzigingen(ArrayList<String> wijzigingen) {
+        String listLaatst = wijzigingen.get(wijzigingen.size() -3); // 3 Omdat daarvoor stand/datum bevat
+        if (listLaatst.equals("Er zijn geen wijzigingen.")){
+            return false;
+        } else return true;
+    }
+
+    private boolean isFoutmelding(ArrayList<String> wijzigingen) {
+        String listLaatst = wijzigingen.get(wijzigingen.size() - 1);
+        if (listLaatst.equals("geenKlas") || listLaatst.equals("verbindFout") ||
+                listLaatst.equals("EersteTekenLetter") || listLaatst.equals("klasMeerDan4Tekens") ||
+                listLaatst.equals("geenTabel") || listLaatst.equals("andereFout") ||
+                listLaatst.equals("geenClusters")){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void broadcastResult(ArrayList wijzigingen, Boolean clusters_enabled) {
