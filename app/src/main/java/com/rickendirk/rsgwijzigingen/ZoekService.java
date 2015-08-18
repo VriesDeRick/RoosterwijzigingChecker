@@ -32,7 +32,7 @@ public class ZoekService extends IntentService{
     @Override
     protected void onHandleIntent(Intent intent) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        Boolean clusters_enabled = sp.getBoolean("pref_cluster_enabled", false);
+        Boolean clusters_enabled = sp.getBoolean("pref_cluster_enabled", true);
         ArrayList<String> wijzigingen;
         if (clusters_enabled){
             wijzigingen = checkerClusters();

@@ -135,6 +135,7 @@ public class SettingsFragment extends PreferenceFragment implements
 
     private void setupAlarm() {
         Intent zoekIntent = new Intent(getActivity(), ZoekService.class);
+        zoekIntent.putExtra("isAchtergrond", true);
         PendingIntent alarmIntent1 = PendingIntent.getBroadcast(getActivity(), 1,
                 zoekIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         PendingIntent alarmIntent2 = PendingIntent.getBroadcast(getActivity(), 2,
