@@ -1,5 +1,8 @@
 package com.rickendirk.rsgwijzigingen;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -126,8 +129,25 @@ public class SettingsFragment extends PreferenceFragment implements
             calendar2.set(Calendar.MINUTE, minute);
             saveToSP(2);
         }
+        setupAlarm();
         setTimeSummary();
-        //TODO: Verwijzing naar Dirks Method hier
+    }
+
+    private void setupAlarm() {
+        Intent zoekIntent = new Intent(getActivity(), ZoekService.class);
+        PendingIntent alarmIntent1 = PendingIntent.getBroadcast(getActivity(), 1,
+                zoekIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent alarmIntent2 = PendingIntent.getBroadcast(getActivity(), 2,
+                zoekIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        AlarmManager manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        if (welke == 1){
+            manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar1.getTimeInMillis(),
+                    AlarmManager.INTERVAL_DAY, alarmIntent1);
+        } else {
+            manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar2.getTimeInMillis(),
+                    AlarmManager.INTERVAL_DAY, alarmIntent2);
+        }
     }
 
     private void saveToSP(int welke) {
