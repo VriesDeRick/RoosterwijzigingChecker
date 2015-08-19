@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.MultiSelectListPreference;
@@ -89,6 +90,24 @@ public class SettingsFragment extends PreferenceFragment implements
                 welke = 2;
                 TimePickerDialog.newInstance(listener, calendar2.get(Calendar.HOUR_OF_DAY),
                         calendar2.get(Calendar.MINUTE), true).show(getFragmentManager(), "timePicker2");
+                return true;
+            }
+        });
+        CheckBoxPreference autoZoek = (CheckBoxPreference) findPreference("pref_auto_zoek");
+        autoZoek.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                boolean checked = Boolean.valueOf(o.toString());
+                if (!checked){
+                    Intent zoekIntent = new Intent(getActivity(), ZoekService.class);
+                    PendingIntent alarmIntent1 = PendingIntent.getService(getActivity(), 1,
+                            zoekIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    PendingIntent alarmIntent2 = PendingIntent.getService(getActivity(), 2,
+                            zoekIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    AlarmManager manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+                    manager.cancel(alarmIntent1);
+                    manager.cancel(alarmIntent2);
+                }
                 return true;
             }
         });
