@@ -22,6 +22,8 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ZoekService extends IntentService{
 
@@ -75,6 +77,7 @@ public class ZoekService extends IntentService{
         }
         ArrayList<String> schoneLijst = new ArrayList<>();
         if (!isFoutMelding){
+            sPreferencesSaver(wijzigingen);
             schoneLijst = maakLijstSchoon(wijzigingen);
         }
 
@@ -116,11 +119,30 @@ public class ZoekService extends IntentService{
         Log.i(TAG, "Nieuwe notificatie gemaakt");
     }
 
+    private void sPreferencesSaver(ArrayList<String> wijzigingen) {
+        String standZin = "Stand van" + wijzigingen.get(wijzigingen.size() -1);
+        String dagEnDatum = wijzigingen.get(wijzigingen.size() -2);
+        //Mag originele lijst niet aanpassen
+        ArrayList<String> wijzigingenNieuw = new ArrayList<>(wijzigingen);
+        //Nu kunnen stand en datum eruit
+        wijzigingenNieuw.remove(wijzigingenNieuw.size() -1);
+        wijzigingenNieuw.remove(wijzigingenNieuw.size() -1); //Deze is nu de laatste, laatste 2 moeten eruit
+
+        SharedPreferences.Editor spEditor = PreferenceManager
+                .getDefaultSharedPreferences(this).edit();
+        Set<String> wijzigingenSet = new HashSet<>();
+        wijzigingenSet.addAll(wijzigingenNieuw);
+        spEditor.putStringSet("last_wijzigingenList", wijzigingenSet);
+        spEditor.putString("stand", standZin);
+        spEditor.putString("dagEnDatum", dagEnDatum);
+        spEditor.commit();
+    }
+
     private boolean isNieuw(ArrayList<String> wijzigingen) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         String standOud = sp.getString("stand", "geenWaarde");
         if (!standOud.equals("geenWaarde")){
-            String standNieuw = wijzigingen.get(wijzigingen.size() -1);
+            String standNieuw = "Stand van" + wijzigingen.get(wijzigingen.size() -1);
             if (standNieuw.equals(standOud)){
                 return false;
             } else return true;
