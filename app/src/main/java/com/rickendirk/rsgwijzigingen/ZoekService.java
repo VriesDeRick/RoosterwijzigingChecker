@@ -2,8 +2,10 @@ package com.rickendirk.rsgwijzigingen;
 
 import android.app.IntentService;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -101,6 +103,16 @@ public class ZoekService extends IntentService{
         builder.setContentIntent(pendingIntent);
         NotificationManagerCompat notifManager = NotificationManagerCompat.from(this);
         notifManager.notify(notifID, builder.build());
+        vibrate();
+    }
+
+    private void vibrate() {
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        if (vibrator.hasVibrator()){
+            //Eerste waarde vertraging, 2e duur, 3e vertraging, 4e duur, etc
+            long[] pattern = {0,100,400,100};
+            vibrator.vibrate(pattern, - 1); // -1 betekent geen herhaling
+        }
     }
 
     private ArrayList<String> maakLijstSchoon(ArrayList<String> wijzigingen) {
