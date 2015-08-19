@@ -70,7 +70,6 @@ public class ZoekService extends IntentService{
         boolean isFoutMelding = isFoutmelding(wijzigingen);
         boolean zijnWijzigingen = zijnWijzigingen(wijzigingen);
         boolean isNieuw = isNieuw(wijzigingen);
-        isNieuw = true;
         if (!isNieuw){
             Log.i(TAG, "Geen nieuwe wijzigingen, geen notificatie");
             return;
