@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -25,6 +26,7 @@ import java.util.Collections;
 public class ZoekService extends IntentService{
 
     public static final int notifID = 3395;
+    public static final String TAG = "RSG-Zoekservice";
 
     public ZoekService(){
         super("Zoekservice");
@@ -65,6 +67,12 @@ public class ZoekService extends IntentService{
     private void sendNotification(ArrayList<String> wijzigingen) {
         boolean isFoutMelding = isFoutmelding(wijzigingen);
         boolean zijnWijzigingen = zijnWijzigingen(wijzigingen);
+        boolean isNieuw = isNieuw(wijzigingen);
+
+        if (!isNieuw){
+            Log.i(TAG, "Geen nieuwe wijzigingen, geen notificatie");
+            return;
+        }
         ArrayList<String> schoneLijst = new ArrayList<>();
         if (!isFoutMelding){
             schoneLijst = maakLijstSchoon(wijzigingen);
@@ -99,11 +107,24 @@ public class ZoekService extends IntentService{
         stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(resultIntent);
         PendingIntent pendingIntent =
-                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT);
         builder.setContentIntent(pendingIntent);
+
         NotificationManagerCompat notifManager = NotificationManagerCompat.from(this);
         notifManager.notify(notifID, builder.build());
         vibrate();
+        Log.i(TAG, "Nieuwe notificatie gemaakt");
+    }
+
+    private boolean isNieuw(ArrayList<String> wijzigingen) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        String standOud = sp.getString("stand", "geenWaarde");
+        if (!standOud.equals("geenWaarde")){
+            String standNieuw = wijzigingen.get(wijzigingen.size() -1);
+            if (standNieuw.equals(standOud)){
+                return false;
+            } else return true;
+        } else return true; //Goedkeuren als er nog geen waarde was: sowieso nieuw
     }
 
     private void vibrate() {
