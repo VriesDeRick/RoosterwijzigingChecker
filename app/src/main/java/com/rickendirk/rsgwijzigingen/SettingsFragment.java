@@ -107,7 +107,7 @@ public class SettingsFragment extends PreferenceFragment implements
                     AlarmManager manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
                     manager.cancel(alarmIntent1);
                     manager.cancel(alarmIntent2);
-                }
+                } else setupAlarm();
                 return true;
             }
         });
