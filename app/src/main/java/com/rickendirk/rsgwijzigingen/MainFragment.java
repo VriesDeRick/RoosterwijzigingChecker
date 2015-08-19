@@ -97,8 +97,7 @@ public class MainFragment extends Fragment{
                 .progress(true, 0)
                 .show();
         Intent zoekIntent = new Intent(getActivity(), ZoekService.class);
-        //TODO: Dit weer op false zetten
-        zoekIntent.putExtra("isAchtergrond", true);
+        zoekIntent.putExtra("isAchtergrond", false);
         getActivity().startService(zoekIntent);
     }
 
