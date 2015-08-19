@@ -70,7 +70,7 @@ public class ZoekService extends IntentService{
         boolean isFoutMelding = isFoutmelding(wijzigingen);
         boolean zijnWijzigingen = zijnWijzigingen(wijzigingen);
         boolean isNieuw = isNieuw(wijzigingen);
-
+        isNieuw = true;
         if (!isNieuw){
             Log.i(TAG, "Geen nieuwe wijzigingen, geen notificatie");
             return;
@@ -83,8 +83,9 @@ public class ZoekService extends IntentService{
 
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.rsg_2)
-                .setContentTitle("Roosterwijzigingen");
+                .setSmallIcon(R.drawable.ic_action_list)
+                .setContentTitle("Roosterwijzigingen")
+                .setColor(getResources().getColor(R.color.lighter_blue));
         if (isFoutMelding){
             builder.setContentText("Er was een fout. Probeer het handmatig opnieuw");
         } else {
