@@ -39,7 +39,7 @@ public class SettingsFragment extends PreferenceFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setupCalendar();
+        setupCalendar(true);
         timeFormat = new SimpleDateFormat(TIME_PATTERN, Locale.getDefault());
 
         // Instellingen laden
@@ -122,7 +122,7 @@ public class SettingsFragment extends PreferenceFragment implements
     }
 
 
-    private void setupCalendar() {
+    private void setupCalendar(boolean isVanafOncreate) {
         calendar1 = Calendar.getInstance();
         calendar2 = Calendar.getInstance();
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -142,7 +142,15 @@ public class SettingsFragment extends PreferenceFragment implements
             timeInMsCal2 = tijdMiddag.getTimeInMillis();
         }
         calendar1.setTimeInMillis(timeInMsCal1);
+        calendar1.set(Calendar.DAY_OF_YEAR, Calendar.getInstance().get(Calendar.DAY_OF_YEAR));
+
         calendar2.setTimeInMillis(timeInMsCal2);
+        calendar2.set(Calendar.DAY_OF_YEAR, Calendar.getInstance().get(Calendar.DAY_OF_YEAR));
+        if (isVanafOncreate) {
+            //Indien vanaf onCreate staan data nog niet goed in SP
+            saveToSP(1);
+            saveToSP(2);
+        }
     }
     @Override
     public void onTimeSet(RadialPickerLayout radialPickerLayout, int hourOfDay, int minute) {
