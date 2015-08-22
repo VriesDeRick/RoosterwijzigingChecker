@@ -98,7 +98,7 @@ public class SettingsFragment extends PreferenceFragment implements
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
                 boolean checked = Boolean.valueOf(o.toString());
-                if (!checked){
+                if (!checked) {
                     Intent zoekIntent = new Intent(getActivity(), ZoekService.class);
                     PendingIntent alarmIntent1 = PendingIntent.getService(getActivity(), 1,
                             zoekIntent, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -115,6 +115,13 @@ public class SettingsFragment extends PreferenceFragment implements
 
     }
 
+    private void setupAlarm(){
+        AlarmsSetter alarmsSetter = new AlarmsSetter(getActivity());
+
+        alarmsSetter.setupAlarms();
+    }
+
+
     private void setupCalendar() {
         calendar1 = Calendar.getInstance();
         calendar2 = Calendar.getInstance();
@@ -129,10 +136,10 @@ public class SettingsFragment extends PreferenceFragment implements
             timeInMsCal1 = tijdOchtend.getTimeInMillis();
         }
         if (timeInMsCal2 == 0){
-            Calendar tijdMidag = Calendar.getInstance();
-            tijdMidag.set(Calendar.HOUR_OF_DAY, 14);
-            tijdMidag.set(Calendar.MINUTE, 5);
-            timeInMsCal2 = tijdMidag.getTimeInMillis();
+            Calendar tijdMiddag = Calendar.getInstance();
+            tijdMiddag.set(Calendar.HOUR_OF_DAY, 14);
+            tijdMiddag.set(Calendar.MINUTE, 5);
+            timeInMsCal2 = tijdMiddag.getTimeInMillis();
         }
         calendar1.setTimeInMillis(timeInMsCal1);
         calendar2.setTimeInMillis(timeInMsCal2);
@@ -150,24 +157,6 @@ public class SettingsFragment extends PreferenceFragment implements
         }
         setupAlarm();
         setTimeSummary();
-    }
-
-    private void setupAlarm() {
-        Intent zoekIntent = new Intent(getActivity(), ZoekService.class);
-        zoekIntent.putExtra("isAchtergrond", true);
-        PendingIntent alarmIntent1 = PendingIntent.getService(getActivity(), 1,
-                zoekIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        PendingIntent alarmIntent2 = PendingIntent.getService(getActivity(), 2,
-                zoekIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-        AlarmManager manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-        if (welke == 1){
-            manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar1.getTimeInMillis(),
-                    AlarmManager.INTERVAL_DAY, alarmIntent1);
-        } else {
-            manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar2.getTimeInMillis(),
-                    AlarmManager.INTERVAL_DAY, alarmIntent2);
-        }
     }
 
     private void saveToSP(int welke) {
