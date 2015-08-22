@@ -5,7 +5,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
@@ -15,7 +14,6 @@ import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
 import com.android.datetimepicker.time.RadialPickerLayout;
@@ -143,9 +141,12 @@ public class SettingsFragment extends PreferenceFragment implements
         }
         calendar1.setTimeInMillis(timeInMsCal1);
         calendar1.set(Calendar.DAY_OF_YEAR, Calendar.getInstance().get(Calendar.DAY_OF_YEAR));
+        if (calendar1.before(Calendar.getInstance())) calendar1.add(Calendar.DATE, 1);
 
         calendar2.setTimeInMillis(timeInMsCal2);
         calendar2.set(Calendar.DAY_OF_YEAR, Calendar.getInstance().get(Calendar.DAY_OF_YEAR));
+        if (calendar2.before(Calendar.getInstance())) calendar2.add(Calendar.DATE, 1);
+
         if (isVanafOncreate) {
             //Indien vanaf onCreate staan data nog niet goed in SP
             saveToSP(1);
