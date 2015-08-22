@@ -61,16 +61,15 @@ public class ZoekService extends IntentService{
                     .setCategory("Acties")
                     .setAction("Zoeken_voorgrond")
                     .build());
+            boolean isFoutMelding = isFoutmelding(wijzigingen);
+            if (!isFoutMelding)sPreferencesSaver(wijzigingen);
             broadcastResult(wijzigingen, clusters_enabled);
         }
-
     }
 
     private void sendNotification(ArrayList<String> wijzigingen) {
         boolean isFoutMelding = isFoutmelding(wijzigingen);
-        boolean zijnWijzigingen = zijnWijzigingen(wijzigingen);
         boolean isNieuw = isNieuw(wijzigingen);
-        isNieuw = true;
         if (!isNieuw){
             Log.i(TAG, "Geen nieuwe wijzigingen, geen notificatie");
             return;
@@ -89,6 +88,7 @@ public class ZoekService extends IntentService{
         if (isFoutMelding){
             builder.setContentText("Er was een fout. Probeer het handmatig opnieuw");
         } else {
+            boolean zijnWijzigingen = zijnWijzigingen(wijzigingen);
             if (zijnWijzigingen){
                 if (schoneLijst.size() == 1){
                     builder.setContentText(schoneLijst.get(0));
