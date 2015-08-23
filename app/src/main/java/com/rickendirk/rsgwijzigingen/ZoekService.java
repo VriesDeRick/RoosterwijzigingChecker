@@ -1,10 +1,14 @@
 package com.rickendirk.rsgwijzigingen;
 
+import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.SystemClock;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
@@ -37,8 +41,20 @@ public class ZoekService extends IntentService{
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        Boolean clusters_enabled = sp.getBoolean("pref_cluster_enabled", true);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean clusters_enabled = sp.getBoolean("pref_cluster_enabled", true);
+        boolean alleenBijWifi = sp.getBoolean("pref_auto_zoek_wifi", false);
+        boolean isAchtergrond = intent.getBooleanExtra("isAchtergrond", false);
+        if (alleenBijWifi && isAchtergrond){
+            ConnectivityManager conManager = (ConnectivityManager)
+                    getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo nwInfo = conManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            if (!nwInfo.isConnectedOrConnecting()){
+                //Later weer proberen: nu geen wifi
+                setAlarmIn20Min();
+                return;
+            }
+        }
         ArrayList<String> wijzigingen;
         if (clusters_enabled){
             wijzigingen = checkerClusters();
@@ -49,7 +65,7 @@ public class ZoekService extends IntentService{
         //Tracken dat er is gezocht
         OwnApplication application = (OwnApplication) getApplication();
         Tracker tracker = application.getDefaultTracker();
-        boolean isAchtergrond = intent.getBooleanExtra("isAchtergrond", false);
+
         if (isAchtergrond){
             tracker.send(new HitBuilders.EventBuilder()
                     .setCategory("Acties")
@@ -65,6 +81,18 @@ public class ZoekService extends IntentService{
             if (!isFoutMelding)sPreferencesSaver(wijzigingen);
             broadcastResult(wijzigingen, clusters_enabled);
         }
+    }
+
+    private void setAlarmIn20Min() {
+        Intent zoekIntent = new Intent(this, ZoekService.class);
+        zoekIntent.putExtra("isAchtergrond", true);
+        zoekIntent.addCategory("GeenWifiHerhaling"); //Categorie om andere intents cancelen te voorkomen
+        PendingIntent pendingIntent = PendingIntent.getService(this, 3, zoekIntent,
+                PendingIntent.FLAG_ONE_SHOT);
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Long in20Min = SystemClock.elapsedRealtime() + 1440000; //20Min in milisec.
+        manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, in20Min, pendingIntent);
+        Log.i(TAG, "Nieuw alarm gezet in 20 min");
     }
 
     private void sendNotification(ArrayList<String> wijzigingen) {

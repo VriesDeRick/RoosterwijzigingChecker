@@ -23,6 +23,13 @@
             android:summary="@string/timePickerSum"
             android:key="pref_auto_tijd2"
             android:dependency="pref_auto_zoek"/>
+    <CheckBoxPreference
+        android:title="Alleen bij wifi"
+        android:summaryOff="Alleen achtergrondzoeken op een WiFi-netwerk"
+        android:summaryOn="Zal indien geen Wifi aanwezig twintig minuten later opnieuw proberen"
+        android:key="pref_auto_zoek_wifi"
+        android:dependency="pref_auto_zoek"
+        android:defaultValue="false" />
     <PreferenceCategory
         android:title="Clusterinstellingen"
         android:key="pref_cluster_settings">
