@@ -98,6 +98,7 @@ public class ZoekService extends IntentService{
     private void sendNotification(ArrayList<String> wijzigingen) {
         boolean isFoutMelding = isFoutmelding(wijzigingen);
         boolean isNieuw = isNieuw(wijzigingen);
+        isNieuw = true;
         if (!isNieuw){
             Log.i(TAG, "Geen nieuwe wijzigingen, geen notificatie");
             return;
@@ -182,7 +183,7 @@ public class ZoekService extends IntentService{
         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         if (vibrator.hasVibrator()){
             //Eerste waarde vertraging, 2e duur, 3e vertraging, 4e duur, etc
-            long[] pattern = {0,100,400,100};
+            long[] pattern = {0,250,600,250};
             vibrator.vibrate(pattern, - 1); // -1 betekent geen herhaling
         }
     }
@@ -194,7 +195,7 @@ public class ZoekService extends IntentService{
     }
 
     private boolean zijnWijzigingen(ArrayList<String> wijzigingen) {
-        String listLaatst = wijzigingen.get(wijzigingen.size() -3); // 3 Omdat daarvoor stand/datum bevat
+        String listLaatst = wijzigingen.get(wijzigingen.size() - 1); // Lijst is hier al opgeschoond
         if (listLaatst.equals("Er zijn geen wijzigingen.")){
             return false;
         } else return true;
