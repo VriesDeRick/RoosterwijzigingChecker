@@ -23,9 +23,9 @@ public class AlarmsSetter {
         Intent zoekIntent = new Intent(context, ZoekService.class);
         zoekIntent.putExtra("isAchtergrond", true);
         PendingIntent alarmIntent1 = PendingIntent.getService(context, 1,
-                zoekIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                zoekIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent alarmIntent2 = PendingIntent.getService(context, 2,
-                zoekIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                zoekIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (welke == 1){
