@@ -2,6 +2,7 @@ package com.rickendirk.rsgwijzigingen;
 
 import android.app.AlarmManager;
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -113,7 +114,8 @@ public class ZoekService extends IntentService{
                 new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_action_list)
                 .setContentTitle("Roosterwijzigingen")
-                .setColor(getResources().getColor(R.color.lighter_blue));
+                .setColor(getResources().getColor(R.color.lighter_blue))
+                .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS);
         if (isFoutMelding){
             builder.setContentText("Er was een fout. Probeer het handmatig opnieuw");
         } else {
