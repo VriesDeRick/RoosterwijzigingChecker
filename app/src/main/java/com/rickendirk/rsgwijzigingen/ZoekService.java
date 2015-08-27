@@ -132,7 +132,7 @@ public class ZoekService extends IntentService{
                     builder.setStyle(inboxStyle);
                 }
             } else {
-                builder.setContentText("Er zijn geen roosterwijzigingen.");
+                builder.setContentText("Er zijn geen roosterwijzigingen");
             }
         }
         Intent resultIntent = new Intent(this, MainActivity.class);
@@ -376,6 +376,10 @@ public class ZoekService extends IntentService{
                     }
                     //Dag waarvoor wijzigingen zijn ophalen
                     Element dag = doc.select("body > div > div:nth-child(2) > p > b > span").first();
+                    //Compatibiliteit met andere opmaak, om NPE te voorkomen
+                    if (dag == null){
+                        dag = doc.select("body > center:nth-child(2) > div").first();
+                    }
                     String dagStr = dag.text().toLowerCase();
                     // Woorden staan verkeerd om: omwisselen
                     int indexVanSpatie = dagStr.indexOf(" ");
