@@ -91,13 +91,17 @@ public class ZoekService extends IntentService{
         PendingIntent pendingIntent = PendingIntent.getService(this, 3, zoekIntent,
                 PendingIntent.FLAG_ONE_SHOT);
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Long in20Min = SystemClock.elapsedRealtime() + 1440000; //20Min in milisec.
+        Long in20Min = SystemClock.elapsedRealtime() + 1200000; //20Min in milisec.
         manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, in20Min, pendingIntent);
         Log.i(TAG, "Nieuw alarm gezet in 20 min");
     }
 
     private void sendNotification(ArrayList<String> wijzigingen) {
         boolean isFoutMelding = isFoutmelding(wijzigingen);
+        boolean isVerbindFout = false;
+        if (isFoutMelding){
+            isVerbindFout = isVerbindFout(wijzigingen);
+        }
         boolean isNieuw = isNieuw(wijzigingen);
         isNieuw = true;
         if (!isNieuw){
@@ -117,7 +121,21 @@ public class ZoekService extends IntentService{
                 .setColor(getResources().getColor(R.color.lighter_blue))
                 .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS);
         if (isFoutMelding){
-            builder.setContentText("Er was een fout. Probeer het handmatig opnieuw");
+            if (isVerbindFout){
+                Log.i(TAG, "Er was geen internetverbinding bij het zoeken");
+                boolean moetHerhalen = PreferenceManager.getDefaultSharedPreferences(this)
+                        .getBoolean("pref_auto_herhaal_geenInternet", false);
+                if (moetHerhalen){
+                    setAlarmIn20Min();
+                    Log.i(TAG, "Zal ivm geen internet in 20 minuten opnieuw zoeken");
+                    return;
+                }
+                else {
+                    builder.setContentText("Er was geen internetverbinding. Probeer het handmatig opnieuw");
+                }
+            } else{
+                builder.setContentText("Er was een fout. Probeer het handmatig opnieuw");
+            }
         } else {
             boolean zijnWijzigingen = zijnWijzigingen(wijzigingen);
             if (zijnWijzigingen){
@@ -157,8 +175,8 @@ public class ZoekService extends IntentService{
         //Mag originele lijst niet aanpassen
         ArrayList<String> wijzigingenNieuw = new ArrayList<>(wijzigingen);
         //Nu kunnen stand en datum eruit
-        wijzigingenNieuw.remove(wijzigingenNieuw.size() -1);
-        wijzigingenNieuw.remove(wijzigingenNieuw.size() -1); //Deze is nu de laatste, laatste 2 moeten eruit
+        wijzigingenNieuw.remove(wijzigingenNieuw.size() - 1);
+        wijzigingenNieuw.remove(wijzigingenNieuw.size() - 1); //Deze is nu de laatste, laatste 2 moeten eruit
 
         SharedPreferences.Editor spEditor = PreferenceManager
                 .getDefaultSharedPreferences(this).edit();
@@ -213,6 +231,10 @@ public class ZoekService extends IntentService{
         } else {
             return false;
         }
+    }
+    private boolean isVerbindFout(ArrayList<String> wijzigingen){
+        String listLaatst = wijzigingen.get(wijzigingen.size() - 1);
+        return listLaatst.equals("verbindFout");
     }
 
     private void broadcastResult(ArrayList wijzigingen, Boolean clusters_enabled) {

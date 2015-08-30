@@ -30,6 +30,13 @@
         android:key="pref_auto_zoek_wifi"
         android:dependency="pref_auto_zoek"
         android:defaultValue="false" />
+    <CheckBoxPreference
+        android:title="Herhaal indien verbindingsfout"
+        android:summaryOff="Herhaal het zoeken even later als er een verbindingsfout was"
+        android:summaryOn="Zal binnen 20 minuten opnieuw proberen om te zoeken"
+        android:key="pref_auto_herhaal_geenInternet"
+        android:dependency="pref_auto_zoek"
+        android:defaultValue="false" />
     <PreferenceCategory
         android:title="Clusterinstellingen"
         android:key="pref_cluster_settings">
