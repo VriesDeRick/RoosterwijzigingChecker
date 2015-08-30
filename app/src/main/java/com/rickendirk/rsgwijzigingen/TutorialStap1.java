@@ -24,7 +24,7 @@ public class TutorialStap1 extends WizardStep{
      * NOTE: Context Variable names are unique and therefore must
      * have the same name wherever you wish to use them.
      */
-    private Boolean clusters;
+    private boolean clusters;
     @ContextVariable
     private String klas;
 
@@ -43,7 +43,6 @@ public class TutorialStap1 extends WizardStep{
         View v = inflater.inflate(R.layout.tutorial_stap1, container, false);
         //Get reference to the textboxes
         final EditText klasET = (EditText) v.findViewById(R.id.editTextKlas);
-        CheckBox clustersCB = (CheckBox) v.findViewById(R.id.checkBoxClusters);
 
         klasET.addTextChangedListener(new TextWatcher() {
             @Override
@@ -103,12 +102,17 @@ public class TutorialStap1 extends WizardStep{
         View v = getView();
         EditText klasET = (EditText) v.findViewById(R.id.editTextKlas);
         CheckBox clustersCB = (CheckBox) v.findViewById(R.id.checkBoxClusters);
+        CheckBox autoZoekenCB = (CheckBox) v.findViewById(R.id.autoZoekenCB);
+
         String klas = klasET.getText().toString();
-        Boolean clusters = clustersCB.isChecked();
+        boolean clusters = clustersCB.isChecked();
+        boolean autoZoeken = autoZoekenCB.isChecked();
+
         SharedPreferences.Editor spEditor = PreferenceManager
                 .getDefaultSharedPreferences(getActivity()).edit();
         spEditor.putString("pref_klas", klas);
         spEditor.putBoolean("pref_cluster_enabled", clusters);
+        spEditor.putBoolean("pref_auto_zoek", autoZoeken);
         spEditor.commit();
     }
 
