@@ -135,10 +135,4 @@
             android:summary="Stuur feedback over deze app naar de ontwikkelaars"
             android:enabled="true"
             android:key="pref_mail" />
-        <CheckBoxPreference
-            android:key="pref_but_bold"
-            android:title="Maak zoekknop dikgedrukt"
-            android:summary="Let op: dit is puur voor debugging-doeleinden"
-            android:defaultValue="false"
-            android:enabled="false"/>
 </PreferenceScreen>
