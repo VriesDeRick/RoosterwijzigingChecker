@@ -152,7 +152,12 @@ public class ZoekService extends IntentService{
                     builder.setStyle(inboxStyle);
                 }
             } else {
-                builder.setContentText("Er zijn geen roosterwijzigingen");
+                boolean alleenBijWijziging  = PreferenceManager.getDefaultSharedPreferences(this)
+                        .getBoolean("pref_auto_zoek_alleenBijWijziging", true);
+                if (!alleenBijWijziging){
+                    //Dus ook bij geen-wijzigingen
+                    builder.setContentText("Er zijn geen roosterwijzigingen");
+                } else return;
             }
         }
         Intent resultIntent = new Intent(this, MainActivity.class);
