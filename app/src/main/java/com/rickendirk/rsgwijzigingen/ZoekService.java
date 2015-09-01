@@ -103,7 +103,6 @@ public class ZoekService extends IntentService{
             isVerbindFout = isVerbindFout(wijzigingen);
         }
         boolean isNieuw = isNieuw(wijzigingen);
-        isNieuw = true;
         if (!isNieuw){
             Log.i(TAG, "Geen nieuwe wijzigingen, geen notificatie");
             return;
