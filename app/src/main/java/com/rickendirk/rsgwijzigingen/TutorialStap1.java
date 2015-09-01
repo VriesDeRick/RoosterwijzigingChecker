@@ -1,6 +1,7 @@
 package com.rickendirk.rsgwijzigingen;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -90,11 +91,20 @@ public class TutorialStap1 extends WizardStep{
             case WizardStep.EXIT_NEXT:
                 //bindDataFields();
                 saveDataFields();
+                openSettings();
                 break;
             case WizardStep.EXIT_PREVIOUS:
                 //Do nothing...
-
                 break;
+        }
+    }
+
+    private void openSettings() {
+        CheckBox checkBox = (CheckBox) getView().findViewById(R.id.autoZoekenCB);
+        boolean moetNaarSettings = checkBox.isChecked();
+        if (moetNaarSettings) {
+            Intent settingsIntent = new Intent(getActivity(), SettingsActivity.class);
+            startActivityForResult(settingsIntent, 1874);
         }
     }
 
@@ -102,17 +112,14 @@ public class TutorialStap1 extends WizardStep{
         View v = getView();
         EditText klasET = (EditText) v.findViewById(R.id.editTextKlas);
         CheckBox clustersCB = (CheckBox) v.findViewById(R.id.checkBoxClusters);
-        CheckBox autoZoekenCB = (CheckBox) v.findViewById(R.id.autoZoekenCB);
 
         String klas = klasET.getText().toString();
         boolean clusters = clustersCB.isChecked();
-        boolean autoZoeken = autoZoekenCB.isChecked();
 
         SharedPreferences.Editor spEditor = PreferenceManager
                 .getDefaultSharedPreferences(getActivity()).edit();
         spEditor.putString("pref_klas", klas);
         spEditor.putBoolean("pref_cluster_enabled", clusters);
-        spEditor.putBoolean("pref_auto_zoek", autoZoeken);
         spEditor.commit();
     }
 

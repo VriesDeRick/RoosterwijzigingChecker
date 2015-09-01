@@ -58,8 +58,9 @@
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Schakel automatisch zoeken in"
-        android:id="@+id/autoZoekenCB"/>
+        android:text="Help me om dit in te stellen"
+        android:id="@+id/autoZoekenCB"
+        android:checked="false" />
 
 </LinearLayout>
 </ScrollView>
