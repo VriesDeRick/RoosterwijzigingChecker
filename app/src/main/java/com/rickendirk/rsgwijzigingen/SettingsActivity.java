@@ -2,12 +2,12 @@ package com.rickendirk.rsgwijzigingen;
 
 
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
@@ -46,11 +46,10 @@ public class SettingsActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
     public void helpDialog(){
-        new AlertDialog.Builder(this)
-                .setTitle("Hulp voor instellingen")
-                //.setMessage(R.string.settingsHelp)
-                .setView(R.layout.help_dialog)
-                .setPositiveButton("OK", null)
+        new MaterialDialog.Builder(this)
+                .title("Hulp voor instellingen")
+                .customView(R.layout.help_dialog, true)
+                .positiveText("OK")
                 .show();
     }
 
