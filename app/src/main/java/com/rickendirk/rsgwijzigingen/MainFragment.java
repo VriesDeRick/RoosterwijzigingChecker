@@ -134,16 +134,6 @@ public class MainFragment extends Fragment{
                 })
                 .show();
     }
-    public void sPsaver(ArrayList wijzigingenList, String standZin, String dagEnDatum){
-        SharedPreferences.Editor spEditor = PreferenceManager
-                .getDefaultSharedPreferences(getActivity()).edit();
-        Set<String> wijzigingenSet = new HashSet<>();
-        wijzigingenSet.addAll(wijzigingenList);
-        spEditor.putStringSet("last_wijzigingenList", wijzigingenSet);
-        spEditor.putString("stand", standZin);
-        spEditor.putString("dagEnDatum", dagEnDatum);
-        spEditor.commit();
-    }
     public void vernieuwdToast(){
         Toast.makeText(getActivity(), "Vernieuwd", Toast.LENGTH_LONG).show();
     }
@@ -284,7 +274,6 @@ public class MainFragment extends Fragment{
                 wijzigingenList.remove(listLaatste);
                 //Dag en datum moeten er ook uit, nu is die de laatste
                 wijzigingenList.remove(wijzigingenList.size() - 1);
-                sPsaver(wijzigingenList, standZin, dagEnDatum);
 
                 ListView listView = (ListView) mainView.findViewById(R.id.wijzigingenList);
                 listView.invalidateViews();

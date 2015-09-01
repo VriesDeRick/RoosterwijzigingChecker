@@ -67,11 +67,15 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                int position = tab.getPosition();
-                viewPager.setCurrentItem(position);
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
                 if (position == 1) {//webview fragment
                     WebFragment webFragment = (WebFragment) adapter.getItem(position);
                     boolean isFinished = webFragment.isFinished();
@@ -81,9 +85,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                     fab.hide();
                     tracker.send(new HitBuilders.EventBuilder()
-                    .setCategory("Navigatie")
-                    .setAction("naar_webFragment")
-                    .build());
+                            .setCategory("Navigatie")
+                            .setAction("naar_webFragment")
+                            .build());
 
                 } else {
                     //Gewone fragment, dus toolbar moet weer bovenaan gaan staan
@@ -95,14 +99,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+            public void onPageScrollStateChanged(int state) {
 
             }
         });

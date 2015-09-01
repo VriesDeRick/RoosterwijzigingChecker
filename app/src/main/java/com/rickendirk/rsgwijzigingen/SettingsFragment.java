@@ -1,9 +1,12 @@
 package com.rickendirk.rsgwijzigingen;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.MultiSelectListPreference;
@@ -11,7 +14,6 @@ import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
 import com.android.datetimepicker.time.RadialPickerLayout;
@@ -35,7 +37,7 @@ public class SettingsFragment extends PreferenceFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setupCalendar();
+        setupCalendar(true);
         timeFormat = new SimpleDateFormat(TIME_PATTERN, Locale.getDefault());
 
         // Instellingen laden
@@ -89,11 +91,36 @@ public class SettingsFragment extends PreferenceFragment implements
                 return true;
             }
         });
+        CheckBoxPreference autoZoek = (CheckBoxPreference) findPreference("pref_auto_zoek");
+        autoZoek.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                boolean checked = Boolean.valueOf(o.toString());
+                if (!checked) {
+                    Intent zoekIntent = new Intent(getActivity(), ZoekService.class);
+                    PendingIntent alarmIntent1 = PendingIntent.getService(getActivity(), 1,
+                            zoekIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    PendingIntent alarmIntent2 = PendingIntent.getService(getActivity(), 2,
+                            zoekIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    AlarmManager manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+                    manager.cancel(alarmIntent1);
+                    manager.cancel(alarmIntent2);
+                } else setupAlarm();
+                return true;
+            }
+        });
 
 
     }
 
-    private void setupCalendar() {
+    private void setupAlarm(){
+        AlarmsSetter alarmsSetter = new AlarmsSetter(getActivity());
+
+        alarmsSetter.setupAlarms();
+    }
+
+
+    private void setupCalendar(boolean isVanafOncreate) {
         calendar1 = Calendar.getInstance();
         calendar2 = Calendar.getInstance();
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -107,13 +134,24 @@ public class SettingsFragment extends PreferenceFragment implements
             timeInMsCal1 = tijdOchtend.getTimeInMillis();
         }
         if (timeInMsCal2 == 0){
-            Calendar tijdMidag = Calendar.getInstance();
-            tijdMidag.set(Calendar.HOUR_OF_DAY, 14);
-            tijdMidag.set(Calendar.MINUTE, 5);
-            timeInMsCal2 = tijdMidag.getTimeInMillis();
+            Calendar tijdMiddag = Calendar.getInstance();
+            tijdMiddag.set(Calendar.HOUR_OF_DAY, 14);
+            tijdMiddag.set(Calendar.MINUTE, 5);
+            timeInMsCal2 = tijdMiddag.getTimeInMillis();
         }
         calendar1.setTimeInMillis(timeInMsCal1);
+        calendar1.set(Calendar.DAY_OF_YEAR, Calendar.getInstance().get(Calendar.DAY_OF_YEAR));
+        if (calendar1.before(Calendar.getInstance())) calendar1.add(Calendar.DATE, 1);
+
         calendar2.setTimeInMillis(timeInMsCal2);
+        calendar2.set(Calendar.DAY_OF_YEAR, Calendar.getInstance().get(Calendar.DAY_OF_YEAR));
+        if (calendar2.before(Calendar.getInstance())) calendar2.add(Calendar.DATE, 1);
+
+        if (isVanafOncreate) {
+            //Indien vanaf onCreate staan data nog niet goed in SP
+            saveToSP(1);
+            saveToSP(2);
+        }
     }
     @Override
     public void onTimeSet(RadialPickerLayout radialPickerLayout, int hourOfDay, int minute) {
@@ -126,8 +164,8 @@ public class SettingsFragment extends PreferenceFragment implements
             calendar2.set(Calendar.MINUTE, minute);
             saveToSP(2);
         }
+        setupAlarm();
         setTimeSummary();
-        //TODO: Verwijzing naar Dirks Method hier
     }
 
     private void saveToSP(int welke) {

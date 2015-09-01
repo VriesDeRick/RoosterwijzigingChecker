@@ -1,9 +1,21 @@
 package com.rickendirk.rsgwijzigingen;
 
+import android.app.AlarmManager;
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.SystemClock;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -15,8 +27,13 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ZoekService extends IntentService{
+
+    public static final int notifID = 3395;
+    public static final String TAG = "RSG-Zoekservice";
 
     public ZoekService(){
         super("Zoekservice");
@@ -25,8 +42,20 @@ public class ZoekService extends IntentService{
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        Boolean clusters_enabled = sp.getBoolean("pref_cluster_enabled", false);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean clusters_enabled = sp.getBoolean("pref_cluster_enabled", true);
+        boolean alleenBijWifi = sp.getBoolean("pref_auto_zoek_wifi", false);
+        boolean isAchtergrond = intent.getBooleanExtra("isAchtergrond", false);
+        if (alleenBijWifi && isAchtergrond){
+            ConnectivityManager conManager = (ConnectivityManager)
+                    getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo nwInfo = conManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            if (!nwInfo.isConnectedOrConnecting()){
+                //Later weer proberen: nu geen wifi
+                setAlarmIn20Min();
+                return;
+            }
+        }
         ArrayList<String> wijzigingen;
         if (clusters_enabled){
             wijzigingen = checkerClusters();
@@ -37,21 +66,179 @@ public class ZoekService extends IntentService{
         //Tracken dat er is gezocht
         OwnApplication application = (OwnApplication) getApplication();
         Tracker tracker = application.getDefaultTracker();
-        boolean isAchtergrond = intent.getBooleanExtra("isAchtergrond", false);
+
         if (isAchtergrond){
             tracker.send(new HitBuilders.EventBuilder()
                     .setCategory("Acties")
                     .setAction("Zoeken_achtergrond")
                     .build());
-            // TODO: Method om notificatie te maken hier verwijzen
+            sendNotification(wijzigingen);
         } else {
             tracker.send(new HitBuilders.EventBuilder()
                     .setCategory("Acties")
                     .setAction("Zoeken_voorgrond")
                     .build());
+            boolean isFoutMelding = isFoutmelding(wijzigingen);
+            if (!isFoutMelding)sPreferencesSaver(wijzigingen);
             broadcastResult(wijzigingen, clusters_enabled);
         }
+    }
 
+    private void setAlarmIn20Min() {
+        Intent zoekIntent = new Intent(this, ZoekService.class);
+        zoekIntent.putExtra("isAchtergrond", true);
+        zoekIntent.addCategory("GeenWifiHerhaling"); //Categorie om andere intents cancelen te voorkomen
+        PendingIntent pendingIntent = PendingIntent.getService(this, 3, zoekIntent,
+                PendingIntent.FLAG_ONE_SHOT);
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Long in20Min = SystemClock.elapsedRealtime() + 1200000; //20Min in milisec.
+        manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, in20Min, pendingIntent);
+        Log.i(TAG, "Nieuw alarm gezet in 20 min");
+    }
+
+    private void sendNotification(ArrayList<String> wijzigingen) {
+        boolean isFoutMelding = isFoutmelding(wijzigingen);
+        boolean isVerbindFout = false;
+        if (isFoutMelding){
+            isVerbindFout = isVerbindFout(wijzigingen);
+        }
+        boolean isNieuw = isNieuw(wijzigingen);
+        if (!isNieuw){
+            Log.i(TAG, "Geen nieuwe wijzigingen, geen notificatie");
+            return;
+        }
+        ArrayList<String> schoneLijst = new ArrayList<>();
+        if (!isFoutMelding){
+            sPreferencesSaver(wijzigingen);
+            schoneLijst = maakLijstSchoon(wijzigingen);
+        }
+
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_action_list)
+                .setContentTitle("Roosterwijzigingen")
+                .setColor(getResources().getColor(R.color.lighter_blue))
+                .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS);
+        if (isFoutMelding){
+            if (isVerbindFout){
+                Log.i(TAG, "Er was geen internetverbinding bij het zoeken");
+                boolean moetHerhalen = PreferenceManager.getDefaultSharedPreferences(this)
+                        .getBoolean("pref_auto_herhaal_geenInternet", false);
+                if (moetHerhalen){
+                    setAlarmIn20Min();
+                    Log.i(TAG, "Zal ivm geen internet in 20 minuten opnieuw zoeken");
+                    return;
+                }
+                else {
+                    builder.setContentText("Er was geen internetverbinding. Probeer het handmatig opnieuw");
+                }
+            } else{
+                builder.setContentText("Er was een fout. Probeer het handmatig opnieuw");
+            }
+        } else {
+            boolean zijnWijzigingen = zijnWijzigingen(wijzigingen);
+            if (zijnWijzigingen){
+                if (schoneLijst.size() == 1){
+                    builder.setContentText(schoneLijst.get(0));
+                } else {
+                    builder.setContentText("Er zijn " + schoneLijst.size() + " wijzigingen!");
+                    NotificationCompat.InboxStyle inboxStyle =
+                            new NotificationCompat.InboxStyle();
+                    inboxStyle.setBigContentTitle("De roosterwijzigingen zijn:");
+                    for (int i = 0; i < schoneLijst.size(); i++){
+                        inboxStyle.addLine(schoneLijst.get(i));
+                    }
+                    builder.setStyle(inboxStyle);
+                }
+            } else {
+                boolean alleenBijWijziging  = PreferenceManager.getDefaultSharedPreferences(this)
+                        .getBoolean("pref_auto_zoek_alleenBijWijziging", true);
+                if (!alleenBijWijziging){
+                    //Dus ook bij geen-wijzigingen
+                    builder.setContentText("Er zijn geen roosterwijzigingen");
+                } else return;
+            }
+        }
+        Intent resultIntent = new Intent(this, MainActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent pendingIntent =
+                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT);
+        builder.setContentIntent(pendingIntent);
+
+        NotificationManagerCompat notifManager = NotificationManagerCompat.from(this);
+        notifManager.notify(notifID, builder.build());
+        vibrate();
+        Log.i(TAG, "Nieuwe notificatie gemaakt");
+    }
+
+    private void sPreferencesSaver(ArrayList<String> wijzigingen) {
+        String standZin = "Stand van" + wijzigingen.get(wijzigingen.size() -1);
+        String dagEnDatum = wijzigingen.get(wijzigingen.size() -2);
+        //Mag originele lijst niet aanpassen
+        ArrayList<String> wijzigingenNieuw = new ArrayList<>(wijzigingen);
+        //Nu kunnen stand en datum eruit
+        wijzigingenNieuw.remove(wijzigingenNieuw.size() - 1);
+        wijzigingenNieuw.remove(wijzigingenNieuw.size() - 1); //Deze is nu de laatste, laatste 2 moeten eruit
+
+        SharedPreferences.Editor spEditor = PreferenceManager
+                .getDefaultSharedPreferences(this).edit();
+        Set<String> wijzigingenSet = new HashSet<>();
+        wijzigingenSet.addAll(wijzigingenNieuw);
+        spEditor.putStringSet("last_wijzigingenList", wijzigingenSet);
+        spEditor.putString("stand", standZin);
+        spEditor.putString("dagEnDatum", dagEnDatum);
+        spEditor.commit();
+    }
+
+    private boolean isNieuw(ArrayList<String> wijzigingen) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        String standOud = sp.getString("stand", "geenWaarde");
+        if (!standOud.equals("geenWaarde")){
+            String standNieuw = "Stand van" + wijzigingen.get(wijzigingen.size() -1);
+            if (standNieuw.equals(standOud)){
+                return false;
+            } else return true;
+        } else return true; //Goedkeuren als er nog geen waarde was: sowieso nieuw
+    }
+
+    private void vibrate() {
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        if (vibrator.hasVibrator()){
+            //Eerste waarde vertraging, 2e duur, 3e vertraging, 4e duur, etc
+            long[] pattern = {0,250,600,250};
+            vibrator.vibrate(pattern, - 1); // -1 betekent geen herhaling
+        }
+    }
+
+    private ArrayList<String> maakLijstSchoon(ArrayList<String> wijzigingen) {
+        wijzigingen.remove(wijzigingen.size() - 1);
+        wijzigingen.remove(wijzigingen.size() - 1);
+        return wijzigingen;
+    }
+
+    private boolean zijnWijzigingen(ArrayList<String> wijzigingen) {
+        String listLaatst = wijzigingen.get(wijzigingen.size() - 1); // Lijst is hier al opgeschoond
+        if (listLaatst.equals("Er zijn geen wijzigingen.")){
+            return false;
+        } else return true;
+    }
+
+    private boolean isFoutmelding(ArrayList<String> wijzigingen) {
+        String listLaatst = wijzigingen.get(wijzigingen.size() - 1);
+        if (listLaatst.equals("geenKlas") || listLaatst.equals("verbindFout") ||
+                listLaatst.equals("EersteTekenLetter") || listLaatst.equals("klasMeerDan4Tekens") ||
+                listLaatst.equals("geenTabel") || listLaatst.equals("andereFout") ||
+                listLaatst.equals("geenClusters")){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    private boolean isVerbindFout(ArrayList<String> wijzigingen){
+        String listLaatst = wijzigingen.get(wijzigingen.size() - 1);
+        return listLaatst.equals("verbindFout");
     }
 
     private void broadcastResult(ArrayList wijzigingen, Boolean clusters_enabled) {
@@ -217,6 +404,10 @@ public class ZoekService extends IntentService{
                     }
                     //Dag waarvoor wijzigingen zijn ophalen
                     Element dag = doc.select("body > div > div:nth-child(2) > p > b > span").first();
+                    //Compatibiliteit met andere opmaak, om NPE te voorkomen
+                    if (dag == null){
+                        dag = doc.select("body > center:nth-child(2) > div").first();
+                    }
                     String dagStr = dag.text().toLowerCase();
                     // Woorden staan verkeerd om: omwisselen
                     int indexVanSpatie = dagStr.indexOf(" ");
@@ -384,6 +575,10 @@ public class ZoekService extends IntentService{
                         }
                         //Dag waarvoor wijzigingen zijn ophalen
                         Element dag = doc.select("body > div > div:nth-child(2) > p > b > span").first();
+                        //Compatibiliteit met andere opmaak, om NPE te voorkomen
+                        if (dag == null){
+                            dag = doc.select("body > center:nth-child(2) > div").first();
+                        }
                         String dagStr = dag.text().toLowerCase();
                         // Woorden staan verkeerd om: omwisselen
                         int indexVanSpatie = dagStr.indexOf(" ");

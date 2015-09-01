@@ -40,15 +40,27 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/clusterUitleg"
         android:id="@+id/textViewClusterUitleg"
-        android:layout_marginTop="100dp" />
+        android:layout_marginTop="8dp" />
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Schakel clusters in"
+        android:text="Schakel clusterfiltering in"
         android:id="@+id/checkBoxClusters"
         android:checked="false"
         android:layout_marginTop="0dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/autoZoekenTV"
+        android:text="@string/autoZoekenTutorialUitleg"/>
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Help me om dit in te stellen"
+        android:id="@+id/autoZoekenCB"
+        android:checked="false" />
 
 </LinearLayout>
 </ScrollView>
