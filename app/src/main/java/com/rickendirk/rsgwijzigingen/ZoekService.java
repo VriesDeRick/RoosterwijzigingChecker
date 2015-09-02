@@ -220,7 +220,7 @@ public class ZoekService extends IntentService{
 
     private boolean zijnWijzigingen(ArrayList<String> wijzigingen) {
         String listLaatst = wijzigingen.get(wijzigingen.size() - 1); // Lijst is hier al opgeschoond
-        if (listLaatst.equals("Er zijn geen wijzigingen.")){
+        if (listLaatst.equals("Er zijn geen wijzigingen")){
             return false;
         } else return true;
     }
@@ -400,7 +400,7 @@ public class ZoekService extends IntentService{
                 if (i == rows.size() - 1){
                     //Checken of tempList leeg is, zo ja 1 ding toevoegen
                     if (tempList.isEmpty()){
-                        tempList.add("Er zijn geen wijzigingen.");
+                        tempList.add("Er zijn geen wijzigingen");
                     }
                     //Dag waarvoor wijzigingen zijn ophalen
                     Element dag = doc.select("body > div > div:nth-child(2) > p > b > span").first();
@@ -571,7 +571,7 @@ public class ZoekService extends IntentService{
                     if (i == rows.size() - 1 && b == clusters.size() - 1){
                         //Checken of tempList leeg is, zo ja 1 ding toevoegen
                         if (tempList.isEmpty()){
-                            tempList.add("Er zijn geen wijzigingen.");
+                            tempList.add("Er zijn geen wijzigingen");
                         }
                         //Dag waarvoor wijzigingen zijn ophalen
                         Element dag = doc.select("body > div > div:nth-child(2) > p > b > span").first();
