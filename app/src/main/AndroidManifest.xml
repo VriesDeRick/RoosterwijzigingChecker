@@ -27,8 +27,11 @@
             android:label="Instellingen"
             android:theme="@style/AppTheme"
             android:parentActivityName="com.rickendirk.rsgwijzigingen.MainActivity">
-
         </activity>
+        <activity android:name=".ClustersActivity"
+            android:label="Clusters"
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".SettingsActivity" />
         <activity android:name="com.rickendirk.rsgwijzigingen.WizardActivity"
             android:parentActivityName="com.rickendirk.rsgwijzigingen.MainActivity"/>
         <activity android:name=".overAppActivity"

@@ -51,90 +51,12 @@
             android:summary="Schakel clusterfiltering in (aangeraden voor bovenbouw)"
             android:key="pref_cluster_enabled"
             android:defaultValue="false" />
-        <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
-            android:key="pref_cluster1"
-            android:title="Cluster 1"
-            android:summary=""
-            android:defaultValue=""
-            android:dependency="pref_cluster_enabled" />
-        <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
-            android:key="pref_cluster2"
-            android:title="Cluster 2"
-            android:summary=""
-            android:defaultValue=""
-            android:dependency="pref_cluster_enabled" />
-        <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
-            android:key="pref_cluster3"
-            android:title="Cluster 3"
-            android:summary=""
-            android:defaultValue=""
-            android:dependency="pref_cluster_enabled" />
-        <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
-            android:key="pref_cluster4"
-            android:title="Cluster 4"
-            android:summary=""
-            android:defaultValue=""
-            android:dependency="pref_cluster_enabled" />
-        <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
-            android:key="pref_cluster5"
-            android:title="Cluster 5"
-            android:summary=""
-            android:defaultValue=""
-            android:dependency="pref_cluster_enabled" />
-        <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
-            android:key="pref_cluster6"
-            android:title="Cluster 6"
-            android:summary=""
-            android:defaultValue=""
-            android:dependency="pref_cluster_enabled" />
-        <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
-            android:key="pref_cluster7"
-            android:title="Cluster 7"
-            android:summary=""
-            android:defaultValue=""
-            android:dependency="pref_cluster_enabled" />
-        <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
-            android:key="pref_cluster8"
-            android:title="Cluster 8"
-            android:summary=""
-            android:defaultValue=""
-            android:dependency="pref_cluster_enabled" />
-        <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
-            android:key="pref_cluster9"
-            android:title="Cluster 9"
-            android:summary=""
-            android:defaultValue=""
-            android:dependency="pref_cluster_enabled" />
-        <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
-            android:key="pref_cluster10"
-            android:title="Cluster 10"
-            android:summary=""
-            android:defaultValue=""
-            android:dependency="pref_cluster_enabled" />
-        <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
-            android:key="pref_cluster11"
-            android:title="Cluster 11"
-            android:summary=""
-            android:defaultValue=""
-            android:dependency="pref_cluster_enabled" />
-        <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
-            android:key="pref_cluster12"
-            android:title="Cluster 12"
-            android:summary=""
-            android:defaultValue=""
-            android:dependency="pref_cluster_enabled" />
-        <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
-            android:key="pref_cluster13"
-            android:title="Cluster 13"
-            android:summary=""
-            android:defaultValue=""
-            android:dependency="pref_cluster_enabled" />
-        <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
-            android:key="pref_cluster14"
-            android:title="Cluster 14"
-            android:summary=""
-            android:defaultValue=""
-            android:dependency="pref_cluster_enabled" />
+        <Preference
+            android:title="Clusters instellen"
+            android:dependency="pref_cluster_enabled">
+            <intent android:targetClass="com.rickendirk.rsgwijzigingen.ClustersActivity"
+                android:targetPackage="com.rickendirk.rsgwijzigingen"/>
+        </Preference>
     </PreferenceCategory>
     <PreferenceCategory
         android:title="Over deze app"
