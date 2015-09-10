@@ -115,7 +115,7 @@ public class ZoekService extends IntentService{
 
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_action_list)
+                .setSmallIcon(R.drawable.ic_rsg_notific)
                 .setContentTitle("Roosterwijzigingen")
                 .setColor(getResources().getColor(R.color.lighter_blue))
                 .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS);
