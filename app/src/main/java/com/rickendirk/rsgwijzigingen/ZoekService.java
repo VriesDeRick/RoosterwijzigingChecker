@@ -347,7 +347,7 @@ public class ZoekService extends IntentService{
                         if (Jsoup.parse(cols.get(8).toString()).text().contains("Uitval")){
                             String wijziging =
                                     Jsoup.parse(cols.get(1).toString()).text() + "e uur " +
-                                            Jsoup.parse(cols.get(2).toString()).text() + " valt uit.";
+                                            Jsoup.parse(cols.get(2).toString()).text() + " valt uit";
                             tempList.add(wijziging);
                         } else {
                             //Uur wordt verplaatst
@@ -367,7 +367,7 @@ public class ZoekService extends IntentService{
                             // Opvang door andere docent: dit staat alleen bij klas omdat
                             // dit amper gebeurt bij clusters
                             wijzigingKaal = Jsoup.parse(cols.get(1).toString()).text() + "e uur " +
-                                    docentOud + " wordt opgevangen door " + docentNieuw + ".";
+                                    docentOud + " wordt opgevangen door " + docentNieuw;
                         } else { //Geen opvang door andere docent, lokaalwijziging oid
                             wijzigingKaal =
                                     // Voegt alle kolommen samen tot 1 string
@@ -538,7 +538,7 @@ public class ZoekService extends IntentService{
                         if (Jsoup.parse(cols.get(6).toString()).text().contains("--")){
                             String wijziging =
                                     Jsoup.parse(cols.get(1).toString()).text() + "e uur " +
-                                            Jsoup.parse(cols.get(2).toString()).text() + " valt uit.";
+                                            Jsoup.parse(cols.get(2).toString()).text() + " valt uit";
                             tempList.add(wijziging);
                         }
                         else {
