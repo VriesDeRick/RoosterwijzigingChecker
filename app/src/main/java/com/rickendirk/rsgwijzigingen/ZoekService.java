@@ -160,6 +160,7 @@ public class ZoekService extends IntentService{
             }
         }
         Intent resultIntent = new Intent(this, MainActivity.class);
+        resultIntent.putExtra("isVanNotificatie", true);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(resultIntent);
