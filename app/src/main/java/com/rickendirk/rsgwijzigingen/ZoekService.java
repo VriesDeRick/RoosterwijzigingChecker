@@ -56,13 +56,7 @@ public class ZoekService extends IntentService{
                 return;
             }
         }
-        ArrayList<String> wijzigingen;
-        if (clusters_enabled){
-            wijzigingen = checkerClusters();
-        }
-        else {
-            wijzigingen = checkerNieuwKlas();
-        }
+        ArrayList<String> wijzigingen = checkerNieuw(clusters_enabled);
         //Tracken dat er is gezocht
         OwnApplication application = (OwnApplication) getApplication();
         Tracker tracker = application.getDefaultTracker();
@@ -278,7 +272,7 @@ public class ZoekService extends IntentService{
         return URLStr;
     }
 
-    private ArrayList<String> checkerNieuwKlas(){
+    private ArrayList<String> checkerNieuw(boolean clusters_enabled){
         ArrayList<String> list = new ArrayList<>();
         //String halen uit SP
         String klasTextS = PreferenceManager.getDefaultSharedPreferences
@@ -298,6 +292,17 @@ public class ZoekService extends IntentService{
             list.add("klasMeerDan4Tekens");
             return list;
         }
+        ArrayList<String> clusters = new ArrayList<>();
+        if (clusters_enabled){
+            clusters.addAll(getClusters());
+            //Lege clusters weghalen
+            clusters.removeAll(Collections.singleton(""));
+            //Clusters moeten aanwezig zijn
+            if (clusters.isEmpty()){
+                list.add("geenClusters");
+                return list;
+            }
+        }
         Document doc;
         try {
             String url = "http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm";
@@ -314,7 +319,13 @@ public class ZoekService extends IntentService{
         }
         Element table = tables.get(1);
         Elements rows = table.select("tr");
-        ArrayList<Element> rowsList = getwijzigingenListKlas(rows, klasGoed);
+        ArrayList<Element> rowsList;
+        if (clusters_enabled){
+            rowsList = getWijzigingenListClusters(rows, klasGoed, clusters);
+        } else {
+            rowsList = getwijzigingenListKlas(rows, klasGoed);
+        }
+
         if (rowsList.isEmpty()){
             //Geen wijzigingen
             list.add("Er zijn geen roosterwijzigingen");
@@ -324,6 +335,42 @@ public class ZoekService extends IntentService{
         }
         addDagEnDatum(list, doc);
         return list;
+    }
+
+    private ArrayList<Element> getWijzigingenListClusters(Elements rows, String klas, ArrayList<String> clusters) {
+        ArrayList<Element> list = new ArrayList<>();
+        //Dubbele loop, over zowel tabel als lijst met clusters
+        for (int a = 0; a < clusters.size(); a++) {
+            String cluster = clusters.get(a);
+            for (int i = 2; i < rows.size(); i++) {
+                Element row = rows.get(i);
+                Elements cols = row.select("td");
+
+                String klasWijziging = cols.get(0).text();
+                String clusterWijziging = cols.get(2).text();
+                if (klasWijziging.contains(klas) && clusterWijziging.equals(cluster)) {
+                    list.add(row);
+                }
+            }
+        }
+        return list;
+    }
+
+    private ArrayList<String> getClusters() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        ArrayList<String> clusters = new ArrayList<>();
+        for (int i = 1; i < 15; i++){
+            //String initializen, anders kan hij hem niet toevoegen
+            String clusterLowCase = "";
+            String cluster = sp.getString("pref_cluster" + i, "");
+            //If om nullpointer te voorkomen
+            if (!cluster.equals("")){
+                clusterLowCase = cluster.substring(0, 1).toLowerCase() +
+                        cluster.substring(1);
+            }
+            clusters.add(clusterLowCase);
+        }
+        return clusters;
     }
 
     private void addDagEnDatum(ArrayList<String> list, Document doc) {
@@ -414,7 +461,7 @@ public class ZoekService extends IntentService{
     private void verwijderDubbeleWijzigingen(ArrayList<String> list) {
         for (int i = 0; i < list.size(); i++){
             String wijziging = list.get(i);
-            for (int a = 0; a < list.size(); a++){
+            for (int a = i + 1; a < list.size(); a++){ //Plus 1 zodat eerste niet wordt verwijderd
                 String wijziging2 = list.get(a);
                 if (wijziging.equals(wijziging2)) list.remove(a);
             }
