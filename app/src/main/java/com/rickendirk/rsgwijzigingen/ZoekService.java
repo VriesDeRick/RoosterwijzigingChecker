@@ -537,10 +537,19 @@ public class ZoekService extends IntentService{
                             && cols.get(2).text().contains(clusters.get(b))) {
                         //If in geval van uitval, else ingeval van wijziging
                         if (Jsoup.parse(cols.get(6).toString()).text().contains("--")){
-                            String wijziging =
-                                    Jsoup.parse(cols.get(1).toString()).text() + "e uur " +
-                                            Jsoup.parse(cols.get(2).toString()).text() + " valt uit";
-                            tempList.add(wijziging);
+                            //2 opties: wordt verplaatst of valt uit
+                            if (Jsoup.parse(cols.get(8).toString()).text().contains("Uitval")){
+                                String wijziging =
+                                        Jsoup.parse(cols.get(1).toString()).text() + "e uur " +
+                                                Jsoup.parse(cols.get(2).toString()).text() + " valt uit";
+                                tempList.add(wijziging);
+                            } else {
+                                //Uur wordt verplaatst
+                                String wijziging = Jsoup.parse(cols.get(1).toString()).text() + "e uur "
+                                        + "wordt verplaatst naar " + Jsoup.parse(cols.get(8)
+                                        .toString()).text();
+                                tempList.add(wijziging);
+                            }
                         }
                         else {
                             String wijzigingKaal =
