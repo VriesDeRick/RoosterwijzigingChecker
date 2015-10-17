@@ -342,6 +342,10 @@ public class ZoekService extends IntentService{
 
 
                 if (cols.get(0).text().contains(klasCorrect)) {
+                    String vakOud = Jsoup.parse(cols.get(2).toString()).text();
+                    String docentOud = Jsoup.parse(cols.get(3).toString()).text();
+                    String vakNieuw = Jsoup.parse(cols.get(4).toString()).text();
+                    String docentNieuw = Jsoup.parse(cols.get(5).toString()).text();
                     //If in geval van uitval, else ingeval van wijziging
                     if (Jsoup.parse(cols.get(6).toString()).text().contains("--")){
                         //2 opties: wordt verplaatst of valt uit
@@ -357,12 +361,13 @@ public class ZoekService extends IntentService{
                                     .toString()).text();
                             tempList.add(wijziging);
                         }
+                    } else if (vakOud.equals(vakNieuw) && docentOud.equals(docentNieuw)){
+                        String wijziging = Jsoup.parse(cols.get(1).toString()).text() + "e uur " +
+                                vakOud + " wordt verplaatst naar " +
+                                Jsoup.parse(cols.get(6).toString()).text();
+                        tempList.add(wijziging);
                     }
                     else {
-                        String vakOud = Jsoup.parse(cols.get(2).toString()).text();
-                        String docentOud = Jsoup.parse(cols.get(3).toString()).text();
-                        String vakNieuw = Jsoup.parse(cols.get(4).toString()).text();
-                        String docentNieuw = Jsoup.parse(cols.get(5).toString()).text();
                         String wijzigingKaal;
                         if (vakOud.equals(vakNieuw) && !docentOud.equals(docentNieuw)){
                             // Opvang door andere docent: dit staat alleen bij klas omdat
@@ -535,6 +540,10 @@ public class ZoekService extends IntentService{
 
                     if (cols.get(0).text().contains(klasCorrect)
                             && cols.get(2).text().contains(clusters.get(b))) {
+                        String vakOud = Jsoup.parse(cols.get(2).toString()).text();
+                        String docentOud = Jsoup.parse(cols.get(3).toString()).text();
+                        String vakNieuw = Jsoup.parse(cols.get(4).toString()).text();
+                        String docentNieuw = Jsoup.parse(cols.get(5).toString()).text();
                         //If in geval van uitval, else ingeval van wijziging
                         if (Jsoup.parse(cols.get(6).toString()).text().contains("--")){
                             //2 opties: wordt verplaatst of valt uit
@@ -550,6 +559,11 @@ public class ZoekService extends IntentService{
                                         .toString()).text();
                                 tempList.add(wijziging);
                             }
+                        } else if (vakOud.equals(vakNieuw) && docentOud.equals(docentNieuw)){
+                            String wijziging = Jsoup.parse(cols.get(1).toString()).text() + "e uur " +
+                                    vakOud + " wordt verplaatst naar " +
+                                    Jsoup.parse(cols.get(6).toString()).text();
+                            tempList.add(wijziging);
                         }
                         else {
                             String wijzigingKaal =
