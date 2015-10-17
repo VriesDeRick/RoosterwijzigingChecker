@@ -61,7 +61,7 @@ public class ZoekService extends IntentService{
             wijzigingen = checkerClusters();
         }
         else {
-            wijzigingen = checkerKlas();
+            wijzigingen = checkerNieuwKlas();
         }
         //Tracken dat er is gezocht
         OwnApplication application = (OwnApplication) getApplication();
@@ -256,8 +256,8 @@ public class ZoekService extends IntentService{
         sendBroadcast(broadcastIntent);
     }
 
-    /*
-    Op dit moment is onderstaande code niet nodig, laat het staan voor testdoeleinden
+
+
     public String getURL(){
         int nummerOud = PreferenceManager.getDefaultSharedPreferences(this)
                 .getInt("URLInt", 2);
@@ -276,7 +276,195 @@ public class ZoekService extends IntentService{
         spEditor.commit();
 
         return URLStr;
-    } */
+    }
+
+    private ArrayList<String> checkerNieuwKlas(){
+        ArrayList<String> list = new ArrayList<>();
+        //String halen uit SP
+        String klasTextS = PreferenceManager.getDefaultSharedPreferences
+                (getApplicationContext()).getString("pref_klas", "");
+        //Checken of klas niet leeg is
+        if (klasTextS.equals("")){
+            list.add("geenKlas");
+            return list;
+        }
+        //Eerste teken klas mag geen letter zijn
+        if(Character.isLetter(klasTextS.charAt(0))) {
+            list.add("EersteTekenLetter");
+            return list;
+        }
+        String klasGoed = corrigeerKlas(klasTextS);
+        if (klasGoed.equals("TeLangeKlas")){
+            list.add("klasMeerDan4Tekens");
+            return list;
+        }
+        Document doc;
+        try {
+            String url = "http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm";
+            doc = Jsoup.connect(url).get();
+        } catch (java.io.IOException e){
+            list.add("verbindFout");
+            return list;
+        }
+        Elements tables = doc.select("table");
+        if (tables.size() < 2){
+            //Geen geschikte tabel aanwezig
+            list.add("geenTabel");
+            return list;
+        }
+        Element table = tables.get(1);
+        Elements rows = table.select("tr");
+        ArrayList<Element> rowsList = getwijzigingenListKlas(rows, klasGoed);
+        if (rowsList.isEmpty()){
+            //Geen wijzigingen
+            list.add("Er zijn geen roosterwijzigingen");
+        } else {
+            ArrayList<String> wijzigingenList = maakWijzigingenKlas(rowsList);
+            list.addAll(wijzigingenList);
+        }
+        addDagEnDatum(list, doc);
+        return list;
+    }
+
+    private void addDagEnDatum(ArrayList<String> list, Document doc) {
+        //Dag waarvoor wijzigingen zijn ophalen
+        Element dag = doc.select("body > div > div:nth-child(2) > p > b > span").first();
+        //Compatibiliteit met andere opmaak, om NPE te voorkomen
+        if (dag == null){
+            dag = doc.select("body > center:nth-child(2) > div").first();
+        }
+        String dagStr = dag.text().toLowerCase();
+        // Woorden staan verkeerd om: omwisselen
+        int indexVanSpatie = dagStr.indexOf(" ");
+        String datum = dagStr.substring(0, indexVanSpatie);
+        String rest = dagStr.substring(indexVanSpatie + 1);
+        String dagGoed = rest + " " + datum;
+        list.add(dagGoed);
+
+        //Stand ophalen: staat in 1e tabel van HTML
+        Element tableDate = doc.select("table").get(0);
+        String dateFullText = tableDate.getElementsContainingOwnText("Stand:").text();
+        //Deel achter "Stand:" pakken
+        String FullTextSplit[] = dateFullText.split("Stand:");
+        list.add(FullTextSplit[1]);
+    }
+
+    private ArrayList<String> maakWijzigingenKlas(ArrayList<Element> rowsList) {
+        ArrayList<String> list = new ArrayList<>();
+
+        for (int i = 0; i < rowsList.size(); i++){
+            Element row = rowsList.get(i);
+            Elements cols = row.select("td");
+
+            String uur = Jsoup.parse(cols.get(1).toString()).text();
+            String vakOud = Jsoup.parse(cols.get(2).toString()).text();
+            String docentOud = Jsoup.parse(cols.get(3).toString()).text();
+            String vakNieuw = Jsoup.parse(cols.get(4).toString()).text();
+            String docentNieuw = Jsoup.parse(cols.get(5).toString()).text();
+            String lokaal = Jsoup.parse(cols.get(6).toString()).text();
+            String ipv = Jsoup.parse(cols.get(7).toString()).text();
+            String naar = Jsoup.parse(cols.get(8).toString()).text();
+            String opmerking = "";
+            if (cols.size() > 9){
+                opmerking = Jsoup.parse(cols.get(9).toString()).text();
+            }
+
+            String wijzigingKaal;
+            //5 opties: Uitval, uur verplaatst, lokaal verplaatst, docent vervangen of anders
+            if (lokaal.contains("--")){
+
+                //2 Opties: Uur wordt verplaatst of valt uit
+                if (naar.contains("Uitval")){
+                    wijzigingKaal = uur + "e uur " + vakOud + " valt uit";
+                } else {
+                    wijzigingKaal = uur + "e uur wordt verplaatst"; //naar wordt later toegevoegd
+                }
+            } else if (vakOud.equals(vakNieuw) && docentOud.equals(docentNieuw)){
+                // Verplaatsing lokaal
+                wijzigingKaal = uur + "e uur " + vakOud + " wordt verplaatst naar " + lokaal;
+            } else if (vakOud.equals(vakNieuw) && !docentOud.equals(docentNieuw)){
+                //Opvang door andere docent
+                wijzigingKaal =  uur + "e uur " + docentOud + " wordt opgevangen door " + docentNieuw;
+            } else {
+                //Andere, onbekende wijziging: dit is een "backup"-optie
+                wijzigingKaal = uur + "e uur " + vakOud + " " + docentOud + " wordt " + vakNieuw + " "
+                        + docentNieuw + " in " + lokaal;
+            }
+
+            String ipvZin = "";
+            if (ipv.contains("/")){
+                ipvZin = " ipv " + ipv;
+            }
+            String naarZin = "";
+            if (naar.contains("/")){
+                naarZin = " naar " + naar;
+            }
+            String opmerkingZin = "";
+            if (!opmerking.equals("")){
+                opmerkingZin = "(" + opmerking + ")";
+            }
+            String wijziging = wijzigingKaal + ipvZin + naarZin + opmerkingZin;
+            list.add(wijziging);
+        }
+        //Kunnen, vooral bij onderbouw, dubbele wijzigingen in zitten
+        verwijderDubbeleWijzigingen(list);
+        return list;
+    }
+
+    private void verwijderDubbeleWijzigingen(ArrayList<String> list) {
+        for (int i = 0; i < list.size(); i++){
+            String wijziging = list.get(i);
+            for (int a = 0; a < list.size(); a++){
+                String wijziging2 = list.get(a);
+                if (wijziging.equals(wijziging2)) list.remove(a);
+            }
+        }
+    }
+
+    private ArrayList<Element> getwijzigingenListKlas(Elements rows, String klas) {
+        ArrayList<Element> list = new ArrayList<>();
+
+        for (int i = 2; i < rows.size(); i++) {
+            Element row = rows.get(i);
+            Elements cols = row.select("td");
+            String klasWijziging = cols.get(0).text();
+            if (klasWijziging.contains(klas)) {
+                list.add(row);
+            }
+        }
+        return list;
+    }
+
+
+    private String corrigeerKlas(String klasTextS) {
+        //String opsplitsen in 2 delen, om naar hoofdletters te converteren
+        char charcijfer = klasTextS.charAt(0);
+        String klascijfer = String.valueOf(charcijfer);
+        char charafdeling = klasTextS.charAt(1);
+        String klasafdelingBig = String.valueOf(charafdeling).toUpperCase();
+        String klasGoed;
+        switch (klasTextS.length()){
+            case 2:
+                klasGoed = klascijfer + klasafdelingBig;
+                break;
+            case 3:
+                char klasabc = klasTextS.charAt(2);
+                String klasabcSmall = String.valueOf(klasabc).toLowerCase();
+                klasGoed = klascijfer + klasafdelingBig + klasabcSmall;
+                break;
+            case 4:
+                char klasafdeling2 = klasTextS.charAt(2);
+                String klasafdeling2Big = String.valueOf(klasafdeling2).toUpperCase();
+                klasabc = klasTextS.charAt(3);
+                klasabcSmall = String.valueOf(klasabc).toLowerCase();
+
+                klasGoed = klascijfer + klasafdelingBig + klasafdeling2Big + klasabcSmall;
+                break;
+            default:
+                klasGoed = "TeLangeKlas";
+        }
+        return klasGoed;
+    }
 
     private ArrayList<String> checkerKlas() {
         ArrayList<String> tempList = new ArrayList<>();
@@ -439,8 +627,6 @@ public class ZoekService extends IntentService{
                     tempList.add(FullTextSplit[1]);
                     return tempList;
                 }
-
-
             }
         }
         catch(java.io.IOException e) {
