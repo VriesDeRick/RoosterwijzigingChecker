@@ -44,22 +44,12 @@ public class MainFragment extends Fragment{
                 android.R.layout.simple_list_item_1,
                 wijzigingenList);
         listView.setAdapter(arrayAdapter);
-        //listView updaten met oude wijzigingen: eerst Set ophalen van SP
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        Set<String> wijzigingenSet = sp.getStringSet("last_wijzigingenList", null);
-        //nullpointer voorkomen en hoeft niet als orientatie veranderd, te zien aan bundle
-        if (wijzigingenSet != null && savedInstanceState == null){
-            //Set omzetten naar list
-            List<String> wijzigingenList_old = new ArrayList<>(wijzigingenSet);
-            //Loop om wijzigingen van ene arrayList naar andere over te zetten
-            for (int i = 0; i < wijzigingenList_old.size(); i++){
-                wijzigingenList.add(wijzigingenList_old.get(i));
-                //listView updaten om eventuele wijzigingen te laten zien
-                listView.invalidateViews();
-            }
-        }
+
+        setupListview(listView);
+
         //Stand updaten naar laatste stand
         TextView standView = (TextView) mainView.findViewById(R.id.textStand);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String standZin = sp.getString("stand", null);
         if (standZin != null){
             standView.setText(standZin);
@@ -71,7 +61,23 @@ public class MainFragment extends Fragment{
         setRetainInstance(true);
 
         return mainView;
+    }
 
+    private void setupListview(ListView listView){
+        //listView updaten met oude wijzigingen: eerst Set ophalen van SP
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        Set<String> wijzigingenSet = sp.getStringSet("last_wijzigingenList", null);
+        //nullpointer voorkomen en hoeft niet als orientatie veranderd, te zien aan bundle
+        if (wijzigingenSet != null){
+            //Set omzetten naar list
+            List<String> wijzigingenList_old = new ArrayList<>(wijzigingenSet);
+            //Loop om wijzigingen van ene arrayList naar andere over te zetten
+            for (int i = 0; i < wijzigingenList_old.size(); i++){
+                wijzigingenList.add(wijzigingenList_old.get(i));
+                //listView updaten om eventuele wijzigingen te laten zien
+                listView.invalidateViews();
+            }
+        }
     }
 
     private void openSettings() {
