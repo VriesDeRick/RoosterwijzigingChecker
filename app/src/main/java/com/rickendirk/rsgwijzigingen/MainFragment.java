@@ -45,8 +45,9 @@ public class MainFragment extends Fragment{
                 wijzigingenList);
         listView.setAdapter(arrayAdapter);
 
-        setupListview(listView);
-
+        if (savedInstanceState == null){
+            setupListview(listView);
+        }
         //Stand updaten naar laatste stand
         TextView standView = (TextView) mainView.findViewById(R.id.textStand);
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
