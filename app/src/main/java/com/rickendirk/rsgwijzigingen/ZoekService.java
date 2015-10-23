@@ -431,7 +431,8 @@ public class ZoekService extends IntentService{
                 wijzigingKaal = uur + "e uur " + vakOud + " wordt verplaatst naar " + lokaal;
             } else if (vakOud.equals(vakNieuw) && !docentOud.equals(docentNieuw)){
                 //Opvang door andere docent
-                wijzigingKaal =  uur + "e uur " + docentOud + " wordt opgevangen door " + docentNieuw;
+                wijzigingKaal =  uur + "e uur " + docentOud + " wordt opgevangen door " + docentNieuw
+                    + " in " + lokaal;
             } else {
                 //Andere, onbekende wijziging: dit is een "backup"-optie
                 wijzigingKaal = uur + "e uur " + vakOud + " " + docentOud + " wordt " + vakNieuw + " "
@@ -447,8 +448,8 @@ public class ZoekService extends IntentService{
                 naarZin = " naar " + naar;
             }
             String opmerkingZin = "";
-            if (!opmerking.equals("")){
-                opmerkingZin = "(" + opmerking + ")";
+            if (!opmerking.equals("\u00a0")){
+                opmerkingZin = " (" + opmerking + ")";
             }
             String wijziging = wijzigingKaal + ipvZin + naarZin + opmerkingZin;
             list.add(wijziging);
