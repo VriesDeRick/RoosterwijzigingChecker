@@ -1,8 +1,5 @@
 package com.rickendirk.rsgwijzigingen;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -97,14 +94,7 @@ public class SettingsFragment extends PreferenceFragment implements
             public boolean onPreferenceChange(Preference preference, Object o) {
                 boolean checked = Boolean.valueOf(o.toString());
                 if (!checked) {
-                    Intent zoekIntent = new Intent(getActivity(), ZoekService.class);
-                    PendingIntent alarmIntent1 = PendingIntent.getService(getActivity(), 1,
-                            zoekIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-                    PendingIntent alarmIntent2 = PendingIntent.getService(getActivity(), 2,
-                            zoekIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-                    AlarmManager manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-                    manager.cancel(alarmIntent1);
-                    manager.cancel(alarmIntent2);
+                    AlaramsSetter.cancelAlarms(getActivity());
                 } else setupAlarm();
                 return true;
             }
@@ -114,9 +104,7 @@ public class SettingsFragment extends PreferenceFragment implements
     }
 
     private void setupAlarm(){
-        AlarmsSetter alarmsSetter = new AlarmsSetter(getActivity());
-
-        alarmsSetter.setupAlarms();
+        AlaramsSetter.setupAlarms(getActivity());
     }
 
 

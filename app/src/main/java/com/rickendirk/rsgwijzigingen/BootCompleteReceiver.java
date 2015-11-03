@@ -15,8 +15,7 @@ public class BootCompleteReceiver extends BroadcastReceiver {
                 .getBoolean("pref_auto_zoek", false);
         if (isAlarmsEnabled) {
             setupCalendarTimes(context);
-            AlarmsSetter setter = new AlarmsSetter(context);
-            setter.setupAlarms();
+            AlaramsSetter.setupAlarms(context);
         }
     }
 
