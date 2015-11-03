@@ -25,7 +25,7 @@ public class BootCompleteReceiver extends BroadcastReceiver {
         boolean wel1ekeer = sp.getBoolean("1eKeerSinds140", true);
         if (wel1ekeer){
             SharedPreferences.Editor spEditor = sp.edit();
-            spEditor.putBoolean("1eKeerSinds140", true);
+            spEditor.putBoolean("1eKeerSinds140", false);
             spEditor.commit();
             if (isAlarmsEnabled) {
                 OwnAlarmsManager.cancelAlarms(context);
