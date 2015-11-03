@@ -11,11 +11,26 @@ import java.util.Calendar;
 public class BootCompleteReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Boolean isAlarmsEnabled = PreferenceManager.getDefaultSharedPreferences(context)
+        boolean isAlarmsEnabled = PreferenceManager.getDefaultSharedPreferences(context)
                 .getBoolean("pref_auto_zoek", false);
         if (isAlarmsEnabled) {
             setupCalendarTimes(context);
             OwnAlarmsManager.setupAlarms(context);
+        }
+        check1ekeerSindsVersie140(context, isAlarmsEnabled);
+    }
+
+    private void check1ekeerSindsVersie140(Context context, boolean isAlarmsEnabled) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean wel1ekeer = sp.getBoolean("1eKeerSinds140", true);
+        if (wel1ekeer){
+            SharedPreferences.Editor spEditor = sp.edit();
+            spEditor.putBoolean("1eKeerSinds140", true);
+            spEditor.commit();
+            if (isAlarmsEnabled) {
+                OwnAlarmsManager.cancelAlarms(context);
+                OwnAlarmsManager.setupAlarms(context);
+            }
         }
     }
 
