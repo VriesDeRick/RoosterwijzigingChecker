@@ -6,9 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.preference.PreferenceManager;
 
-public class AlaramsSetter {
+public class OwnAlarmsManager {
 
-    public AlaramsSetter() {
+    public OwnAlarmsManager() {
     }
     
     public static void cancelAlarms(Context context){

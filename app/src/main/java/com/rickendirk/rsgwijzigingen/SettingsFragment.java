@@ -94,7 +94,7 @@ public class SettingsFragment extends PreferenceFragment implements
             public boolean onPreferenceChange(Preference preference, Object o) {
                 boolean checked = Boolean.valueOf(o.toString());
                 if (!checked) {
-                    AlaramsSetter.cancelAlarms(getActivity());
+                    OwnAlarmsManager.cancelAlarms(getActivity());
                 } else setupAlarm();
                 return true;
             }
@@ -104,7 +104,7 @@ public class SettingsFragment extends PreferenceFragment implements
     }
 
     private void setupAlarm(){
-        AlaramsSetter.setupAlarms(getActivity());
+        OwnAlarmsManager.setupAlarms(getActivity());
     }
 
 

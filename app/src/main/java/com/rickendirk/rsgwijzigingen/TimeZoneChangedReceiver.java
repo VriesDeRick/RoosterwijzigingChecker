@@ -8,7 +8,7 @@ import android.content.Intent;
 public class TimeZoneChangedReceiver extends BroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
-        AlaramsSetter.cancelAlarms(context);
-        AlaramsSetter.setupAlarms(context);
+        OwnAlarmsManager.cancelAlarms(context);
+        OwnAlarmsManager.setupAlarms(context);
     }
 }
