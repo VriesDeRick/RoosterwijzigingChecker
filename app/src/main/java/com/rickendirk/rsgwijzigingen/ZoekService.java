@@ -448,7 +448,7 @@ public class ZoekService extends IntentService{
                 naarZin = " naar " + naar;
             }
             String opmerkingZin = "";
-            if (!opmerking.equals("\u00a0")){
+            if (!opmerking.equals("\u00a0") && cols.size() > 9){ //Opmerking mag niet leeg zijn en wel aanwezig
                 opmerkingZin = " (" + opmerking + ")";
             }
             String wijziging = wijzigingKaal + ipvZin + naarZin + opmerkingZin;
