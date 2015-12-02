@@ -215,7 +215,7 @@ public class ZoekService extends IntentService{
 
     private boolean zijnWijzigingen(ArrayList<String> wijzigingen) {
         String listLaatst = wijzigingen.get(wijzigingen.size() - 1); // Lijst is hier al opgeschoond
-        if (listLaatst.equals("Er zijn geen wijzigingen")){
+        if (listLaatst.equals("Er zijn geen roosterwijzigingen")){
             return false;
         } else return true;
     }
