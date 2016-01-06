@@ -45,9 +45,6 @@ public class MainFragment extends Fragment {
                 wijzigingenList);
         listView.setAdapter(arrayAdapter);
 
-        if (savedInstanceState == null) {
-            setupListview(listView);
-        }
         //Stand updaten naar laatste stand
         TextView standView = (TextView) mainView.findViewById(R.id.textStand);
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -58,15 +55,14 @@ public class MainFragment extends Fragment {
         String dagEnDatum = sp.getString("dagEnDatum", "geenWaarde");
         dagEnDatumUpdater(dagEnDatum);
 
-
         setRetainInstance(true);
 
         return mainView;
     }
 
     private void setupListview(ListView listView) {
-        //listView updaten met oude wijzigingen: eerst Set ophalen van SP
-        Wijzigingen wijzigingen = new Wijzigingen(true, getActivity());
+        Wijzigingen wijzigingen = new Wijzigingen(true, getActivity()); //Auomatisch uit SP
+        wijzigingenList.clear();
         if (wijzigingen.getSize() != 0){
             wijzigingenList.addAll(wijzigingen.getWijzigingen());
         } else { //Geen roosterwijzigingen
@@ -240,7 +236,7 @@ public class MainFragment extends Fragment {
         super.onResume();
         registerReceiver();
         ListView listView = (ListView) mainView.findViewById(R.id.wijzigingenList);
-        listView.invalidateViews();
+        setupListview(listView);
     }
 
     private void naZoeken(Wijzigingen wijzigingen) {
