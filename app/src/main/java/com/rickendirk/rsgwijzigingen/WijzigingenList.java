@@ -3,6 +3,7 @@ package com.rickendirk.rsgwijzigingen;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,7 +14,9 @@ public class WijzigingenList {
     private ArrayList<String> wijzigingen;
     private String dagEnDatum;
     private String standZin;
+    private String fout;
     public boolean setupComplete = false;
+    public boolean zijnWijzigingen = false;
 
     public WijzigingenList(String dagEnDatum, String standZin) {
         initVar();
@@ -22,9 +25,9 @@ public class WijzigingenList {
         setupComplete = true;
     }
 
-    public WijzigingenList(boolean moetUitSP, Context context) {
+    public WijzigingenList(boolean moetUitSP, @Nullable Context context) {
         initVar();
-        loadFromSP(context);
+        if (moetUitSP) loadFromSP(context);
     }
 
     public String getStandZin() {
@@ -38,9 +41,29 @@ public class WijzigingenList {
     public String getDagEnDatum() {
         return dagEnDatum;
     }
+    public int getSize() {
+        return wijzigingen.size();
+    }
+
+    public void setFout(String fout) {
+        this.fout = fout;
+    }
+
+    public void setDagEnDatum(String dagEnDatum) {
+        this.dagEnDatum = dagEnDatum;
+    }
+
+    public void setStandZin(String standZin) {
+        this.standZin = standZin;
+    }
+
+    public String getFout() {
+        return fout;
+    }
 
     private void initVar() {
         wijzigingen = new ArrayList<>();
+        zijnWijzigingen = false;
     }
 
     private void saveToSP(Context context){
@@ -61,6 +84,7 @@ public class WijzigingenList {
         Set<String> wijzigingenSet = sp.getStringSet("last_wijzigingenList", null);
         if (wijzigingenSet != null) {
             wijzigingen.addAll(wijzigingenSet);
+            zijnWijzigingen = true;
         }
         standZin = sp.getString("stand", "");
         dagEnDatum = sp.getString("dagEnDatum", "geenWaarde");
@@ -69,6 +93,10 @@ public class WijzigingenList {
 
     public void addWijziging(String wijziging){
         wijzigingen.add(wijziging);
+        zijnWijzigingen = true;
+    }
+    public void removeWijziging(int index){
+        wijzigingen.remove(index);
     }
 
 }
