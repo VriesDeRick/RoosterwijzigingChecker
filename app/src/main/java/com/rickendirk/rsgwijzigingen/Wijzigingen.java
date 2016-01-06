@@ -66,7 +66,7 @@ public class Wijzigingen {
         zijnWijzigingen = false;
     }
 
-    private void saveToSP(Context context){
+    public void saveToSP(Context context){
         SharedPreferences.Editor spEditor = PreferenceManager
                 .getDefaultSharedPreferences(context).edit();
         //Stand wordt opgeslagen als standzin
@@ -90,6 +90,19 @@ public class Wijzigingen {
         dagEnDatum = sp.getString("dagEnDatum", "geenWaarde");
         setupComplete = true;
     }
+    public boolean isFoutmelding(){
+        return fout.isEmpty();
+    }
+    public boolean isVerbindfout(){
+        return fout.equals("verbindFout");
+    }
+    public boolean isNieuw(Context context) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        String standOud = sp.getString("stand", "geenWaarde");
+        if (!standOud.equals("geenWaarde")){
+            return !standZin.equals(standOud); //Wel gelijk, dus niet nieuw en omgekeerd
+        } else return true; //Goedkeuren als er nog geen waarde was: sowieso nieuw
+    }
 
     public void addWijziging(String wijziging){
         wijzigingen.add(wijziging);
@@ -97,6 +110,7 @@ public class Wijzigingen {
     }
     public void removeWijziging(int index){
         wijzigingen.remove(index);
+        if (wijzigingen.size() == 0) zijnWijzigingen = false;
     }
 
 }
