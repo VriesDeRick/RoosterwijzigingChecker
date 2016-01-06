@@ -72,8 +72,8 @@ public class ZoekService extends IntentService{
                     .setCategory("Acties")
                     .setAction("Zoeken_voorgrond")
                     .build());
-            boolean isFoutMelding = isFoutmelding(wijzigingen);
-            if (!isFoutMelding)sPreferencesSaver(wijzigingen);
+            boolean isFoutMelding = wijzigingen.isFoutmelding();
+            if (!isFoutMelding)wijzigingen.saveToSP(this);
             broadcastResult(wijzigingen, clusters_enabled);
         }
     }
@@ -221,11 +221,11 @@ public class ZoekService extends IntentService{
         return listLaatst.equals("verbindFout");
     }
 
-    private void broadcastResult(ArrayList wijzigingen, Boolean clusters_enabled) {
+    private void broadcastResult(Wijzigingen wijzigingen, Boolean clusters_enabled) {
         Intent broadcastIntent = new Intent();
         broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
         broadcastIntent.setAction(MainFragment.ZoekReceiver.ACTION_RESP); //Nodig voor intentfilter
-        broadcastIntent.putParcelableArrayListExtra("wijzigingen", wijzigingen);
+        broadcastIntent.putExtra("wijzigingen", wijzigingen);
         if (clusters_enabled){
             broadcastIntent.putExtra("clustersAan", true);
         }
