@@ -92,16 +92,21 @@ public class ZoekService extends IntentService{
 
     private void sendNotification(Wijzigingen wijzigingen) {
         boolean isFoutMelding = wijzigingen.isFoutmelding();
-        boolean isVerbindFout = wijzigingen.isVerbindfout();
-        boolean isNieuw = wijzigingen.isNieuw(this);
-        if (!isNieuw){
-            Log.i(TAG, "Geen nieuwe wijzigingen, geen notificatie");
-            return;
+        boolean isVerbindFout; boolean isNieuw; //Tot tegendeel bewezen is
+        if (isFoutMelding){
+            isVerbindFout = wijzigingen.isVerbindfout();
+            isNieuw = false;
+        } else {
+            isVerbindFout = false;
+            isNieuw = wijzigingen.isNieuw(this);
         }
         if (!isFoutMelding){
             wijzigingen.saveToSP(this);
         }
-
+        if (!isFoutMelding && !isNieuw){
+            Log.i(TAG, "Geen nieuwe wijzigingen, geen notificatie");
+            return;
+        }
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_rsg_notific)
