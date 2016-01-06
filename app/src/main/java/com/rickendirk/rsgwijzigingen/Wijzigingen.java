@@ -2,6 +2,8 @@ package com.rickendirk.rsgwijzigingen;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 
@@ -9,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Wijzigingen {
+public class Wijzigingen implements Parcelable {
 
     private ArrayList<String> wijzigingen;
     private String dagEnDatum;
@@ -113,4 +115,37 @@ public class Wijzigingen {
         if (wijzigingen.size() == 0) zijnWijzigingen = false;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeSerializable(this.wijzigingen);
+        dest.writeString(this.dagEnDatum);
+        dest.writeString(this.standZin);
+        dest.writeString(this.fout);
+        dest.writeByte(setupComplete ? (byte) 1 : (byte) 0);
+        dest.writeByte(zijnWijzigingen ? (byte) 1 : (byte) 0);
+    }
+
+    private Wijzigingen(Parcel in) {
+        this.wijzigingen = (ArrayList<String>) in.readSerializable();
+        this.dagEnDatum = in.readString();
+        this.standZin = in.readString();
+        this.fout = in.readString();
+        this.setupComplete = in.readByte() != 0;
+        this.zijnWijzigingen = in.readByte() != 0;
+    }
+
+    public static final Parcelable.Creator<Wijzigingen> CREATOR = new Parcelable.Creator<Wijzigingen>() {
+        public Wijzigingen createFromParcel(Parcel source) {
+            return new Wijzigingen(source);
+        }
+
+        public Wijzigingen[] newArray(int size) {
+            return new Wijzigingen[size];
+        }
+    };
 }
