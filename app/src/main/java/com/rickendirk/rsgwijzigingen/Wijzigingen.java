@@ -93,11 +93,14 @@ public class Wijzigingen implements Parcelable {
         setupComplete = true;
     }
     public boolean isFoutmelding(){
-        return fout.isEmpty();
+        return fout != null; //Fout is null, dan geen fout, dus isFoutmelding false bij null
     }
     public boolean isVerbindfout(){
-        return fout.equals("verbindFout");
+        if (isFoutmelding()) {
+            return fout.equals("verbindFout");
+        } else return false;
     }
+
     public boolean isNieuw(Context context) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         String standOud = sp.getString("stand", "geenWaarde");
