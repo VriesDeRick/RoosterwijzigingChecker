@@ -56,7 +56,7 @@ public class ZoekService extends IntentService{
                 return;
             }
         }
-        ArrayList<String> wijzigingen = checkerNieuw(clusters_enabled);
+        Wijzigingen wijzigingen = checkerNieuw(clusters_enabled);
         //Tracken dat er is gezocht
         OwnApplication application = (OwnApplication) getApplication();
         Tracker tracker = application.getDefaultTracker();
@@ -90,21 +90,16 @@ public class ZoekService extends IntentService{
         Log.i(TAG, "Nieuw alarm gezet in 20 min");
     }
 
-    private void sendNotification(ArrayList<String> wijzigingen) {
-        boolean isFoutMelding = isFoutmelding(wijzigingen);
-        boolean isVerbindFout = false;
-        if (isFoutMelding){
-            isVerbindFout = isVerbindFout(wijzigingen);
-        }
-        boolean isNieuw = isNieuw(wijzigingen);
+    private void sendNotification(Wijzigingen wijzigingen) {
+        boolean isFoutMelding = wijzigingen.isFoutmelding();
+        boolean isVerbindFout = wijzigingen.isVerbindfout();
+        boolean isNieuw = wijzigingen.isNieuw(this);
         if (!isNieuw){
             Log.i(TAG, "Geen nieuwe wijzigingen, geen notificatie");
             return;
         }
-        ArrayList<String> schoneLijst = new ArrayList<>();
         if (!isFoutMelding){
-            sPreferencesSaver(wijzigingen);
-            schoneLijst = maakLijstSchoon(wijzigingen);
+            wijzigingen.saveToSP(this);
         }
 
         NotificationCompat.Builder builder =
@@ -130,17 +125,18 @@ public class ZoekService extends IntentService{
                 builder.setContentText("Er was een fout. Probeer het handmatig opnieuw");
             }
         } else {
-            boolean zijnWijzigingen = zijnWijzigingen(wijzigingen);
+            boolean zijnWijzigingen = wijzigingen.zijnWijzigingen;
+            ArrayList<String> wijzigingenList = wijzigingen.getWijzigingen();
             if (zijnWijzigingen){
-                if (schoneLijst.size() == 1){
-                    builder.setContentText(schoneLijst.get(0));
+                if (wijzigingenList.size() == 1){
+                    builder.setContentText(wijzigingenList.get(0));
                 } else {
-                    builder.setContentText("Er zijn " + schoneLijst.size() + " wijzigingen!");
+                    builder.setContentText("Er zijn " + wijzigingenList.size() + " wijzigingen!");
                     NotificationCompat.InboxStyle inboxStyle =
                             new NotificationCompat.InboxStyle();
                     inboxStyle.setBigContentTitle("De roosterwijzigingen zijn:");
-                    for (int i = 0; i < schoneLijst.size(); i++){
-                        inboxStyle.addLine(schoneLijst.get(i));
+                    for (int i = 0; i < wijzigingenList.size(); i++){
+                        inboxStyle.addLine(wijzigingenList.get(i));
                     }
                     builder.setStyle(inboxStyle);
                 }
@@ -185,17 +181,6 @@ public class ZoekService extends IntentService{
         spEditor.putString("stand", standZin);
         spEditor.putString("dagEnDatum", dagEnDatum);
         spEditor.commit();
-    }
-
-    private boolean isNieuw(ArrayList<String> wijzigingen) {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        String standOud = sp.getString("stand", "geenWaarde");
-        if (!standOud.equals("geenWaarde")){
-            String standNieuw = "Stand van" + wijzigingen.get(wijzigingen.size() -1);
-            if (standNieuw.equals(standOud)){
-                return false;
-            } else return true;
-        } else return true; //Goedkeuren als er nog geen waarde was: sowieso nieuw
     }
 
     private void vibrate() {
