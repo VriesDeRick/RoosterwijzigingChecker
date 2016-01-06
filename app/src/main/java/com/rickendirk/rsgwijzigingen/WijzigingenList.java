@@ -3,7 +3,6 @@ package com.rickendirk.rsgwijzigingen;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.ArraySet;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -12,16 +11,14 @@ import java.util.Set;
 public class WijzigingenList {
 
     private ArrayList<String> wijzigingen;
-    private String stand;
     private String dagEnDatum;
     private String standZin;
     public boolean setupComplete = false;
 
-    public WijzigingenList(String dagEnDatum, String stand) {
+    public WijzigingenList(String dagEnDatum, String standZin) {
         initVar();
         this.dagEnDatum = dagEnDatum;
-        this.stand = stand;
-        standZin = "Stand van" + stand;
+        this.standZin = standZin;
         setupComplete = true;
     }
 
