@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-public class WijzigingenList {
+public class Wijzigingen {
 
     private ArrayList<String> wijzigingen;
     private String dagEnDatum;
@@ -18,14 +18,14 @@ public class WijzigingenList {
     public boolean setupComplete = false;
     public boolean zijnWijzigingen = false;
 
-    public WijzigingenList(String dagEnDatum, String standZin) {
+    public Wijzigingen(String dagEnDatum, String standZin) {
         initVar();
         this.dagEnDatum = dagEnDatum;
         this.standZin = standZin;
         setupComplete = true;
     }
 
-    public WijzigingenList(boolean moetUitSP, @Nullable Context context) {
+    public Wijzigingen(boolean moetUitSP, @Nullable Context context) {
         initVar();
         if (moetUitSP) loadFromSP(context);
     }

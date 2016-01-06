@@ -272,8 +272,8 @@ public class ZoekService extends IntentService{
         return URLStr;
     }
 
-    private WijzigingenList checkerNieuw(boolean clusters_enabled){
-        WijzigingenList wijzigingen = new WijzigingenList(false, null);
+    private Wijzigingen checkerNieuw(boolean clusters_enabled){
+        Wijzigingen wijzigingen = new Wijzigingen(false, null);
         //String halen uit SP
         String klasTextS = PreferenceManager.getDefaultSharedPreferences
                 (getApplicationContext()).getString("pref_klas", "");
@@ -372,7 +372,7 @@ public class ZoekService extends IntentService{
         return clusters;
     }
 
-    private void addDagEnDatum(WijzigingenList wijzigingen, Document doc) {
+    private void addDagEnDatum(Wijzigingen wijzigingen, Document doc) {
         //Dag waarvoor wijzigingen zijn ophalen
         Element dag = doc.select("body > div > div:nth-child(2) > p > b > span").first();
         //Compatibiliteit met andere opmaak, om NPE te voorkomen
@@ -395,7 +395,7 @@ public class ZoekService extends IntentService{
         wijzigingen.setStandZin("Stand van" + FullTextSplit[1]);
     }
 
-    private void maakWijzigingenKlas(ArrayList<Element> rowsList, WijzigingenList wijzigingenList) {
+    private void maakWijzigingenKlas(ArrayList<Element> rowsList, Wijzigingen wijzigingen) {
         for (int i = 0; i < rowsList.size(); i++){
             Element row = rowsList.get(i);
             Elements cols = row.select("td");
@@ -449,18 +449,18 @@ public class ZoekService extends IntentService{
                 opmerkingZin = " (" + opmerking + ")";
             }
             String wijziging = wijzigingKaal + ipvZin + naarZin + opmerkingZin;
-            wijzigingenList.addWijziging(wijziging);
+            wijzigingen.addWijziging(wijziging);
         }
         //Kunnen, vooral bij onderbouw, dubbele wijzigingen in zitten
-        verwijderDubbeleWijzigingen(wijzigingenList);
+        verwijderDubbeleWijzigingen(wijzigingen);
     }
 
-    private void verwijderDubbeleWijzigingen(WijzigingenList wijzigingenList) {
-        for (int i = 0; i < wijzigingenList.getSize(); i++){
-            String wijziging = wijzigingenList.getWijzigingen().get(i);
-            for (int a = i + 1; a < wijzigingenList.getSize(); a++){ //Plus 1 zodat eerste niet wordt verwijderd
-                String wijziging2 = wijzigingenList.getWijzigingen().get(a);
-                if (wijziging.equals(wijziging2)) wijzigingenList.removeWijziging(a);
+    private void verwijderDubbeleWijzigingen(Wijzigingen wijzigingen) {
+        for (int i = 0; i < wijzigingen.getSize(); i++){
+            String wijziging = wijzigingen.getWijzigingen().get(i);
+            for (int a = i + 1; a < wijzigingen.getSize(); a++){ //Plus 1 zodat eerste niet wordt verwijderd
+                String wijziging2 = wijzigingen.getWijzigingen().get(a);
+                if (wijziging.equals(wijziging2)) wijzigingen.removeWijziging(a);
             }
         }
     }
