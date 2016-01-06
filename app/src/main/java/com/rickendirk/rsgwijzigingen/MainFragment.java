@@ -28,7 +28,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class MainFragment extends Fragment{
+public class MainFragment extends Fragment {
     public ArrayList<String> wijzigingenList = new ArrayList<>();
     MaterialDialog progressDialog;
     private ZoekReceiver receiver;
@@ -45,14 +45,14 @@ public class MainFragment extends Fragment{
                 wijzigingenList);
         listView.setAdapter(arrayAdapter);
 
-        if (savedInstanceState == null){
+        if (savedInstanceState == null) {
             setupListview(listView);
         }
         //Stand updaten naar laatste stand
         TextView standView = (TextView) mainView.findViewById(R.id.textStand);
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String standZin = sp.getString("stand", null);
-        if (standZin != null){
+        if (standZin != null) {
             standView.setText(standZin);
         }
         String dagEnDatum = sp.getString("dagEnDatum", "geenWaarde");
@@ -64,20 +64,12 @@ public class MainFragment extends Fragment{
         return mainView;
     }
 
-    private void setupListview(ListView listView){
+    private void setupListview(ListView listView) {
         //listView updaten met oude wijzigingen: eerst Set ophalen van SP
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        Set<String> wijzigingenSet = sp.getStringSet("last_wijzigingenList", null);
-        //nullpointer voorkomen en hoeft niet als orientatie veranderd, te zien aan bundle
-        if (wijzigingenSet != null){
-            //Set omzetten naar list
-            List<String> wijzigingenList_old = new ArrayList<>(wijzigingenSet);
-            //Loop om wijzigingen van ene arrayList naar andere over te zetten
-            for (int i = 0; i < wijzigingenList_old.size(); i++){
-                wijzigingenList.add(wijzigingenList_old.get(i));
-                //listView updaten om eventuele wijzigingen te laten zien
-                listView.invalidateViews();
-            }
+        Wijzigingen wijzigingen = new Wijzigingen(true, getActivity());
+        if (wijzigingen.getSize() != 0){
+            wijzigingenList.addAll(wijzigingen.getWijzigingen());
+            listView.invalidateViews();
         }
     }
 
@@ -91,13 +83,14 @@ public class MainFragment extends Fragment{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 1874){
+        if (requestCode == 1874) {
             //Nieuwe backup van instellingen doen
             BackupManager bm = new BackupManager(getActivity());
             bm.dataChanged();
         }
     }
-    public void checker(){
+
+    public void checker() {
         progressDialog = new MaterialDialog.Builder(getActivity())
                 .title("Aan het laden")
                 .content("De roosterwijzigingentabel wordt geladen en doorzocht")
@@ -109,7 +102,7 @@ public class MainFragment extends Fragment{
     }
 
 
-    public void geenKlasAlert(){
+    public void geenKlasAlert() {
         new AlertDialogWrapper.Builder(getActivity())
                 .setTitle("Geen klas ingevoerd")
                 .setMessage("Er is geen klas ingevoerd in het instellingenscherm")
@@ -122,14 +115,15 @@ public class MainFragment extends Fragment{
                 .show();
     }
 
-    public void verbindfoutAlert(){
+    public void verbindfoutAlert() {
         new AlertDialogWrapper.Builder(getActivity())
                 .setTitle("Verbindingsfout")
                 .setMessage("Er was een verbindingsfout. Controleer je internetverbinding of probeer het later opnieuw.")
                 .setPositiveButton("OK", null)
                 .show();
     }
-    public void geenClusterAlert(){
+
+    public void geenClusterAlert() {
         new AlertDialogWrapper.Builder(getActivity())
                 .setTitle("Geen clusters")
                 .setMessage(getString(R.string.geenClusterMelding))
@@ -141,11 +135,12 @@ public class MainFragment extends Fragment{
                 })
                 .show();
     }
-    public void vernieuwdToast(){
+
+    public void vernieuwdToast() {
         Toast.makeText(getActivity(), "Vernieuwd", Toast.LENGTH_LONG).show();
     }
 
-    public void EersteTekenKlasLetter(){
+    public void EersteTekenKlasLetter() {
         new AlertDialogWrapper.Builder(getActivity())
                 .setTitle("Klas bestaat niet")
                 .setMessage(R.string.verkeerdeKlas)
@@ -163,7 +158,8 @@ public class MainFragment extends Fragment{
                 })
                 .show();
     }
-    public void klasCorrector(){
+
+    public void klasCorrector() {
         final String klasFout = PreferenceManager.getDefaultSharedPreferences(getActivity())
                 .getString("pref_klas", "");
         char[] c = klasFout.toCharArray();
@@ -188,14 +184,16 @@ public class MainFragment extends Fragment{
                     }
                 }).show();
     }
-    public void dagEnDatumUpdater(String dagEnDatum){
+
+    public void dagEnDatumUpdater(String dagEnDatum) {
         TextView dagDatumView = (TextView) mainView.findViewById(R.id.wijzigingenBanner);
-        if (!dagEnDatum.equals("geenWaarde")){
+        if (!dagEnDatum.equals("geenWaarde")) {
             dagDatumView.setText("Wijzigingen voor " + dagEnDatum);
         }
 
     }
-    public void klasMeerDan4Tekens(){
+
+    public void klasMeerDan4Tekens() {
         new AlertDialogWrapper.Builder(getActivity())
                 .setTitle("Klas meer dan 4 tekens")
                 .setMessage(R.string.klasMeerDan4Tekens)
@@ -212,20 +210,23 @@ public class MainFragment extends Fragment{
 
         public static final String ACTION_RESP =
                 "com.rickendirk.intent.action.MESSAGE_PROCESSED"; //Nodig voor intentfilter
+
         @Override
         public void onReceive(Context context, Intent intent) {
-            ArrayList wijzigingen = intent.getParcelableArrayListExtra("wijzigingen");
+            Wijzigingen wijzigingen = intent.getExtras().getParcelable("wijzigingen");
             //Boolean wordt nog niet gebruikt, maar laten staan voor het geval dat
             boolean clusters_enabled = intent.getBooleanExtra("clustersAan", false);
             naZoeken(wijzigingen);
         }
     }
-    public void registerReceiver(){
+
+    public void registerReceiver() {
         IntentFilter filter = new IntentFilter(ZoekReceiver.ACTION_RESP);
         filter.addCategory(Intent.CATEGORY_DEFAULT);
         receiver = new ZoekReceiver();
         getActivity().registerReceiver(receiver, filter);
     }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -240,61 +241,58 @@ public class MainFragment extends Fragment{
         listView.invalidateViews();
     }
 
-    private void naZoeken(ArrayList<String> wijzigingen) {
+    private void naZoeken(Wijzigingen wijzigingen) {
         progressDialog.dismiss();
 
-        int listLaatste = wijzigingen.size() - 1;
-        String listlaatst = wijzigingen.get(listLaatste);
-        switch (listlaatst) {
-            case "geenKlas":
-                geenKlasAlert();
-                break;
-            case "verbindFout":
-                verbindfoutAlert();
-                break;
-            case "EersteTekenLetter":
-                EersteTekenKlasLetter();
-                break;
-            case "klasMeerDan4Tekens":
-                klasMeerDan4Tekens();
-                break;
-            case "geenTabel":
-                geenTabelAlert();
-                break;
-            case "andereFout":
-                andereFoutAlert();
-                break;
-            //Onderstaande case kan alleen bij clusterzoeken
-            case "geenClusters":
-                geenClusterAlert();
-                break;
-            default:
-                //Kopieren naar wijzigingenList zodat listView bijgewerkt kan worden, eerst resultaten vorige weghalen
-                wijzigingenList.clear();
-                wijzigingenList.addAll(wijzigingen);
-                //Er is dus geen verbindfout en klasfout, listlaatst bevat stand
-                String standZin = "Stand van" + listlaatst;
-                //Dag met datum ophalen uit lijst
-                int dagIndex = wijzigingenList.size() - 2;
-                String dagEnDatum = wijzigingenList.get(dagIndex);
+        if (wijzigingen.isFoutmelding()) {
 
-                wijzigingenList.remove(listLaatste);
-                //Dag en datum moeten er ook uit, nu is die de laatste
-                wijzigingenList.remove(wijzigingenList.size() - 1);
+            switch (wijzigingen.getFout()) {
+                case "geenKlas":
+                    geenKlasAlert();
+                    break;
+                case "verbindFout":
+                    verbindfoutAlert();
+                    break;
+                case "EersteTekenLetter":
+                    EersteTekenKlasLetter();
+                    break;
+                case "klasMeerDan4Tekens":
+                    klasMeerDan4Tekens();
+                    break;
+                case "geenTabel":
+                    geenTabelAlert();
+                    break;
+                case "andereFout":
+                    andereFoutAlert();
+                    break;
+                //Onderstaande case kan alleen bij clusterzoeken
+                case "geenClusters":
+                    geenClusterAlert();
+                    break;
+            }
+        } else {
+            //Kopieren naar wijzigingenList zodat listView bijgewerkt kan worden, eerst resultaten vorige weghalen
+            wijzigingenList.clear();
+            //Moet toch iets in lijst worden weergegeven
+            if (!wijzigingen.zijnWijzigingen) wijzigingen.addWijziging("Er zijn geen roosterwijzigingen");
+            wijzigingenList.addAll(wijzigingen.getWijzigingen());
 
-                ListView listView = (ListView) mainView.findViewById(R.id.wijzigingenList);
-                listView.invalidateViews();
+            String standZin = wijzigingen.getStandZin();
+            String dagEnDatum = wijzigingen.getDagEnDatum();
 
-                TextView textStandView = (TextView) mainView.findViewById(R.id.textStand);
-                textStandView.setText(standZin);
+            ListView listView = (ListView) mainView.findViewById(R.id.wijzigingenList);
+            listView.invalidateViews();
 
-                //Dag en datum updaten
-                dagEnDatumUpdater(dagEnDatum);
+            TextView textStandView = (TextView) mainView.findViewById(R.id.textStand);
+            textStandView.setText(standZin);
 
-                //Mag toast met vernieuwd niet bij verbindingsfout etc
-                vernieuwdToast();
-                break;
+            //Dag en datum updaten
+            dagEnDatumUpdater(dagEnDatum);
+
+            //Mag toast met vernieuwd niet bij verbindingsfout etc
+            vernieuwdToast();
         }
+
     }
 
     private void andereFoutAlert() {
