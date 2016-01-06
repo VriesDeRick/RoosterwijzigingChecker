@@ -69,8 +69,10 @@ public class MainFragment extends Fragment {
         Wijzigingen wijzigingen = new Wijzigingen(true, getActivity());
         if (wijzigingen.getSize() != 0){
             wijzigingenList.addAll(wijzigingen.getWijzigingen());
-            listView.invalidateViews();
+        } else { //Geen roosterwijzigingen
+            wijzigingenList.add("Er zijn geen roosterwijzigingen");
         }
+        listView.invalidateViews();
     }
 
     private void openSettings() {
