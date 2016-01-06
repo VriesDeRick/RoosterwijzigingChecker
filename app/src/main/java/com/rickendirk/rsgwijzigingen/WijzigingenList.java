@@ -11,11 +11,11 @@ import java.util.Set;
 
 public class WijzigingenList {
 
-    ArrayList<String> wijzigingen;
-    String stand;
-    String dagEnDatum;
-    String standZin;
-    boolean setupComplete = false;
+    private ArrayList<String> wijzigingen;
+    private String stand;
+    private String dagEnDatum;
+    private String standZin;
+    public boolean setupComplete = false;
 
     public WijzigingenList(String dagEnDatum, String stand) {
         initVar();
@@ -28,6 +28,18 @@ public class WijzigingenList {
     public WijzigingenList(boolean moetUitSP, Context context) {
         initVar();
         loadFromSP(context);
+    }
+
+    public String getStandZin() {
+        return standZin;
+    }
+
+    public ArrayList<String> getWijzigingen() {
+        return wijzigingen;
+    }
+
+    public String getDagEnDatum() {
+        return dagEnDatum;
     }
 
     private void initVar() {
@@ -56,6 +68,10 @@ public class WijzigingenList {
         standZin = sp.getString("stand", "");
         dagEnDatum = sp.getString("dagEnDatum", "geenWaarde");
         setupComplete = true;
+    }
+
+    public void addWijziging(String wijziging){
+        wijzigingen.add(wijziging);
     }
 
 }
