@@ -56,7 +56,7 @@ public class ZoekService extends IntentService{
                 return;
             }
         }
-        ArrayList<String> wijzigingen = checkerNieuw(clusters_enabled);
+        Wijzigingen wijzigingen = checkerNieuw(clusters_enabled);
         //Tracken dat er is gezocht
         OwnApplication application = (OwnApplication) getApplication();
         Tracker tracker = application.getDefaultTracker();
@@ -72,8 +72,8 @@ public class ZoekService extends IntentService{
                     .setCategory("Acties")
                     .setAction("Zoeken_voorgrond")
                     .build());
-            boolean isFoutMelding = isFoutmelding(wijzigingen);
-            if (!isFoutMelding)sPreferencesSaver(wijzigingen);
+            boolean isFoutMelding = wijzigingen.isFoutmelding();
+            if (!isFoutMelding)wijzigingen.saveToSP(this);
             broadcastResult(wijzigingen, clusters_enabled);
         }
     }
@@ -90,23 +90,23 @@ public class ZoekService extends IntentService{
         Log.i(TAG, "Nieuw alarm gezet in 20 min");
     }
 
-    private void sendNotification(ArrayList<String> wijzigingen) {
-        boolean isFoutMelding = isFoutmelding(wijzigingen);
-        boolean isVerbindFout = false;
+    private void sendNotification(Wijzigingen wijzigingen) {
+        boolean isFoutMelding = wijzigingen.isFoutmelding();
+        boolean isVerbindFout; boolean isNieuw; //Tot tegendeel bewezen is
         if (isFoutMelding){
-            isVerbindFout = isVerbindFout(wijzigingen);
+            isVerbindFout = wijzigingen.isVerbindfout();
+            isNieuw = false;
+        } else {
+            isVerbindFout = false;
+            isNieuw = wijzigingen.isNieuw(this);
         }
-        boolean isNieuw = isNieuw(wijzigingen);
-        if (!isNieuw){
+        if (!isFoutMelding){
+            wijzigingen.saveToSP(this);
+        }
+        if (!isFoutMelding && !isNieuw){
             Log.i(TAG, "Geen nieuwe wijzigingen, geen notificatie");
             return;
         }
-        ArrayList<String> schoneLijst = new ArrayList<>();
-        if (!isFoutMelding){
-            sPreferencesSaver(wijzigingen);
-            schoneLijst = maakLijstSchoon(wijzigingen);
-        }
-
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_rsg_notific)
@@ -130,17 +130,18 @@ public class ZoekService extends IntentService{
                 builder.setContentText("Er was een fout. Probeer het handmatig opnieuw");
             }
         } else {
-            boolean zijnWijzigingen = zijnWijzigingen(wijzigingen);
+            boolean zijnWijzigingen = wijzigingen.zijnWijzigingen;
+            ArrayList<String> wijzigingenList = wijzigingen.getWijzigingen();
             if (zijnWijzigingen){
-                if (schoneLijst.size() == 1){
-                    builder.setContentText(schoneLijst.get(0));
+                if (wijzigingenList.size() == 1){
+                    builder.setContentText(wijzigingenList.get(0));
                 } else {
-                    builder.setContentText("Er zijn " + schoneLijst.size() + " wijzigingen!");
+                    builder.setContentText("Er zijn " + wijzigingenList.size() + " wijzigingen!");
                     NotificationCompat.InboxStyle inboxStyle =
                             new NotificationCompat.InboxStyle();
                     inboxStyle.setBigContentTitle("De roosterwijzigingen zijn:");
-                    for (int i = 0; i < schoneLijst.size(); i++){
-                        inboxStyle.addLine(schoneLijst.get(i));
+                    for (int i = 0; i < wijzigingenList.size(); i++){
+                        inboxStyle.addLine(wijzigingenList.get(i));
                     }
                     builder.setStyle(inboxStyle);
                 }
@@ -187,17 +188,6 @@ public class ZoekService extends IntentService{
         spEditor.commit();
     }
 
-    private boolean isNieuw(ArrayList<String> wijzigingen) {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        String standOud = sp.getString("stand", "geenWaarde");
-        if (!standOud.equals("geenWaarde")){
-            String standNieuw = "Stand van" + wijzigingen.get(wijzigingen.size() -1);
-            if (standNieuw.equals(standOud)){
-                return false;
-            } else return true;
-        } else return true; //Goedkeuren als er nog geen waarde was: sowieso nieuw
-    }
-
     private void vibrate() {
         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         if (vibrator.hasVibrator()){
@@ -236,11 +226,11 @@ public class ZoekService extends IntentService{
         return listLaatst.equals("verbindFout");
     }
 
-    private void broadcastResult(ArrayList wijzigingen, Boolean clusters_enabled) {
+    private void broadcastResult(Wijzigingen wijzigingen, Boolean clusters_enabled) {
         Intent broadcastIntent = new Intent();
         broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
         broadcastIntent.setAction(MainFragment.ZoekReceiver.ACTION_RESP); //Nodig voor intentfilter
-        broadcastIntent.putParcelableArrayListExtra("wijzigingen", wijzigingen);
+        broadcastIntent.putExtra("wijzigingen", wijzigingen);
         if (clusters_enabled){
             broadcastIntent.putExtra("clustersAan", true);
         }
@@ -272,25 +262,25 @@ public class ZoekService extends IntentService{
         return URLStr;
     }
 
-    private ArrayList<String> checkerNieuw(boolean clusters_enabled){
-        ArrayList<String> list = new ArrayList<>();
+    private Wijzigingen checkerNieuw(boolean clusters_enabled){
+        Wijzigingen wijzigingen = new Wijzigingen(false, null);
         //String halen uit SP
         String klasTextS = PreferenceManager.getDefaultSharedPreferences
                 (getApplicationContext()).getString("pref_klas", "");
         //Checken of klas niet leeg is
         if (klasTextS.equals("")){
-            list.add("geenKlas");
-            return list;
+            wijzigingen.setFout("geenKlas");
+            return wijzigingen;
         }
         //Eerste teken klas mag geen letter zijn
         if(Character.isLetter(klasTextS.charAt(0))) {
-            list.add("EersteTekenLetter");
-            return list;
+            wijzigingen.setFout("EersteTekenLetter");
+            return wijzigingen;
         }
         String klasGoed = corrigeerKlas(klasTextS);
         if (klasGoed.equals("TeLangeKlas")){
-            list.add("klasMeerDan4Tekens");
-            return list;
+            wijzigingen.setFout("klasMeerDan4Tekens");
+            return wijzigingen;
         }
         ArrayList<String> clusters = new ArrayList<>();
         if (clusters_enabled){
@@ -299,8 +289,8 @@ public class ZoekService extends IntentService{
             clusters.removeAll(Collections.singleton(""));
             //Clusters moeten aanwezig zijn
             if (clusters.isEmpty()){
-                list.add("geenClusters");
-                return list;
+                wijzigingen.setFout("geenClusters");
+                return wijzigingen;
             }
         }
         Document doc;
@@ -308,14 +298,14 @@ public class ZoekService extends IntentService{
             String url = "http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm";
             doc = Jsoup.connect(url).get();
         } catch (java.io.IOException e){
-            list.add("verbindFout");
-            return list;
+            wijzigingen.setFout("verbindFout");
+            return wijzigingen;
         }
         Elements tables = doc.select("table");
         if (tables.size() < 2){
             //Geen geschikte tabel aanwezig
-            list.add("geenTabel");
-            return list;
+            wijzigingen.setFout("geenTabel");
+            return wijzigingen;
         }
         Element table = tables.get(1);
         Elements rows = table.select("tr");
@@ -325,16 +315,15 @@ public class ZoekService extends IntentService{
         } else {
             rowsList = getwijzigingenListKlas(rows, klasGoed);
         }
-
         if (rowsList.isEmpty()){
-            //Geen wijzigingen
-            list.add("Er zijn geen roosterwijzigingen");
+            //Geen wijzigingen TODO: Onderstaande comment weghalen als alles werkt
+            //list.add("Er zijn geen roosterwijzigingen");
+            wijzigingen.zijnWijzigingen = false;
         } else {
-            ArrayList<String> wijzigingenList = maakWijzigingenKlas(rowsList);
-            list.addAll(wijzigingenList);
+            maakWijzigingenKlas(rowsList, wijzigingen);
         }
-        addDagEnDatum(list, doc);
-        return list;
+        addDagEnDatum(wijzigingen, doc);
+        return wijzigingen;
     }
 
     private ArrayList<Element> getWijzigingenListClusters(Elements rows, String klas, ArrayList<String> clusters) {
@@ -373,7 +362,7 @@ public class ZoekService extends IntentService{
         return clusters;
     }
 
-    private void addDagEnDatum(ArrayList<String> list, Document doc) {
+    private void addDagEnDatum(Wijzigingen wijzigingen, Document doc) {
         //Dag waarvoor wijzigingen zijn ophalen
         Element dag = doc.select("body > div > div:nth-child(2) > p > b > span").first();
         //Compatibiliteit met andere opmaak, om NPE te voorkomen
@@ -386,19 +375,17 @@ public class ZoekService extends IntentService{
         String datum = dagStr.substring(0, indexVanSpatie);
         String rest = dagStr.substring(indexVanSpatie + 1);
         String dagGoed = rest + " " + datum;
-        list.add(dagGoed);
+        wijzigingen.setDagEnDatum(dagGoed);
 
         //Stand ophalen: staat in 1e tabel van HTML
         Element tableDate = doc.select("table").get(0);
         String dateFullText = tableDate.getElementsContainingOwnText("Stand:").text();
         //Deel achter "Stand:" pakken
         String FullTextSplit[] = dateFullText.split("Stand:");
-        list.add(FullTextSplit[1]);
+        wijzigingen.setStandZin("Stand van" + FullTextSplit[1]);
     }
 
-    private ArrayList<String> maakWijzigingenKlas(ArrayList<Element> rowsList) {
-        ArrayList<String> list = new ArrayList<>();
-
+    private void maakWijzigingenKlas(ArrayList<Element> rowsList, Wijzigingen wijzigingen) {
         for (int i = 0; i < rowsList.size(); i++){
             Element row = rowsList.get(i);
             Elements cols = row.select("td");
@@ -452,19 +439,18 @@ public class ZoekService extends IntentService{
                 opmerkingZin = " (" + opmerking + ")";
             }
             String wijziging = wijzigingKaal + ipvZin + naarZin + opmerkingZin;
-            list.add(wijziging);
+            wijzigingen.addWijziging(wijziging);
         }
         //Kunnen, vooral bij onderbouw, dubbele wijzigingen in zitten
-        verwijderDubbeleWijzigingen(list);
-        return list;
+        verwijderDubbeleWijzigingen(wijzigingen);
     }
 
-    private void verwijderDubbeleWijzigingen(ArrayList<String> list) {
-        for (int i = 0; i < list.size(); i++){
-            String wijziging = list.get(i);
-            for (int a = i + 1; a < list.size(); a++){ //Plus 1 zodat eerste niet wordt verwijderd
-                String wijziging2 = list.get(a);
-                if (wijziging.equals(wijziging2)) list.remove(a);
+    private void verwijderDubbeleWijzigingen(Wijzigingen wijzigingen) {
+        for (int i = 0; i < wijzigingen.getSize(); i++){
+            String wijziging = wijzigingen.getWijzigingen().get(i);
+            for (int a = i + 1; a < wijzigingen.getSize(); a++){ //Plus 1 zodat eerste niet wordt verwijderd
+                String wijziging2 = wijzigingen.getWijzigingen().get(a);
+                if (wijziging.equals(wijziging2)) wijzigingen.removeWijziging(a);
             }
         }
     }
