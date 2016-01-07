@@ -1,9 +1,14 @@
 package com.rickendirk.rsgwijzigingen;
 
+import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.preference.PreferenceManager;
 
 public class OwnAlarmsManager {
@@ -46,5 +51,37 @@ public class OwnAlarmsManager {
             manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, timeMs2,
                     AlarmManager.INTERVAL_DAY, alarmIntent2);
         }
+    }
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public static void setupJobSschedulerAlarm(Context context, int welke){
+        cancelJobSschedulerAlarms(context,welke);
+        JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        if (welke == 1) {
+            JobInfo.Builder builder1 = new JobInfo.Builder(1,
+                    new ComponentName(context.getPackageName(),
+                            JobSchedulerService.class.getName()));
+            builder1.setPeriodic(20000)
+                    .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                    .setPersisted(true)
+                    .setRequiresCharging(false)
+                    .setRequiresDeviceIdle(false);
+            jobScheduler.schedule(builder1.build());
+        } else {
+            JobInfo.Builder builder2 = new JobInfo.Builder(2,
+                    new ComponentName(context.getPackageName(),
+                            JobSchedulerService.class.getName()));
+            builder2.setPeriodic(20000)
+                    .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                    .setPersisted(true)
+                    .setRequiresCharging(false)
+                    .setRequiresDeviceIdle(false);
+            jobScheduler.schedule(builder2.build());
+        }
+    }
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public static void cancelJobSschedulerAlarms(Context context, int welke){
+        JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        if (welke == 1)jobScheduler.cancel(1);
+        else jobScheduler.cancel(2);
     }
 }

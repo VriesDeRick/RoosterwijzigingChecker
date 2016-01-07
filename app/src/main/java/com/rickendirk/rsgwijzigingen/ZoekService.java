@@ -75,7 +75,14 @@ public class ZoekService extends IntentService{
             boolean isFoutMelding = wijzigingen.isFoutmelding();
             if (!isFoutMelding)wijzigingen.saveToSP(this);
             broadcastResult(wijzigingen, clusters_enabled);
+
         }
+        boolean jobService = intent.getBooleanExtra("isJobService", false);
+        if (jobService) broadcastResult(wijzigingen, clusters_enabled);
+    }
+
+    private void notifyJobService() {
+
     }
 
     private void setAlarmIn20Min() {
@@ -103,6 +110,7 @@ public class ZoekService extends IntentService{
         if (!isFoutMelding){
             wijzigingen.saveToSP(this);
         }
+        isNieuw = true;
         if (!isFoutMelding && !isNieuw){
             Log.i(TAG, "Geen nieuwe wijzigingen, geen notificatie");
             return;

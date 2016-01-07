@@ -2,6 +2,7 @@ package com.rickendirk.rsgwijzigingen;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
@@ -18,8 +19,10 @@ import com.android.datetimepicker.time.TimePickerDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
+import java.util.Timer;
 
 public class SettingsFragment extends PreferenceFragment implements
         SharedPreferences.OnSharedPreferenceChangeListener, TimePickerDialog.OnTimeSetListener {
@@ -99,8 +102,32 @@ public class SettingsFragment extends PreferenceFragment implements
                 return true;
             }
         });
+        CheckBoxPreference jobZoeken = (CheckBoxPreference) findPreference("pref_alt_zoeken");
+        if (Build.VERSION.SDK_INT > 20){
+            jobZoeken.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    boolean checked = Boolean.valueOf(newValue.toString());
+                    if (checked) {
+                        scheduleTimers();
+                    } else OwnAlarmsManager.cancelJobSschedulerAlarms(getActivity());
+                    return true;
+                }
+
+            });
+        } else jobZoeken.setEnabled(false);
 
 
+    }
+
+    private void scheduleTimers() {
+        Timer timer = new Timer();
+        Long timeMs1 = PreferenceManager.getDefaultSharedPreferences(getActivity()).getLong("timeMs1", 0);
+        Long timeMs2 = PreferenceManager.getDefaultSharedPreferences(getActivity()).getLong("timeMs2", 0);
+        Date time1 = new Date(timeMs1);
+        Date time2 = new Date(timeMs2);
+        timer.schedule(new ScheduleAlarmsTask(getActivity(), 1), time1);
+        timer.schedule(new ScheduleAlarmsTask(getActivity(), 2), time2);
     }
 
     private void setupAlarm(){

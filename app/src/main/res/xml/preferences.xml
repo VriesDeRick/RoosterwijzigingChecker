@@ -6,43 +6,50 @@
         android:summary="Voer hier je klas in"
         android:defaultValue="" />
     <PreferenceCategory
-        android:title="Automatisch zoeken"
-        android:key="prefCat_zoek_auto" />
-        <CheckBoxPreference
-            android:title="Zoek automatisch"
-            android:summary="Schakel automatisch zoeken in"
-            android:key="pref_auto_zoek"
-            android:defaultValue="false" />
-        <Preference
-            android:title="Zoektijd 1"
-            android:summary="@string/timePickerSum"
-            android:key="pref_auto_tijd1"
-            android:dependency="pref_auto_zoek"/>
-        <Preference
-            android:title="Zoektijd 2"
-            android:summary="@string/timePickerSum"
-            android:key="pref_auto_tijd2"
-            android:dependency="pref_auto_zoek"/>
+        android:key="prefCat_zoek_auto"
+        android:title="Automatisch zoeken" />
     <CheckBoxPreference
-        android:title="Alleen bij wifi"
+        android:defaultValue="false"
+        android:key="pref_auto_zoek"
+        android:summary="Schakel automatisch zoeken in"
+        android:title="Zoek automatisch" />
+    <Preference
+        android:dependency="pref_auto_zoek"
+        android:key="pref_auto_tijd1"
+        android:summary="@string/timePickerSum"
+        android:title="Zoektijd 1" />
+    <Preference
+        android:dependency="pref_auto_zoek"
+        android:key="pref_auto_tijd2"
+        android:summary="@string/timePickerSum"
+        android:title="Zoektijd 2" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:dependency="pref_auto_zoek"
+        android:key="pref_auto_zoek_wifi"
         android:summaryOff="Alleen achtergrondzoeken op een WiFi-netwerk"
         android:summaryOn="Zal indien geen Wifi aanwezig twintig minuten later opnieuw proberen"
-        android:key="pref_auto_zoek_wifi"
-        android:dependency="pref_auto_zoek"
-        android:defaultValue="false" />
+        android:title="Alleen bij wifi" />
     <CheckBoxPreference
-        android:title="Alleen notificatie bij wijzigingen"
-        android:summary="App geeft alleen een notificatie als je wijzigingen hebt"
+        android:defaultValue="true"
+        android:dependency="pref_auto_zoek"
         android:key="pref_auto_zoek_alleenBijWijziging"
-        android:dependency="pref_auto_zoek"
-        android:defaultValue="true" />
+        android:summary="App geeft alleen een notificatie als je wijzigingen hebt"
+        android:title="Alleen notificatie bij wijzigingen" />
     <CheckBoxPreference
-        android:title="Herhaal indien verbindingsfout"
+        android:defaultValue="true"
+        android:dependency="pref_auto_zoek"
+        android:key="pref_auto_herhaal_geenInternet"
         android:summaryOff="Herhaal het zoeken even later als er een verbindingsfout was"
         android:summaryOn="Zal binnen 20 minuten opnieuw proberen om te zoeken"
-        android:key="pref_auto_herhaal_geenInternet"
+        android:title="Herhaal indien verbindingsfout" />
+    <CheckBoxPreference
+        android:defaultValue="false"
         android:dependency="pref_auto_zoek"
-        android:defaultValue="true" />
+        android:key="pref_alt_zoeken"
+        android:summaryOff="Alleen beschikbaar voor Android 5.0 en hoger"
+        android:summaryOn="Verbeterd zoeken is ingeschakeld"
+        android:title="Alternatief zoeksysteem" />
     <PreferenceCategory
         android:title="Clusterinstellingen"
         android:key="pref_cluster_settings">
