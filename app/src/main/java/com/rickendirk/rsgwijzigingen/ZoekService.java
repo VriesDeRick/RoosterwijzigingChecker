@@ -34,6 +34,8 @@ public class ZoekService extends IntentService{
 
     public static final int notifID = 3395;
     public static final String TAG = "RSG-Zoekservice";
+    public static final String tableURL =
+            "http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm";
 
     public ZoekService(){
         super("Zoekservice");
@@ -295,8 +297,7 @@ public class ZoekService extends IntentService{
         }
         Document doc;
         try {
-            String url = "http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm";
-            doc = Jsoup.connect(url).get();
+            doc = Jsoup.connect(tableURL).get();
         } catch (java.io.IOException e){
             wijzigingen.setFout("verbindFout");
             return wijzigingen;
@@ -323,7 +324,16 @@ public class ZoekService extends IntentService{
             maakWijzigingenKlas(rowsList, wijzigingen);
         }
         addDagEnDatum(wijzigingen, doc);
+        addMessage(wijzigingen, doc);
         return wijzigingen;
+    }
+
+    private void addMessage(Wijzigingen wijzigingen, Document doc) {
+        Elements messageSpan = doc.select("body > div > div > div > table > tbody > tr:nth-child(1) > td > p > b > span");
+        if (!messageSpan.isEmpty()){
+            String message = messageSpan.first().text();
+            wijzigingen.setMessage(message);
+        }
     }
 
     private ArrayList<Element> getWijzigingenListClusters(Elements rows, String klas, ArrayList<String> clusters) {

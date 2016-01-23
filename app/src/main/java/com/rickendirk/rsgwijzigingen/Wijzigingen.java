@@ -20,6 +20,9 @@ public class Wijzigingen implements Parcelable {
     public boolean setupComplete = false;
     public boolean zijnWijzigingen = false;
 
+    private String message;
+    public boolean hasMessage = false;
+
     public Wijzigingen(String dagEnDatum, String standZin) {
         initVar();
         this.dagEnDatum = dagEnDatum;
@@ -61,6 +64,18 @@ public class Wijzigingen implements Parcelable {
 
     public String getFout() {
         return fout;
+    }
+
+    public void setWijzigingen(ArrayList<String> wijzigingen) {
+        this.wijzigingen = wijzigingen;
+    }
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+        hasMessage = true;
     }
 
     private void initVar() {
