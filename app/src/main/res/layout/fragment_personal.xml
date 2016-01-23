@@ -14,12 +14,22 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/messageTV"
+        android:textSize="15sp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/wijzigingenBanner"
+        android:visibility="gone"/>
+        <!-- verschijnt alleen wanneer er een melding is-->
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/wijzigingenList"
-        android:layout_below="@+id/wijzigingenBanner"
+        android:layout_below="@+id/messageTV"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 

@@ -89,6 +89,10 @@ public class Wijzigingen implements Parcelable {
         //Stand wordt opgeslagen als standzin
         spEditor.putString("stand", standZin);
         spEditor.putString("dagEnDatum", dagEnDatum);
+        if (hasMessage) {
+            spEditor.putString("message", message);
+        }
+        spEditor.putBoolean("hasMessage", hasMessage);
 
         Set<String> wijzigingenSet = new HashSet<>();
         wijzigingenSet.addAll(wijzigingen);
@@ -105,6 +109,8 @@ public class Wijzigingen implements Parcelable {
         }
         standZin = sp.getString("stand", "");
         dagEnDatum = sp.getString("dagEnDatum", "geenWaarde");
+        hasMessage = sp.getBoolean("hasMessage", false);
+        if (hasMessage) message = sp.getString("message", null);
         setupComplete = true;
     }
     public boolean isFoutmelding(){
@@ -146,6 +152,8 @@ public class Wijzigingen implements Parcelable {
         dest.writeString(this.fout);
         dest.writeByte(setupComplete ? (byte) 1 : (byte) 0);
         dest.writeByte(zijnWijzigingen ? (byte) 1 : (byte) 0);
+        dest.writeString(this.message);
+        dest.writeByte(hasMessage ? (byte) 1 : (byte) 0);
     }
 
     private Wijzigingen(Parcel in) {
@@ -155,9 +163,11 @@ public class Wijzigingen implements Parcelable {
         this.fout = in.readString();
         this.setupComplete = in.readByte() != 0;
         this.zijnWijzigingen = in.readByte() != 0;
+        this.message = in.readString();
+        this.hasMessage = in.readByte() != 0;
     }
 
-    public static final Parcelable.Creator<Wijzigingen> CREATOR = new Parcelable.Creator<Wijzigingen>() {
+    public static final Creator<Wijzigingen> CREATOR = new Creator<Wijzigingen>() {
         public Wijzigingen createFromParcel(Parcel source) {
             return new Wijzigingen(source);
         }
