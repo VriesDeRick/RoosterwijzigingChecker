@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.widget.Toast;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class JobSchedulerService extends JobService {
@@ -23,7 +24,8 @@ public class JobSchedulerService extends JobService {
         Intent zoekIntent = new Intent(this, ZoekService.class);
         zoekIntent.putExtra("isAchtergrond", true);
         zoekIntent.putExtra("isJobService", true);
-        startService(zoekIntent);
+        //startService(zoekIntent);
+        Toast.makeText(this, "Gelukt!", Toast.LENGTH_SHORT).show();
     }
 
     @Override

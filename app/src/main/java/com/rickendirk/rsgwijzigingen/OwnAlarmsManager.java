@@ -60,7 +60,7 @@ public class OwnAlarmsManager {
             JobInfo.Builder builder1 = new JobInfo.Builder(1,
                     new ComponentName(context.getPackageName(),
                             JobSchedulerService.class.getName()));
-            builder1.setPeriodic(20000)
+            builder1.setPeriodic(5000)
                     .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                     .setPersisted(true)
                     .setRequiresCharging(false)
@@ -70,7 +70,7 @@ public class OwnAlarmsManager {
             JobInfo.Builder builder2 = new JobInfo.Builder(2,
                     new ComponentName(context.getPackageName(),
                             JobSchedulerService.class.getName()));
-            builder2.setPeriodic(20000)
+            builder2.setPeriodic(5000)
                     .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                     .setPersisted(true)
                     .setRequiresCharging(false)

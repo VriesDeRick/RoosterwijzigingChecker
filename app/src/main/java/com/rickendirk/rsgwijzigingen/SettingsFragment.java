@@ -110,7 +110,11 @@ public class SettingsFragment extends PreferenceFragment implements
                     boolean checked = Boolean.valueOf(newValue.toString());
                     if (checked) {
                         scheduleTimers();
-                    } else OwnAlarmsManager.cancelJobSschedulerAlarms(getActivity());
+                    } else {
+                        OwnAlarmsManager.cancelJobSschedulerAlarms(getActivity(), 1);
+                        OwnAlarmsManager.cancelJobSschedulerAlarms(getActivity(), 2);
+
+                    }
                     return true;
                 }
 
