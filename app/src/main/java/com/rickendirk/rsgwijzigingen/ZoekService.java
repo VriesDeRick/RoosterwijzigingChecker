@@ -134,6 +134,7 @@ public class ZoekService extends IntentService{
         } else {
             boolean zijnWijzigingen = wijzigingen.zijnWijzigingen;
             ArrayList<String> wijzigingenList = wijzigingen.getWijzigingen();
+            addPossibleMessage(wijzigingen, wijzigingenList);
             if (zijnWijzigingen){
                 if (wijzigingenList.size() == 1){
                     builder.setContentText(wijzigingenList.get(0));
@@ -169,6 +170,21 @@ public class ZoekService extends IntentService{
         notifManager.notify(notifID, builder.build());
         vibrate();
         Log.i(TAG, "Nieuwe notificatie gemaakt");
+    }
+
+    private void addPossibleMessage(Wijzigingen wijzigingen, ArrayList<String> wijzigingenList) {
+        if (wijzigingen.hasMessage){
+            String msg = wijzigingen.getMessage();
+            String klas = corrigeerKlas(PreferenceManager.getDefaultSharedPreferences
+                    (getApplicationContext()).getString("pref_klas", ""));
+            if (msg.contains(klas)) {
+                //Klassenlijst moet er nog tussenuitgeknipt
+                String cleanmsg = wijzigingen.getCleanMSG();
+                wijzigingenList.add(0, cleanmsg);
+            } else if (msg.contains("Let op") || msg.contains("blijvend")){
+                wijzigingenList.add(0, msg);
+            }
+        }
     }
 
     private void sPreferencesSaver(ArrayList<String> wijzigingen) {

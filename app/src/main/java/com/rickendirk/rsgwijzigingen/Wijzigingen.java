@@ -8,7 +8,9 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Wijzigingen implements Parcelable {
@@ -137,6 +139,12 @@ public class Wijzigingen implements Parcelable {
     public void removeWijziging(int index){
         wijzigingen.remove(index);
         if (wijzigingen.size() == 0) zijnWijzigingen = false;
+    }
+    public String getCleanMSG() {
+        List<String> afterSplit = Arrays.asList(message.split(": "));
+        if (afterSplit.size() > 1) {
+            return afterSplit.get(1);
+        } else return "Fout";
     }
 
     @Override
