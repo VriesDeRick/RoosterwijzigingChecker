@@ -24,9 +24,6 @@ import com.afollestad.materialdialogs.AlertDialogWrapper;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class MainFragment extends Fragment {
     public ArrayList<String> wijzigingenList = new ArrayList<>();
@@ -54,7 +51,7 @@ public class MainFragment extends Fragment {
         }
         String dagEnDatum = sp.getString("dagEnDatum", "geenWaarde");
         dagEnDatumUpdater(dagEnDatum);
-        setMessage(null);
+        setupMessage(null);
 
         setRetainInstance(true);
 
@@ -290,17 +287,22 @@ public class MainFragment extends Fragment {
 
             //Mag toast met vernieuwd niet bij verbindingsfout etc
             vernieuwdToast();
-            if (wijzigingen.hasMessage) {
-                setMessage(wijzigingen);
-            } else hideMessage();
+            setupMessage(wijzigingen);
         }
 
     }
 
-    private void setMessage(@Nullable Wijzigingen wijzigingen) {
+    private void setupMessage(@Nullable Wijzigingen wijzigingen) {
         if (wijzigingen == null){
             wijzigingen = new Wijzigingen(true, getActivity());
         }
+        boolean hasMessage = wijzigingen.hasMessage;
+        if (hasMessage) {
+            setMessage(wijzigingen);
+        } else hideMessage();
+    }
+
+    private void setMessage(Wijzigingen wijzigingen) {
         TextView messageTV = (TextView) mainView.findViewById(R.id.messageTV);
         messageTV.setText(wijzigingen.getMessage());
         messageTV.setVisibility(View.VISIBLE);

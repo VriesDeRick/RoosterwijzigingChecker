@@ -345,7 +345,7 @@ public class ZoekService extends IntentService{
     }
 
     private void addMessage(Wijzigingen wijzigingen, Document doc) {
-        Elements messageSpan = doc.select("body > div > div > div > table > tbody > tr:nth-child(1) > td > p > b > span");
+        Elements messageSpan = doc.select("body > div > div > div > table > tbody > tr:nth-child(1)");
         if (!messageSpan.isEmpty()){
             String message = messageSpan.first().text();
             wijzigingen.setMessage(message);
