@@ -36,17 +36,23 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import java.util.List;
 
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
+
 
 public class MainActivity extends AppCompatActivity {
     ViewPager viewPager;
     int animDuration;
     Tracker tracker;
+    public static final String SHOWCASE_ID = "1EKEERSCV";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,7 +140,28 @@ public class MainActivity extends AppCompatActivity {
             NotificationManagerCompat manager = NotificationManagerCompat.from(this);
             manager.cancel(ZoekService.notifID);
         }
+        showcaseViews();
     }
+
+    private void showcaseViews() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        //"Algemeen" tab verkrijgen
+        TabLayout layout = (TabLayout) findViewById(R.id.tabLayout);
+        View algemeenTabView = ((ViewGroup) layout.getChildAt(0)).getChildAt(1); //2e tab
+
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setDelay(500); //0,5 sec
+        config.setShapePadding(50);
+        config.setMaskColor(getResources().getColor(R.color.statusBarDarkerOpacity));
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, SHOWCASE_ID);
+        sequence.setConfig(config);
+
+        sequence.addSequenceItem(fab, getString(R.string.SCV_fab), "OKE");
+        sequence.addSequenceItem(algemeenTabView, getString(R.string.SCV_tab_algemeen), "OKE");
+        sequence.start();
+    }
+
     private void setupViewPager() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
@@ -222,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
             is1eKeer = false;
             SharedPreferences.Editor spEditor = PreferenceManager
                     .getDefaultSharedPreferences(getApplicationContext()).edit();
-            spEditor.putBoolean("1ekeer", is1eKeer);
+            spEditor.putBoolean("1ekeer", false);
             spEditor.commit();
         }
     }

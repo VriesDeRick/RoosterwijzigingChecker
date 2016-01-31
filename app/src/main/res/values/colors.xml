@@ -24,6 +24,7 @@
     <item name="statusBarDarker" type="color">#1E52C9</item>
     <item name="gmailRood" type="color">#dd4b39</item>
     <item name="roodHalf" type="color">#80dd4b39</item>
+    <item name="statusBarDarkerOpacity" type="color">#A61E52C9</item>
 
 
     <item name="purple" type="color">#FFAA66CC</item>
@@ -37,5 +38,5 @@
     <item name="black" type="color">#000000</item>
     <item name="white" type="color">#FFFFFF</item>
 
-    
+
 </resources>

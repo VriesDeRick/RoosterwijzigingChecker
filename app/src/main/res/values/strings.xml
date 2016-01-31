@@ -128,4 +128,6 @@ Copyright © 2009 - 2013 Jonathan Hedley (jonathan@hedley.net)
 \nSee the License for the specific language governing permissions and
 \nlimitations under the License.
     </string>
+    <string name="SCV_fab">Met deze knop kan je zoeken naar je persoonlijke roosterwijzigingen</string>
+    <string name="SCV_tab_algemeen">Hiermee kan je naar de pagina met alle wijzigingen gaan</string>
 </resources>
