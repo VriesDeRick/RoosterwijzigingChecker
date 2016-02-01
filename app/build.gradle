@@ -9,8 +9,8 @@ android {
         applicationId "com.rickendirk.rsgwijzigingen"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 35
-        versionName "1.6.1"
+        versionCode 36
+        versionName "1.6.2"
     }
     buildTypes {
         release {
@@ -30,6 +30,7 @@ dependencies {
     compile 'org.jsoup:jsoup:1.8.3'
     compile 'com.github.citux:datetimepicker:0.1.2'
     compile 'com.google.android.gms:play-services-analytics:8.3.0'
+    compile 'com.github.deano2390:MaterialShowcaseView:1.0.6@aar'
     compile ('com.github.afollestad.material-dialogs:core:0.8.5.2@aar'){
         transitive = true
     }

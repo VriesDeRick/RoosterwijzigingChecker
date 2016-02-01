@@ -17,8 +17,8 @@
 
 <resources>
     <string name="app_name">RSG-Wijzigingen</string>
-    <string name="app_version">v1.6.1</string>
-    <string name="overApp">Over RSG-Wijzigingen v1.6.1</string>
+    <string name="app_version">v1.6.2</string>
+    <string name="overApp">Over RSG-Wijzigingen v1.6.2</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Instellingen</string>
@@ -128,4 +128,20 @@ Copyright © 2009 - 2013 Jonathan Hedley (jonathan@hedley.net)
 \nSee the License for the specific language governing permissions and
 \nlimitations under the License.
     </string>
+    <string name="SCV_License">
+        Copyright 2015 Dean Wild
+
+\n\nLicensed under the Apache License, Version 2.0 (the "License");
+\nyou may not use this file except in compliance with the License.
+\nYou may obtain a copy of the License at
+
+   \n\nhttp://www.apache.org/licenses/LICENSE-2.0
+
+\n\nUnless required by applicable law or agreed to in writing, software
+\ndistributed under the License is distributed on an "AS IS" BASIS,
+\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+\nSee the License for the specific language governing permissions and
+\nlimitations under the License.</string>
+    <string name="SCV_fab">Met deze knop kan je zoeken naar je persoonlijke roosterwijzigingen</string>
+    <string name="SCV_tab_algemeen">Hiermee kan je naar de pagina met alle wijzigingen gaan</string>
 </resources>
