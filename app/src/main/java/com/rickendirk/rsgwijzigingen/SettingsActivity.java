@@ -30,11 +30,6 @@ import com.google.android.gms.analytics.Tracker;
 
 public class SettingsActivity extends AppCompatActivity{
     Tracker tracker;
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_settings, menu);
-        return true;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,17 +52,7 @@ public class SettingsActivity extends AppCompatActivity{
             finish();
             return true;
         }
-        if (id == R.id.action_help){
-            helpDialog();
-        }
         return super.onOptionsItemSelected(item);
-    }
-    public void helpDialog(){
-        new MaterialDialog.Builder(this)
-                .title("Hulp voor instellingen")
-                .customView(R.layout.help_dialog, true)
-                .positiveText("OK")
-                .show();
     }
 
 }
