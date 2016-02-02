@@ -45,4 +45,15 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:padding="5dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/text_boven_image"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:paddingLeft="5dp"
+        android:padding="5dp"
+        android:text="@string/hulpOnderImage"
+        android:layout_below="@+id/imageView"/>
 </RelativeLayout>

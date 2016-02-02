@@ -47,10 +47,13 @@
     <string name="klasMeerDan4Tekens">De klas die je hebt gekozen bevat meer dan 4 tekens. Klassen kunnen
     niet meer dan 4 tekens bevatten. Let op dat je geen enters of spaties in je klas hebt staan. Pas je klas
     aan in het instellingenscherm.</string>
-    <string name="settingsHelpBovenImage">Dit is het instellingenscherm. In dit scherm kan je o.a. je klas en clusters wijzigigen. \n\n<b>Clusters</b> zijn
+    <string name="settingsHelpBovenImage">Hier kunnen je <b>clusters</b> gewijzigd worden. \n\n<b>Clusters</b> zijn
     leergroepen binnen de bovenbouw. Omdat hier vaak meerdere klassen per vak aanwezig zijn, hebben de clusternamen vaak nummers erin,
     zoals dutl2 of latl9. \nIndien je in de bovenbouw zit, kan je je clusters vinden op je rooster of in Magister.
     \nAls je in Magister naar je rooster gaat, zie je daar je vakken, zoals V5<b>schk4</b>, zoals in onderstaande afbeelding. </string>
+    <string name="hulpOnderImage">Het onderstreepte gedeelte op bovenstaande screenshot dien je in te voeren in dit scherm. Een lijstje kan dus zijn: \nCluster 1: <b>latl9</b>
+    \nCluster 2: <b>schk4</b> \nCluster 3: <b>ne<u>tl</u></b> \nCluster 4: <b>nlt1</b> \nCluster 5: <b>en<u>tl</u></b>
+    \n\nDe regel gaat niet op bij Engels en Nederlands, daar dient entl en netl te worden ingevoerd.\n\nDe volgorde van invoeren is niet van belang.</string>
     <string name="timePickerSum">Tijd waarop automatisch wordt gezocht naar updates</string>
     <string name="autoZoekenTutorialUitleg">Deze app biedt de mogelijkheid om 2x per dag automatisch naar roosterwijzigingen te zoeken, en je een notificatie te geven. De zoektijden kan je
     naar wens instellen (vlak voordat je naar school gaat bijvoorbeeld). Deze tijden kan je instellen in het instellingenscherm.</string>
