@@ -19,14 +19,19 @@ package com.rickendirk.rsgwijzigingen;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+
 public class ClustersActivity extends AppCompatActivity{
+    public static final String SHOWCASE_ID = "HELPSHOWCASE";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +51,32 @@ public class ClustersActivity extends AppCompatActivity{
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onResume() {
+        //I know it's a hack, but can't get it to work
+        Handler myHandler = new Handler();
+        myHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showcaseViews();
+            }
+        }, 500);
+        super.onResume();
+    }
+
+    private void showcaseViews() {
+        View button = findViewById(R.id.action_help);
+        new MaterialShowcaseView.Builder(this)
+                .setTarget(button)
+                .setDismissText("OKE")
+                .setContentText("Hier vind je hulp waar je je clusters kan vinden")
+                .setMaskColour(getResources().getColor(R.color.statusBarDarkerOpacity))
+                .setDelay(500)
+                .singleUse(SHOWCASE_ID)
+                .show();
+    }
+
     public void helpDialog(){
         new MaterialDialog.Builder(this)
                 .title("Hulp voor instellingen")
