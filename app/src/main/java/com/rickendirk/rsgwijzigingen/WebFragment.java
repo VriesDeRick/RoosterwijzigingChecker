@@ -121,6 +121,7 @@ public class WebFragment extends Fragment {
 
     }
     public void refresh(){
+        webView.clearCache(true);
         webView.loadUrl("http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm");
         swipeLayout.setRefreshing(true);
     }

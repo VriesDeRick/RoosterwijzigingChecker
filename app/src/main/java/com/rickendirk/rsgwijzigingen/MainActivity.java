@@ -25,6 +25,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.preference.PreferenceManager;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -115,6 +117,9 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {
                     //Gewone fragment, dus toolbar moet weer bovenaan gaan staan
+                    AppBarLayout appbar = (AppBarLayout) findViewById(R.id.appBarLayout);
+                    appbar.setExpanded(true, true);
+
                     fab.show();
                     tracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Navigatie")
@@ -141,6 +146,13 @@ public class MainActivity extends AppCompatActivity {
             manager.cancel(ZoekService.notifID);
         }
         showcaseViews();
+    }
+
+    private AppBarLayout.Behavior getAppBarLayoutBehavior() {
+        AppBarLayout appbar = (AppBarLayout) findViewById(R.id.appBarLayout);
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appbar.getLayoutParams();
+        AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
+        return behavior;
     }
 
     private void showcaseViews() {
