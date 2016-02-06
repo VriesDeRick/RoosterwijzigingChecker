@@ -19,12 +19,18 @@ package com.rickendirk.rsgwijzigingen;
 
 
 
+import android.content.ComponentName;
 import android.content.Intent;
 
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
 import android.preference.PreferenceManager;
+import android.support.customtabs.CustomTabsClient;
+import android.support.customtabs.CustomTabsIntent;
+import android.support.customtabs.CustomTabsServiceConnection;
+import android.support.customtabs.CustomTabsSession;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -32,6 +38,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -52,8 +59,16 @@ import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 public class MainActivity extends AppCompatActivity {
     ViewPager viewPager;
     int animDuration;
+
     Tracker tracker;
+
     public static final String SHOWCASE_ID = "1EKEERSCV";
+
+    public static final String CUSTOM_TABS_PACKAGE = "com.android.chrome";
+
+    public static final String MAGISTER_URL = "https://trompmeesters.magister.net/";
+
+    CustomTabsSession mCustomTabsSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,6 +161,28 @@ public class MainActivity extends AppCompatActivity {
             manager.cancel(ZoekService.notifID);
         }
         showcaseViews();
+        prepareWarmCustomTab();
+    }
+
+    private void prepareWarmCustomTab() {
+        //Delen code afkomstig van: http://blog.grafixartist.com/google-chrome-custom-tabs-android-tutorial/
+        CustomTabsServiceConnection mCustomTabsServiceConnection = new CustomTabsServiceConnection() {
+            CustomTabsClient mClient;
+            @Override
+            public void onCustomTabsServiceConnected(ComponentName componentName, CustomTabsClient customTabsClient) {
+                //Pre-warming
+                mClient = customTabsClient;
+                mClient.warmup(0L);
+                mCustomTabsSession = mClient.newSession(null);
+            }
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                mClient = null;
+            }
+        };
+        CustomTabsClient.bindCustomTabsService(MainActivity.this,
+                CUSTOM_TABS_PACKAGE, mCustomTabsServiceConnection);
+
     }
 
     private AppBarLayout.Behavior getAppBarLayoutBehavior() {
@@ -238,8 +275,19 @@ public class MainActivity extends AppCompatActivity {
                     webFragment.refresh();
                 }
                 break;
+            case R.id.action_magister:
+                openCustomTab();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openCustomTab() {
+        CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder(mCustomTabsSession)
+                .setToolbarColor(ContextCompat.getColor(this, R.color.lighter_blue))
+                .setShowTitle(true)
+                .enableUrlBarHiding()
+                .build();
+        customTabsIntent.launchUrl(MainActivity.this, Uri.parse(MAGISTER_URL));
     }
 
     private void openSettings() {
