@@ -25,6 +25,7 @@
     <item name="gmailRood" type="color">#dd4b39</item>
     <item name="roodHalf" type="color">#80dd4b39</item>
     <item name="statusBarDarkerOpacity" type="color">#A61E52C9</item>
+    <item name="magisterZwart" type="color">#333333</item>
 
 
     <item name="purple" type="color">#FFAA66CC</item>

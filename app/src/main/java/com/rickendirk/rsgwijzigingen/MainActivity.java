@@ -42,6 +42,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -58,6 +59,7 @@ import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 public class MainActivity extends AppCompatActivity {
     ViewPager viewPager;
+
     int animDuration;
 
     Tracker tracker;
@@ -67,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String CUSTOM_TABS_PACKAGE = "com.android.chrome";
 
     public static final String MAGISTER_URL = "https://trompmeesters.magister.net/";
+
+    public static final String TAG = "RSG-MainActivity";
 
     CustomTabsSession mCustomTabsSession;
 
@@ -182,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
         };
         CustomTabsClient.bindCustomTabsService(MainActivity.this,
                 CUSTOM_TABS_PACKAGE, mCustomTabsServiceConnection);
-
+        Log.d(TAG, "Started warming up MagisterCustomTab");
     }
 
     private AppBarLayout.Behavior getAppBarLayoutBehavior() {
@@ -283,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void openCustomTab() {
         CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder(mCustomTabsSession)
-                .setToolbarColor(ContextCompat.getColor(this, R.color.lighter_blue))
+                .setToolbarColor(ContextCompat.getColor(this, R.color.magisterZwart))
                 .setShowTitle(true)
                 .enableUrlBarHiding()
                 .build();
