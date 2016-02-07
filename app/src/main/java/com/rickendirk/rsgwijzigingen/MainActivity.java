@@ -290,6 +290,8 @@ public class MainActivity extends AppCompatActivity {
                 .setToolbarColor(ContextCompat.getColor(this, R.color.magisterZwart))
                 .setShowTitle(true)
                 .enableUrlBarHiding()
+                .setStartAnimations(this, R.anim.slide_in_right, R.anim.slide_out_left)
+                .setExitAnimations(this, R.anim.slide_in_left, R.anim.slide_out_right)
                 .build();
         customTabsIntent.launchUrl(MainActivity.this, Uri.parse(MAGISTER_URL));
     }
