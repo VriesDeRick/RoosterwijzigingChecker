@@ -178,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
                 mClient = customTabsClient;
                 mClient.warmup(0L);
                 mCustomTabsSession = mClient.newSession(null);
+                mCustomTabsSession.mayLaunchUrl(Uri.parse(MAGISTER_URL), null, null);
             }
             @Override
             public void onServiceDisconnected(ComponentName name) {
