@@ -7,4 +7,7 @@
         android:icon="@drawable/ic_action_refresh"
         android:title="@string/action_check"
         app:showAsAction="never" />
+    <item android:id="@+id/action_magister"
+        android:title="Open Magister"
+        app:showAsAction="never" />
 </menu>
