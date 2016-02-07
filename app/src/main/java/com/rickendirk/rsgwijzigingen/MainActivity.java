@@ -189,13 +189,6 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "Started warming up MagisterCustomTab");
     }
 
-    private AppBarLayout.Behavior getAppBarLayoutBehavior() {
-        AppBarLayout appbar = (AppBarLayout) findViewById(R.id.appBarLayout);
-        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appbar.getLayoutParams();
-        AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
-        return behavior;
-    }
-
     private void showcaseViews() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
