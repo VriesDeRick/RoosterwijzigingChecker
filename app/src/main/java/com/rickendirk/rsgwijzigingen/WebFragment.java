@@ -122,7 +122,7 @@ public class WebFragment extends Fragment {
     }
     public void refresh(){
         webView.clearCache(true);
-        webView.loadUrl("http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm");
+        webView.loadUrl(ZoekService.TABLE_URL);
         swipeLayout.setRefreshing(true);
     }
     public boolean isFinished(){

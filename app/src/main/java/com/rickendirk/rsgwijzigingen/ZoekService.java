@@ -51,7 +51,7 @@ public class ZoekService extends IntentService{
 
     public static final int notifID = 3395;
     public static final String TAG = "RSG-Zoekservice";
-    public static final String tableURL =
+    public static final String TABLE_URL =
             "http://www.rsgtrompmeesters.nl/roosters/roosterwijzigingen/Lijsterbesstraat/subst_001.htm";
 
     public ZoekService(){
@@ -330,7 +330,7 @@ public class ZoekService extends IntentService{
         }
         Document doc;
         try {
-            doc = Jsoup.connect(tableURL).get();
+            doc = Jsoup.connect(TABLE_URL).get();
         } catch (java.io.IOException e){
             wijzigingen.setFout("verbindFout");
             return wijzigingen;
