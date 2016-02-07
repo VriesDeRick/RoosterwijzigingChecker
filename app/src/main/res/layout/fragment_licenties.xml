@@ -144,5 +144,26 @@
             android:paddingRight="16dp"
             android:paddingTop="16dp"
             android:paddingBottom="16dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/GoogleLicentieTitel"
+            android:textStyle="bold"
+            android:text="Delen voorbeeldcode van Google"
+            android:textSize="20sp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp"
+            android:layout_below="@id/MaterialSCVLicentieTekst"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/GoogleLicentieTekst"
+            android:text="@string/Google_License"
+            android:layout_below="@id/GoogleLicentieTitel"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"/>
     </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>
