@@ -164,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
             NotificationManagerCompat manager = NotificationManagerCompat.from(this);
             manager.cancel(ZoekService.notifID);
         }
-        showcaseViews();
         prepareWarmCustomTab();
     }
 
@@ -300,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean is1eKeer = sp.getBoolean("1ekeer", true);
         if(is1eKeer){
-
+            showcaseViews();
             //Wizard starten
             Intent wizardInt = new Intent(getApplicationContext(),
                     WizardActivity.class);
