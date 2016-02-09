@@ -84,12 +84,14 @@ public class ZoekService extends IntentService{
             tracker.send(new HitBuilders.EventBuilder()
                     .setCategory("Acties")
                     .setAction("Zoeken_achtergrond")
+                    .setCustomDimension(1, wijzigingen.getKlas())
                     .build());
             sendNotification(wijzigingen);
         } else {
             tracker.send(new HitBuilders.EventBuilder()
                     .setCategory("Acties")
                     .setAction("Zoeken_voorgrond")
+                    .setCustomDimension(1, wijzigingen.getKlas())
                     .build());
             boolean isFoutMelding = wijzigingen.isFoutmelding();
             if (!isFoutMelding)wijzigingen.saveToSP(this);
@@ -358,6 +360,7 @@ public class ZoekService extends IntentService{
         }
         addDagEnDatum(wijzigingen, doc);
         addMessage(wijzigingen, doc);
+        wijzigingen.setKlas(klasGoed);
         return wijzigingen;
     }
 
