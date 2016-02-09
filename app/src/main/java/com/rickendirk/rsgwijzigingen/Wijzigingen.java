@@ -42,10 +42,13 @@ public class Wijzigingen implements Parcelable {
     private String message;
     public boolean hasMessage = false;
 
-    public Wijzigingen(String dagEnDatum, String standZin) {
+    private String klas;
+
+    public Wijzigingen(String dagEnDatum, String standZin, String klas) {
         initVar();
         this.dagEnDatum = dagEnDatum;
         this.standZin = standZin;
+        this.klas = klas;
         setupComplete = true;
     }
 
@@ -100,6 +103,14 @@ public class Wijzigingen implements Parcelable {
     private void initVar() {
         wijzigingen = new ArrayList<>();
         zijnWijzigingen = false;
+    }
+
+    public String getKlas() {
+        return klas;
+    }
+
+    public void setKlas(String klas) {
+        this.klas = klas;
     }
 
     public void saveToSP(Context context){
@@ -171,7 +182,7 @@ public class Wijzigingen implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeSerializable(this.wijzigingen);
+        dest.writeStringList(this.wijzigingen);
         dest.writeString(this.dagEnDatum);
         dest.writeString(this.standZin);
         dest.writeString(this.fout);
@@ -179,10 +190,11 @@ public class Wijzigingen implements Parcelable {
         dest.writeByte(zijnWijzigingen ? (byte) 1 : (byte) 0);
         dest.writeString(this.message);
         dest.writeByte(hasMessage ? (byte) 1 : (byte) 0);
+        dest.writeString(this.klas);
     }
 
-    private Wijzigingen(Parcel in) {
-        this.wijzigingen = (ArrayList<String>) in.readSerializable();
+    protected Wijzigingen(Parcel in) {
+        this.wijzigingen = in.createStringArrayList();
         this.dagEnDatum = in.readString();
         this.standZin = in.readString();
         this.fout = in.readString();
@@ -190,6 +202,7 @@ public class Wijzigingen implements Parcelable {
         this.zijnWijzigingen = in.readByte() != 0;
         this.message = in.readString();
         this.hasMessage = in.readByte() != 0;
+        this.klas = in.readString();
     }
 
     public static final Creator<Wijzigingen> CREATOR = new Creator<Wijzigingen>() {
