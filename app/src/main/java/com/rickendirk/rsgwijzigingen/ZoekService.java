@@ -359,17 +359,26 @@ public class ZoekService extends IntentService{
             maakWijzigingenKlas(rowsList, wijzigingen);
         }
         addDagEnDatum(wijzigingen, doc);
-        addMessage(wijzigingen, doc);
+        addMessage(wijzigingen, doc, rows);
         wijzigingen.setKlas(klasGoed);
         return wijzigingen;
     }
 
-    private void addMessage(Wijzigingen wijzigingen, Document doc) {
-        Elements messageSpan = doc.select("body > div > div > div > table > tbody > tr:nth-child(1)");
+    private void addMessage(Wijzigingen wijzigingen, Document doc, Elements rows) {
+        //Elements messageSpan = doc.select("body > div > div > div > table > tbody > tr:nth-child(1)");
+        Element firstRow = rows.first();
+        Elements columns = firstRow.select("td");
+        boolean hasMessage = columns.size() < 2;
+        if (hasMessage) {
+            String message = firstRow.text();
+            wijzigingen.setMessage(message);
+        }
+        /*
         if (!messageSpan.isEmpty()){
             String message = messageSpan.first().text();
             wijzigingen.setMessage(message);
         }
+        */
     }
 
     private ArrayList<Element> getWijzigingenListClusters(Elements rows, String klas, ArrayList<String> clusters) {
